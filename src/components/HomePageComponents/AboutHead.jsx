@@ -128,7 +128,7 @@ const AboutHead = () => {
         >
           {/* Image Section */}
           <motion.div
-            className="relative group w-full lg:w-[45%] order-2 lg:order-1"
+            className="relative group w-full lg:w-[45%] order-1 lg:order-1"
             variants={imageVariants}
           >
             <motion.div
@@ -184,11 +184,11 @@ const AboutHead = () => {
 
           {/* Text Content Section */}
           <motion.div
-            className="w-full lg:w-[45%] order-1 lg:order-2 space-y-4"
+            className="w-full lg:w-[45%] order-2 lg:order-2 space-y-4"
             variants={contentVariants}
           >
-            {/* Name and Title */}
-            <motion.div className="space-y-1" variants={itemVariants}>
+            {/* Name and Title - Centered on Mobile, Left-aligned on Desktop */}
+            <motion.div className="space-y-1 text-center lg:text-left" variants={itemVariants}>
               <h3 className="text-xl sm:text-2xl font-bold text-primary">
                 Rev. Fr. John Michael, S.J.
               </h3>
@@ -202,7 +202,7 @@ const AboutHead = () => {
 
             {/* Divider */}
             <motion.div
-              className="w-12 h-0.5 bg-secondary rounded-full"
+              className="w-12 h-0.5 bg-secondary rounded-full mx-auto lg:mx-0"
               initial={{ width: 0 }}
               whileInView={{ width: 48 }}
               viewport={{ once: true }}

@@ -35,7 +35,7 @@ const ScrollToTop = () => {
       {isVisible && (
         <motion.button
           onClick={scrollToTop}
-          className="fixed bottom-6 right-6 z-50 group"
+          className="fixed bottom-6 left-6 z-50 group"
           initial={{ opacity: 0, scale: 0, rotate: -180 }}
           animate={{ opacity: 1, scale: 1, rotate: 0 }}
           exit={{ opacity: 0, scale: 0, rotate: 180 }}
@@ -78,13 +78,13 @@ const ScrollToTop = () => {
 
           {/* Tooltip */}
           <motion.div
-            className="absolute bottom-full right-0 mb-2 px-3 py-1.5 bg-navy text-white text-xs font-semibold rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg"
+            className="absolute bottom-full left-0 mb-2 px-3 py-1.5 bg-navy text-white text-xs font-semibold rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg"
             initial={{ y: 10, opacity: 0 }}
             whileHover={{ y: 0, opacity: 1 }}
           >
             Back to Top
             {/* Arrow */}
-            <div className="absolute top-full right-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-navy"></div>
+            <div className="absolute top-full left-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-navy"></div>
           </motion.div>
         </motion.button>
       )}
