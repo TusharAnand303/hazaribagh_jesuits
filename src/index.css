@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+@theme {
+  /* Primary Jesuit Color */
+  --color-primary: #800000; /* Classic Jesuit Maroon */
+  /* Secondary Colors (commonly used in Jesuit schools) */
+  --color-secondary: #D4AF37; /* Royal Gold */
+  --color-navy: #0A1A44; /* Deep Jesuit Navy */
+  --color-cream: #F8F4E3; /* Soft Cream/Off-white */
+  --color-gray: #5A5A5A; /* Neutral Gray */
+}
+
+body{
+  background-image: url('./assets/images/main-bg.png');
+  scroll-behavior: smooth;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
