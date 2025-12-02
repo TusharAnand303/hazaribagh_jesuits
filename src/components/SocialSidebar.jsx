@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { FaFacebookF, FaTwitter, FaYoutube, FaInstagram, FaLinkedinIn, FaWhatsapp } from 'react-icons/fa';
+import { FaFacebookF, FaTwitter, FaYoutube, FaInstagram, FaLinkedinIn, FaWhatsapp, FaTimes } from 'react-icons/fa';
+import { RiShareBoxLine } from 'react-icons/ri';
 
 const SocialSidebar = () => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -9,50 +10,32 @@ const SocialSidebar = () => {
       name: 'Facebook',
       icon: <FaFacebookF />,
       url: 'https://facebook.com',
-      color: 'hover:bg-blue-600',
       bgColor: 'bg-blue-600'
-    },
-    {
-      name: 'Twitter',
-      icon: <FaTwitter />,
-      url: 'https://twitter.com',
-      color: 'hover:bg-sky-500',
-      bgColor: 'bg-sky-500'
     },
     {
       name: 'YouTube',
       icon: <FaYoutube />,
       url: 'https://youtube.com',
-      color: 'hover:bg-red-600',
       bgColor: 'bg-red-600'
     },
     {
       name: 'Instagram',
       icon: <FaInstagram />,
       url: 'https://instagram.com',
-      color: 'hover:bg-pink-600',
       bgColor: 'bg-pink-600'
-    },
-    {
-      name: 'LinkedIn',
-      icon: <FaLinkedinIn />,
-      url: 'https://linkedin.com',
-      color: 'hover:bg-blue-700',
-      bgColor: 'bg-blue-700'
     },
     {
       name: 'WhatsApp',
       icon: <FaWhatsapp />,
       url: 'https://wa.me/1234567890',
-      color: 'hover:bg-green-500',
       bgColor: 'bg-green-500'
     }
   ];
 
   return (
     <>
-      {/* Desktop Floating Social - Left Side */}
-      <div className="hidden lg:block fixed left-0 top-1/2 transform -translate-y-1/2 z-40">
+      {/* Desktop Floating Social - Left Side - MOVED UP */}
+      <div className="hidden lg:block fixed left-0 top-1/3 transform -translate-y-1/2 z-40">
         <div className="flex flex-col space-y-0">
           {socialLinks.map((social, index) => (
             <a
@@ -66,7 +49,7 @@ const SocialSidebar = () => {
               <span className="text-xl">{social.icon}</span>
               
               {/* Tooltip */}
-              <span className="absolute left-full ml-3 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none">
+              <span className="absolute left-full ml-3 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none z-50">
                 {social.name}
                 <span className="absolute right-full top-1/2 transform -translate-y-1/2 border-8 border-transparent border-r-gray-900"></span>
               </span>
@@ -75,12 +58,12 @@ const SocialSidebar = () => {
         </div>
       </div>
 
-      {/* Mobile Floating Social - Bottom Right */}
-      <div className="lg:hidden fixed bottom-6 right-6 z-40">
+      {/* Mobile Floating Social - Bottom Left - MOVED UP */}
+      <div className="lg:hidden fixed bottom-24 left-6 z-40">
         <div className="relative">
-          {/* Expanded Icons */}
+          {/* Expanded Icons - Vertical */}
           {isExpanded && (
-            <div className="absolute bottom-16 right-0 flex flex-col-reverse space-y-reverse space-y-3 mb-3">
+            <div className="absolute bottom-16 left-0 flex flex-col-reverse space-y-reverse space-y-3 mb-3">
               {socialLinks.map((social, index) => (
                 <a
                   key={index}
@@ -98,15 +81,20 @@ const SocialSidebar = () => {
             </div>
           )}
 
-          {/* Toggle Button */}
+          {/* Toggle Button - Primary/Navy Colors */}
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="bg-gradient-to-r from-amber-500 to-orange-600 text-white p-4 rounded-full shadow-2xl hover:from-amber-600 hover:to-orange-700 transition-all duration-300 transform hover:scale-110"
+            className="relative bg-gradient-to-r from-primary to-navy text-white p-4 rounded-full shadow-2xl hover:from-navy hover:to-primary transition-all duration-300 transform hover:scale-110"
           >
             {isExpanded ? (
-              <FaYoutube className="text-2xl transform rotate-45 transition-transform duration-300" />
+              <FaTimes className="text-2xl transition-transform duration-300" />
             ) : (
-              <FaYoutube className="text-2xl transition-transform duration-300" />
+              <RiShareBoxLine className="text-2xl transition-transform duration-300" />
+            )}
+            
+            {/* Pulse effect when closed */}
+            {!isExpanded && (
+              <span className="absolute inset-0 rounded-full bg-secondary animate-ping opacity-20"></span>
             )}
           </button>
         </div>
