@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, useInView, useMotionValue, useSpring } from 'framer-motion';
-import { FiUsers, FiHome, FiBook, FiHeart, FiAward, FiGlobe, FiTrendingUp } from 'react-icons/fi';
+import { FiUsers, FiHome, FiBook, FiHeart, FiTrendingUp } from 'react-icons/fi';
 
 const OurStats = () => {
   const stats = [
@@ -10,7 +10,7 @@ const OurStats = () => {
       number: 50,
       suffix: '+',
       label: 'Communities',
-      color: 'from-secondary to-yellow-500'
+      color: 'from-secondary to-yellow-500',
     },
     {
       id: 2,
@@ -18,7 +18,7 @@ const OurStats = () => {
       number: 200,
       suffix: '+',
       label: 'Jesuits',
-      color: 'from-primary to-red-600'
+      color: 'from-primary to-red-600',
     },
     {
       id: 3,
@@ -26,7 +26,7 @@ const OurStats = () => {
       number: 25,
       suffix: '+',
       label: 'Institutions',
-      color: 'from-secondary to-orange-500'
+      color: 'from-secondary to-orange-500',
     },
     {
       id: 4,
@@ -34,46 +34,25 @@ const OurStats = () => {
       number: 100,
       suffix: 'K+',
       label: 'Lives Touched',
-      color: 'from-primary to-pink-600'
+      color: 'from-primary to-pink-600',
     },
-    {
-      id: 5,
-      icon: FiAward,
-      number: 75,
-      suffix: '+',
-      label: 'Years of Service',
-      color: 'from-secondary to-amber-600'
-    },
-    {
-      id: 6,
-      icon: FiGlobe,
-      number: 15,
-      suffix: '+',
-      label: 'Districts',
-      color: 'from-primary to-purple-600'
-    }
   ];
 
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
+      transition: { staggerChildren: 0.1 },
+    },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, scale: 0.8 },
+    hidden: { opacity: 0, scale: 0.9 },
     visible: {
       opacity: 1,
       scale: 1,
-      transition: {
-        duration: 0.5,
-        ease: "easeOut"
-      }
-    }
+      transition: { duration: 0.5, ease: 'easeOut' },
+    },
   };
 
   return (
@@ -106,9 +85,9 @@ const OurStats = () => {
           />
         </motion.div>
 
-        {/* Stats Grid */}
+        {/* Stats – flex instead of grid */}
         <motion.div
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6 lg:gap-8"
+          className="flex flex-wrap justify-center gap-4 sm:gap-6 lg:gap-8"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
@@ -123,7 +102,6 @@ const OurStats = () => {
   );
 };
 
-// Simple Stat Card Component
 const SimpleStatCard = ({ stat, variants }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.5 });
@@ -132,7 +110,7 @@ const SimpleStatCard = ({ stat, variants }) => {
   const motionValue = useMotionValue(0);
   const springValue = useSpring(motionValue, {
     damping: 50,
-    stiffness: 100
+    stiffness: 100,
   });
 
   const [displayValue, setDisplayValue] = useState(0);
@@ -148,7 +126,6 @@ const SimpleStatCard = ({ stat, variants }) => {
     const unsubscribe = springValue.on('change', (latest) => {
       setDisplayValue(Math.floor(latest));
     });
-
     return () => unsubscribe();
   }, [springValue]);
 
@@ -160,6 +137,7 @@ const SimpleStatCard = ({ stat, variants }) => {
       variants={variants}
       whileHover={{ y: -8 }}
       transition={{ duration: 0.3 }}
+      className="w-full sm:w-[45%] lg:w-[22%]"
     >
       <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-secondary/50 text-center group h-full">
         {/* Icon with Gradient Background */}
