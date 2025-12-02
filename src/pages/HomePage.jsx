@@ -16,9 +16,9 @@ const HomePage = () => {
     <LatestNews/>
     <LatestVideo/>
     <OurStats/>
+    <Testimonials/>
     <ApostolicPlanning/>
     <Universal/>
-    <Testimonials/>
     </>
   )
 }
