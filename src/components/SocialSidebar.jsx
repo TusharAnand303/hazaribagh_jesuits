@@ -1,157 +1,131 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { FiFacebook, FiInstagram, FiTwitter, FiYoutube, FiMail, FiPhone } from 'react-icons/fi';
+import React, { useState } from 'react';
+import { FaFacebookF, FaTwitter, FaYoutube, FaInstagram, FaLinkedinIn, FaWhatsapp } from 'react-icons/fa';
 
 const SocialSidebar = () => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
   const socialLinks = [
     {
-      id: 1,
       name: 'Facebook',
-      icon: FiFacebook,
-      url: 'https://facebook.com/hazaribaghjesuits',
-      color: '#1877F2',
-      hoverColor: '#0C63D4'
+      icon: <FaFacebookF />,
+      url: 'https://facebook.com',
+      color: 'hover:bg-blue-600',
+      bgColor: 'bg-blue-600'
     },
     {
-      id: 2,
-      name: 'Instagram',
-      icon: FiInstagram,
-      url: 'https://instagram.com/hazaribaghjesuits',
-      color: '#E4405F',
-      hoverColor: '#D31245'
-    },
-    {
-      id: 3,
       name: 'Twitter',
-      icon: FiTwitter,
-      url: 'https://twitter.com/hazaribaghjesuits',
-      color: '#1DA1F2',
-      hoverColor: '#0C8BD9'
+      icon: <FaTwitter />,
+      url: 'https://twitter.com',
+      color: 'hover:bg-sky-500',
+      bgColor: 'bg-sky-500'
     },
     {
-      id: 4,
       name: 'YouTube',
-      icon: FiYoutube,
-      url: 'https://youtube.com/@hazaribaghjesuits',
-      color: '#FF0000',
-      hoverColor: '#CC0000'
+      icon: <FaYoutube />,
+      url: 'https://youtube.com',
+      color: 'hover:bg-red-600',
+      bgColor: 'bg-red-600'
     },
     {
-      id: 5,
-      name: 'Email',
-      icon: FiMail,
-      url: 'mailto:info@hazaribaghjesuits.org',
-      color: '#D4AF37',
-      hoverColor: '#B8941F'
+      name: 'Instagram',
+      icon: <FaInstagram />,
+      url: 'https://instagram.com',
+      color: 'hover:bg-pink-600',
+      bgColor: 'bg-pink-600'
     },
     {
-      id: 6,
-      name: 'Call Us',
-      icon: FiPhone,
-      url: 'tel:+916546123456',
-      color: '#800000',
-      hoverColor: '#5C0000'
+      name: 'LinkedIn',
+      icon: <FaLinkedinIn />,
+      url: 'https://linkedin.com',
+      color: 'hover:bg-blue-700',
+      bgColor: 'bg-blue-700'
+    },
+    {
+      name: 'WhatsApp',
+      icon: <FaWhatsapp />,
+      url: 'https://wa.me/1234567890',
+      color: 'hover:bg-green-500',
+      bgColor: 'bg-green-500'
     }
   ];
 
-  const containerVariants = {
-    hidden: { opacity: 0, x: 100 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.5,
-        duration: 0.5
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, x: 50 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        duration: 0.5,
-        ease: "easeOut"
-      }
-    }
-  };
-
   return (
-    <motion.div
-      className="fixed right-0 top-1/2 transform -translate-y-1/2 z-40"
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-    >
-      <div className="flex flex-col gap-2 sm:gap-3">
-        {socialLinks.map((social, index) => {
-          const Icon = social.icon;
-          return (
-            <motion.a
-              key={social.id}
+    <>
+      {/* Desktop Floating Social - Left Side */}
+      <div className="hidden lg:block fixed left-0 top-1/2 transform -translate-y-1/2 z-40">
+        <div className="flex flex-col space-y-0">
+          {socialLinks.map((social, index) => (
+            <a
+              key={index}
               href={social.url}
-              target={social.url.startsWith('http') ? '_blank' : '_self'}
-              rel={social.url.startsWith('http') ? 'noopener noreferrer' : undefined}
-              className="group relative"
-              variants={itemVariants}
-              whileHover={{ x: -10, scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${social.bgColor} text-white p-4 flex items-center justify-center transition-all duration-300 transform hover:translate-x-2 hover:scale-110 group relative`}
+              style={{ width: '50px', height: '50px' }}
             >
-              {/* Main Icon Button */}
-              <motion.div
-                className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-l-full shadow-lg flex items-center justify-center border-2 border-gray-100 group-hover:border-transparent transition-all duration-300"
-                style={{
-                  borderRightWidth: 0
-                }}
-                whileHover={{
-                  backgroundColor: social.color,
-                  boxShadow: `0 10px 30px ${social.color}40`
-                }}
-              >
-                <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-navy group-hover:text-white transition-colors duration-300" />
-              </motion.div>
-
-              {/* Tooltip - Hidden on Mobile, Visible on Desktop */}
-              <motion.div
-                className="hidden lg:block absolute right-full top-1/2 transform -translate-y-1/2 mr-3 px-4 py-2 bg-navy text-white text-sm font-semibold rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-300 shadow-xl"
-                initial={{ x: 10, opacity: 0 }}
-                whileHover={{ x: 0, opacity: 1 }}
-              >
+              <span className="text-xl">{social.icon}</span>
+              
+              {/* Tooltip */}
+              <span className="absolute left-full ml-3 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none">
                 {social.name}
-                {/* Arrow */}
-                <div className="absolute left-full top-1/2 transform -translate-y-1/2 w-0 h-0 border-t-4 border-b-4 border-l-4 border-transparent border-l-navy"></div>
-              </motion.div>
-
-              {/* Ripple Effect */}
-              <motion.div
-                className="absolute inset-0 rounded-l-full"
-                style={{ backgroundColor: social.color }}
-                initial={{ scale: 0, opacity: 0 }}
-                whileHover={{
-                  scale: [1, 1.5],
-                  opacity: [0.5, 0]
-                }}
-                transition={{
-                  duration: 0.6
-                }}
-              />
-            </motion.a>
-          );
-        })}
+                <span className="absolute right-full top-1/2 transform -translate-y-1/2 border-8 border-transparent border-r-gray-900"></span>
+              </span>
+            </a>
+          ))}
+        </div>
       </div>
 
-      {/* Decorative Line */}
-      <motion.div
-        className="absolute top-0 right-0 w-0.5 sm:w-1 bg-gradient-to-b from-transparent via-secondary to-transparent"
-        style={{ height: '200%', top: '-50%' }}
-        initial={{ scaleY: 0 }}
-        animate={{ scaleY: 1 }}
-        transition={{ duration: 1, delay: 1 }}
-      />
-    </motion.div>
+      {/* Mobile Floating Social - Bottom Right */}
+      <div className="lg:hidden fixed bottom-6 right-6 z-40">
+        <div className="relative">
+          {/* Expanded Icons */}
+          {isExpanded && (
+            <div className="absolute bottom-16 right-0 flex flex-col-reverse space-y-reverse space-y-3 mb-3">
+              {socialLinks.map((social, index) => (
+                <a
+                  key={index}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${social.bgColor} text-white p-3 rounded-full shadow-lg transform transition-all duration-300 hover:scale-110`}
+                  style={{
+                    animation: `slideUp 0.3s ease-out ${index * 0.1}s both`
+                  }}
+                >
+                  <span className="text-lg">{social.icon}</span>
+                </a>
+              ))}
+            </div>
+          )}
+
+          {/* Toggle Button */}
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="bg-gradient-to-r from-amber-500 to-orange-600 text-white p-4 rounded-full shadow-2xl hover:from-amber-600 hover:to-orange-700 transition-all duration-300 transform hover:scale-110"
+          >
+            {isExpanded ? (
+              <FaYoutube className="text-2xl transform rotate-45 transition-transform duration-300" />
+            ) : (
+              <FaYoutube className="text-2xl transition-transform duration-300" />
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Animation Styles */}
+      <style jsx>{`
+        @keyframes slideUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px) scale(0.8);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+      `}</style>
+    </>
   );
 };
 

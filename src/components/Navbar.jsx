@@ -1,487 +1,377 @@
-import React, { useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { FiMenu, FiX, FiChevronDown, FiChevronRight } from 'react-icons/fi';
-import logo from '../assets/images/web_images/logo.png';
+import React, { useState, useEffect, useRef } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { FaBars, FaTimes, FaChevronDown } from 'react-icons/fa';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState(null);
-  const [activeDesktopMenu, setActiveDesktopMenu] = useState(null);
+  const [activeMenu, setActiveMenu] = useState(null);
+  const [scrolled, setScrolled] = useState(false);
   const timeoutRef = useRef(null);
+  const navigate = useNavigate();
 
-  const handleToggle = () => {
-    setIsOpen(!isOpen);
-    // Close all dropdowns when toggling menu
-    if (!isOpen) {
-      setOpenDropdown(null);
-      setActiveDesktopMenu(null);
-    }
-  };
+  // Scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-  const handleDropdownToggle = (menu) => {
-    // For both mobile and desktop click
-    if (openDropdown === menu) {
-      setOpenDropdown(null);
-      setActiveDesktopMenu(null);
-    } else {
-      setOpenDropdown(menu);
-      setActiveDesktopMenu(menu);
-    }
-  };
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
-  const handleMouseEnter = (menu) => {
+  const handleMouseEnter = (key) => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
-    setActiveDesktopMenu(menu);
-    setOpenDropdown(menu);
+    setActiveMenu(key);
   };
 
   const handleMouseLeave = () => {
     timeoutRef.current = setTimeout(() => {
-      setActiveDesktopMenu(null);
-      setOpenDropdown(null);
-    }, 300);
+      setActiveMenu(null);
+    }, 100);
   };
 
-  const handleLinkClick = () => {
+  const handleNavigation = (path) => {
+    navigate(path);
     setIsOpen(false);
-    setOpenDropdown(null);
-    setActiveDesktopMenu(null);
+    setActiveMenu(null);
   };
 
-  const handleBackdropClick = () => {
-    setIsOpen(false);
-    setOpenDropdown(null);
-    setActiveDesktopMenu(null);
-  };
-
-  const menuData = {
-    aboutUs: {
+  const megaMenuData = {
+    about: {
       title: 'About Us',
       items: [
         { title: 'Our History', url: '/about/history' },
         { title: 'Foundation', url: '/about/foundation' },
+        { title: 'Timeline', url: '/about/timeline' },
+        { title: 'Milestones', url: '/about/milestones' },
         { title: 'Legacy', url: '/about/legacy' },
-        { title: 'Governance', url: '/about/governance' },
-        { title: 'Administration', url: '/about/administration' },
-        { title: 'Councils', url: '/about/councils' },
-        { title: 'Support Us', url: '/about/support' },
-        { title: 'Contact Us', url: '/about/contact' }
-      ]
-    },
-    communities: {
-      title: 'Communities',
-      items: [
-        { title: 'Hazaribag', url: '/communities/hazaribag' },
-        { title: 'Bokaro', url: '/communities/bokaro' },
-        { title: 'Palamu', url: '/communities/palamu' },
-        { title: 'Garha', url: '/communities/garha' },
-        { title: 'Latehar', url: '/communities/latehar' },
-        { title: 'Ramgarh', url: '/communities/ramgarh' }
+        { title: 'Leadership', url: '/about/leadership' },
+        { title: 'Provincial', url: '/about/provincial' },
+        { title: 'Council Members', url: '/about/council' },
+        { title: 'Directors', url: '/about/directors' },
+        { title: 'Vision & Mission', url: '/about/vision' },
+        { title: 'Core Values', url: '/about/values' },
+        { title: 'Goals', url: '/about/goals' }
       ]
     },
     ministries: {
       title: 'Ministries',
       items: [
         { title: 'Education', url: '/education' },
-        { title: 'Pastoral', url: '/pastoral' },
-        { title: 'Mass Centers', url: '/mass_center' },
-        { title: 'Social Centers', url: '/social_center' },
-        { title: 'Youth', url: '/youth/jamuniatar' },
-        { title: 'Formation', url: '/formation/tarwa' },
-        { title: 'Vocation Promotion', url: '/vocation' },
-        { title: 'Ignatian Retreats', url: '/retreats' },
-        { title: "Pope's Worldwide Prayer", url: '/popes-prayer' }
+        { title: 'Schools', url: '/ministries/schools' },
+        { title: 'Colleges', url: '/ministries/colleges' },
+        { title: 'Hostels', url: '/ministries/hostels' },
+        { title: 'Vocational Training', url: '/ministries/vocational' },
+        { title: 'Social Work', url: '/ministries/social-work' },
+        { title: 'Rural Development', url: '/ministries/rural' },
+        { title: 'Healthcare', url: '/ministries/healthcare' },
+        { title: 'Women Empowerment', url: '/ministries/women' },
+        { title: 'Youth Programs', url: '/ministries/youth' },
+        { title: 'Pastoral Care', url: '/ministries/pastoral' },
+        { title: 'Parishes', url: '/ministries/parishes' },
+        { title: 'Retreat Centers', url: '/ministries/retreats' },
+        { title: 'Spirituality', url: '/ministries/spirituality' },
+        { title: 'Formation', url: '/ministries/formation' }
       ]
     },
-    resources: {
-      title: 'Resources',
+    communities: {
+      title: 'Communities',
       items: [
-        { title: 'Publications', url: '/resources/publications' },
-        { title: 'Books', url: '/resources/books' },
-        { title: 'Jesuit Blogs', url: '/resources/blogs' }
+        { title: 'Hazaribagh', url: '/communities/hazaribagh' },
+        { title: 'Ranchi', url: '/communities/ranchi' },
+        { title: 'Dumka', url: '/communities/dumka' },
+        { title: 'Giridih', url: '/communities/giridih' },
+        { title: 'Formation Houses', url: '/communities/formation-houses' },
+        { title: 'Parish Communities', url: '/communities/parish' },
+        { title: 'Mission Centers', url: '/communities/mission' },
+        { title: 'Educational Institutes', url: '/communities/institutes' }
+      ]
+    },
+    apostolic: {
+      title: 'Apostolic Planning',
+      items: [
+        { title: 'Strategic Plan', url: '/apostolic/strategic' },
+        { title: 'Annual Reports', url: '/apostolic/reports' },
+        { title: 'New Initiatives', url: '/apostolic/initiatives' },
+        { title: 'Evaluations', url: '/apostolic/evaluations' },
+        { title: 'Documents', url: '/apostolic/documents' },
+        { title: 'Guidelines', url: '/apostolic/guidelines' },
+        { title: 'Policies', url: '/apostolic/policies' },
+        { title: 'Formation Materials', url: '/apostolic/materials' }
       ]
     }
   };
 
   return (
     <>
-      <header className="flex shadow-md py-2 px-4 sm:px-10 bg-white min-h-[70px] relative z-50">
-        <div className="flex items-center justify-between gap-2 sm:gap-5 w-full">
-          {/* Desktop Logo */}
-          <Link to="/" className="max-sm:hidden flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
-            <img src={logo} alt="Jesuit Logo" className="h-14 w-14 sm:h-16 sm:w-16 object-contain" />
-            <div className="hidden xl:block">
-              <h1 className="text-lg xl:text-xl font-bold text-primary leading-tight">Hazaribagh Jesuits</h1>
-              <p className="text-xs text-gray">Society of Jesus</p>
+      {/* Main Navbar */}
+      <nav 
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+          scrolled 
+            ? 'bg-white/95 backdrop-blur-md shadow-lg py-3' 
+            : 'bg-gradient-to-r from-amber-900 via-orange-800 to-amber-900 py-4'
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center">
+            
+            {/* Logo */}
+            <Link to="/" className="flex items-center space-x-4 group">
+              <div className="relative">
+                <div className={`absolute inset-0 rounded-md blur-xl transition-all duration-500 ${
+                  scrolled 
+                    ? 'bg-gradient-to-r from-amber-400 to-orange-500 opacity-40' 
+                    : 'bg-white/30 opacity-60'
+                }`}></div>
+                
+                <div className={`relative px-4 py-2 rounded-md transition-all duration-500 ${
+                  scrolled 
+                    ? 'bg-gradient-to-br from-amber-500 to-orange-600' 
+                    : 'bg-white/20 backdrop-blur-sm'
+                } group-hover:scale-105`}>
+                  <div className="flex items-baseline space-x-1">
+                    <span className={`text-2xl font-black transition-colors duration-500 ${
+                      scrolled ? 'text-white' : 'text-white'
+                    }`}>HJ</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <h1 className={`text-lg font-bold transition-colors duration-500 ${
+                  scrolled ? 'text-gray-900' : 'text-white'
+                }`}>
+                  Hazaribagh Province
+                </h1>
+                <p className={`text-xs font-medium transition-colors duration-500 ${
+                  scrolled ? 'text-gray-600' : 'text-amber-100'
+                }`}>
+                  Jesuits
+                </p>
+              </div>
+            </Link>
+
+            {/* Desktop Navigation */}
+            <div className="hidden lg:flex items-center space-x-2">
+              <Link 
+                to="/" 
+                className={`relative px-5 py-2.5 font-semibold rounded-md transition-all duration-300 group ${
+                  scrolled 
+                    ? 'text-gray-700 hover:text-amber-600' 
+                    : 'text-white hover:text-amber-200'
+                }`}
+              >
+                <span className="relative z-10">Home</span>
+                <div className={`absolute inset-0 rounded-md transition-all duration-300 opacity-0 group-hover:opacity-100 ${
+                  scrolled ? 'bg-amber-50' : 'bg-white/10'
+                }`}></div>
+              </Link>
+              
+              {Object.keys(megaMenuData).map((key) => (
+                <div 
+                  key={key}
+                  className="relative"
+                  onMouseEnter={() => handleMouseEnter(key)}
+                  onMouseLeave={handleMouseLeave}
+                >
+                  <button 
+                    className={`relative px-5 py-2.5 font-semibold rounded-md transition-all duration-300 flex items-center space-x-2 group ${
+                      scrolled 
+                        ? 'text-gray-700 hover:text-amber-600' 
+                        : 'text-white hover:text-amber-200'
+                    }`}
+                  >
+                    <span className="relative z-10">{megaMenuData[key].title}</span>
+                    <FaChevronDown 
+                      className={`text-xs transition-all duration-300 ${
+                        activeMenu === key ? 'rotate-180' : ''
+                      }`} 
+                    />
+                    <div className={`absolute inset-0 rounded-md transition-all duration-300 opacity-0 group-hover:opacity-100 ${
+                      scrolled ? 'bg-amber-50' : 'bg-white/10'
+                    }`}></div>
+                  </button>
+                  
+                  {/* Single Column Dropdown Menu */}
+                  {activeMenu === key && (
+                    <div 
+                      className="absolute left-0 pt-2"
+                      onMouseEnter={() => handleMouseEnter(key)}
+                      onMouseLeave={handleMouseLeave}
+                    >
+                      <div className="w-72 bg-white rounded-md shadow-2xl overflow-hidden border border-gray-100">
+                        
+                        {/* Menu Header */}
+                        <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500 px-6 py-4">
+                          <h3 className="text-white text-lg font-bold">{megaMenuData[key].title}</h3>
+                        </div>
+                        
+                        {/* Menu Items - Single Column */}
+                        <div className="max-h-96 overflow-y-auto py-2 custom-scrollbar">
+                          {megaMenuData[key].items.map((item, idx) => (
+                            <Link
+                              key={idx}
+                              to={item.url}
+                              onClick={() => setActiveMenu(null)}
+                              className="flex items-center px-6 py-3 text-gray-700 hover:text-orange-600 hover:bg-orange-50 transition-all duration-200 group/item"
+                            >
+                              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 mr-3 group-hover/item:w-2 group-hover/item:h-2 transition-all"></span>
+                              <span className="text-sm font-medium group-hover/item:translate-x-1 transition-transform inline-block">
+                                {item.title}
+                              </span>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+
+              {/* CTA Button */}
+              <Link 
+                to="/contact" 
+                className={`ml-4 px-6 py-2.5 rounded-md font-bold text-sm shadow-lg transition-all duration-300 transform hover:scale-105 ${
+                  scrolled 
+                    ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white hover:from-amber-600 hover:to-orange-700 shadow-amber-200' 
+                    : 'bg-white text-amber-900 hover:bg-amber-50 shadow-white/20'
+                }`}
+              >
+                Contact Us
+              </Link>
             </div>
-          </Link>
 
-          {/* Mobile Logo */}
-          <Link to="/" className="hidden max-sm:block flex-shrink-0">
-            <img src={logo} alt="Jesuit Logo" className="h-12 w-12 object-contain" />
-          </Link>
-
-          {/* Navigation Menu */}
-          <div
-            id="collapseMenu"
-            className={`${isOpen ? 'max-lg:block' : 'max-lg:hidden'} lg:!flex lg:flex-1 lg:justify-center`}
-          >
-            {/* Backdrop Overlay for Mobile */}
-            {isOpen && (
-              <div
-                className="lg:hidden fixed inset-0 bg-black/50 z-40"
-                onClick={handleBackdropClick}
-              />
-            )}
-
-            {/* Close Button for Mobile */}
-            <button
-              onClick={handleToggle}
-              className="lg:hidden fixed top-2 right-4 z-[100] rounded-full bg-white w-10 h-10 flex items-center justify-center border border-gray-200 cursor-pointer hover:bg-cream hover:border-primary transition-all shadow-lg"
+            {/* Mobile Menu Button */}
+            <button 
+              onClick={() => setIsOpen(!isOpen)} 
+              className={`lg:hidden p-3 rounded-md transition-all duration-300 ${
+                scrolled 
+                  ? 'text-gray-700 hover:bg-amber-50' 
+                  : 'text-white hover:bg-white/10'
+              }`}
             >
-              <FiX className="w-5 h-5 text-primary" />
-            </button>
-
-            <ul className="lg:flex lg:items-center gap-x-2 xl:gap-x-4 max-lg:space-y-3 max-lg:fixed max-lg:bg-white max-lg:w-1/2 max-lg:min-w-[300px] max-lg:top-0 max-lg:left-0 max-lg:p-6 max-lg:h-full max-lg:shadow-md max-lg:overflow-auto z-50">
-              {/* Mobile Logo in Menu */}
-              <li className="mb-6 hidden max-lg:block border-b border-gray-200 pb-4">
-                <Link to="/" onClick={handleLinkClick} className="flex items-center space-x-2">
-                  <img src={logo} alt="Jesuit Logo" className="h-12 w-12 object-contain" />
-                  <div>
-                    <span className="font-bold text-primary block">Hazaribagh Jesuits</span>
-                    <span className="text-xs text-gray">Society of Jesus</span>
-                  </div>
-                </Link>
-              </li>
-
-              {/* Home */}
-              <li className="max-lg:border-b max-lg:border-gray-200 max-lg:py-3 px-2 xl:px-3">
-                <Link
-                  to="/"
-                  className="hover:text-primary text-primary block font-bold text-sm whitespace-nowrap transition-all duration-200"
-                  onClick={handleLinkClick}
-                >
-                  Home
-                </Link>
-              </li>
-
-              {/* About Us - Dropdown */}
-              <li 
-                className="max-lg:border-b max-lg:border-gray-200 max-lg:py-3 px-2 xl:px-3 relative group"
-                onMouseEnter={() => handleMouseEnter('aboutUs')}
-                onMouseLeave={handleMouseLeave}
-              >
-                <button
-                  onClick={() => handleDropdownToggle('aboutUs')}
-                  className="hover:text-primary text-navy font-semibold text-sm flex items-center gap-1 w-full transition-all duration-200 group whitespace-nowrap"
-                >
-                  {menuData.aboutUs.title}
-                  <FiChevronDown className={`w-4 h-4 transition-transform duration-300 flex-shrink-0 ${activeDesktopMenu === 'aboutUs' || openDropdown === 'aboutUs' ? 'rotate-180' : ''}`} />
-                </button>
-                
-                {/* Desktop Dropdown */}
-                {activeDesktopMenu === 'aboutUs' && (
-                  <div 
-                    className="hidden lg:block absolute top-full left-0 mt-3 w-80 bg-white shadow-md rounded-2xl border-2 border-cream py-2 z-50 animate-fadeIn"
-                    onMouseEnter={() => handleMouseEnter('aboutUs')}
-                    onMouseLeave={handleMouseLeave}
-                  >
-                    {menuData.aboutUs.items.map((item, idx) => (
-                      <Link
-                        key={idx}
-                        to={item.url}
-                        onClick={handleLinkClick}
-                        className="flex items-center justify-between px-6 py-3.5 text-sm text-navy hover:bg-cream hover:text-primary transition-all duration-200 group/item border-b border-gray-100 last:border-b-0"
-                      >
-                        <span className="font-medium">{item.title}</span>
-                        <FiChevronRight className="w-5 h-5 opacity-0 group-hover/item:opacity-100 transform group-hover/item:translate-x-2 transition-all duration-200 text-primary" />
-                      </Link>
-                    ))}
-                  </div>
-                )}
-                
-                {/* Mobile Dropdown */}
-                {openDropdown === 'aboutUs' && (
-                  <div className="lg:hidden mt-3 ml-4 space-y-1 animate-slideDown bg-cream rounded-lg p-2">
-                    {menuData.aboutUs.items.map((item, idx) => (
-                      <Link
-                        key={idx}
-                        to={item.url}
-                        onClick={handleLinkClick}
-                        className="flex items-center gap-3 text-sm text-navy hover:text-primary py-2.5 px-3 rounded-lg hover:bg-white transition-all duration-200 border-b border-gray-100 last:border-b-0"
-                      >
-                        <FiChevronRight className="w-4 h-4 text-primary flex-shrink-0" />
-                        <span className="font-medium">{item.title}</span>
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </li>
-
-              {/* Communities - Dropdown */}
-              <li 
-                className="max-lg:border-b max-lg:border-gray-200 max-lg:py-3 px-2 xl:px-3 relative group"
-                onMouseEnter={() => handleMouseEnter('communities')}
-                onMouseLeave={handleMouseLeave}
-              >
-                <button
-                  onClick={() => handleDropdownToggle('communities')}
-                  className="hover:text-primary text-navy font-semibold text-sm flex items-center gap-1 w-full transition-all duration-200 group whitespace-nowrap"
-                >
-                  {menuData.communities.title}
-                  <FiChevronDown className={`w-4 h-4 transition-transform duration-300 flex-shrink-0 ${activeDesktopMenu === 'communities' || openDropdown === 'communities' ? 'rotate-180' : ''}`} />
-                </button>
-                
-                {/* Desktop Dropdown */}
-                {activeDesktopMenu === 'communities' && (
-                  <div 
-                    className="hidden lg:block absolute top-full left-0 mt-3 w-80 bg-white shadow-md rounded-2xl border-2 border-cream py-2 z-50 animate-fadeIn"
-                    onMouseEnter={() => handleMouseEnter('communities')}
-                    onMouseLeave={handleMouseLeave}
-                  >
-                    {menuData.communities.items.map((item, idx) => (
-                      <Link
-                        key={idx}
-                        to={item.url}
-                        onClick={handleLinkClick}
-                        className="flex items-center justify-between px-6 py-3.5 text-sm text-navy hover:bg-cream hover:text-primary transition-all duration-200 group/item border-b border-gray-100 last:border-b-0"
-                      >
-                        <span className="font-medium">{item.title}</span>
-                        <FiChevronRight className="w-5 h-5 opacity-0 group-hover/item:opacity-100 transform group-hover/item:translate-x-2 transition-all duration-200 text-primary" />
-                      </Link>
-                    ))}
-                  </div>
-                )}
-                
-                {/* Mobile Dropdown */}
-                {openDropdown === 'communities' && (
-                  <div className="lg:hidden mt-3 ml-4 space-y-1 animate-slideDown bg-cream rounded-lg p-2">
-                    {menuData.communities.items.map((item, idx) => (
-                      <Link
-                        key={idx}
-                        to={item.url}
-                        onClick={handleLinkClick}
-                        className="flex items-center gap-3 text-sm text-navy hover:text-primary py-2.5 px-3 rounded-lg hover:bg-white transition-all duration-200 border-b border-gray-100 last:border-b-0"
-                      >
-                        <FiChevronRight className="w-4 h-4 text-primary flex-shrink-0" />
-                        <span className="font-medium">{item.title}</span>
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </li>
-
-              {/* Ministries - Dropdown */}
-              <li 
-                className="max-lg:border-b max-lg:border-gray-200 max-lg:py-3 px-2 xl:px-3 relative group"
-                onMouseEnter={() => handleMouseEnter('ministries')}
-                onMouseLeave={handleMouseLeave}
-              >
-                <button
-                  onClick={() => handleDropdownToggle('ministries')}
-                  className="hover:text-primary text-navy font-semibold text-sm flex items-center gap-1 w-full transition-all duration-200 group whitespace-nowrap"
-                >
-                  {menuData.ministries.title}
-                  <FiChevronDown className={`w-4 h-4 transition-transform duration-300 flex-shrink-0 ${activeDesktopMenu === 'ministries' || openDropdown === 'ministries' ? 'rotate-180' : ''}`} />
-                </button>
-                
-                {/* Desktop Dropdown */}
-                {activeDesktopMenu === 'ministries' && (
-                  <div 
-                    className="hidden lg:block absolute top-full left-0 mt-3 w-80 bg-white shadow-md rounded-2xl border-2 border-cream py-2 max-h-[500px] overflow-y-auto z-50 animate-fadeIn custom-scrollbar"
-                    onMouseEnter={() => handleMouseEnter('ministries')}
-                    onMouseLeave={handleMouseLeave}
-                  >
-                    {menuData.ministries.items.map((item, idx) => (
-                      <Link
-                        key={idx}
-                        to={item.url}
-                        onClick={handleLinkClick}
-                        className="flex items-center justify-between px-6 py-3.5 text-sm text-navy hover:bg-cream hover:text-primary transition-all duration-200 group/item border-b border-gray-100 last:border-b-0"
-                      >
-                        <span className="font-medium">{item.title}</span>
-                        <FiChevronRight className="w-5 h-5 opacity-0 group-hover/item:opacity-100 transform group-hover/item:translate-x-2 transition-all duration-200 text-primary" />
-                      </Link>
-                    ))}
-                  </div>
-                )}
-                
-                {/* Mobile Dropdown */}
-                {openDropdown === 'ministries' && (
-                  <div className="lg:hidden mt-3 ml-4 space-y-1 max-h-80 overflow-y-auto animate-slideDown custom-scrollbar bg-cream rounded-lg p-2">
-                    {menuData.ministries.items.map((item, idx) => (
-                      <Link
-                        key={idx}
-                        to={item.url}
-                        onClick={handleLinkClick}
-                        className="flex items-center gap-3 text-sm text-navy hover:text-primary py-2.5 px-3 rounded-lg hover:bg-white transition-all duration-200 border-b border-gray-100 last:border-b-0"
-                      >
-                        <FiChevronRight className="w-4 h-4 text-primary flex-shrink-0" />
-                        <span className="font-medium">{item.title}</span>
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </li>
-
-              {/* Resources - Dropdown */}
-              <li 
-                className="max-lg:border-b max-lg:border-gray-200 max-lg:py-3 px-2 xl:px-3 relative group"
-                onMouseEnter={() => handleMouseEnter('resources')}
-                onMouseLeave={handleMouseLeave}
-              >
-                <button
-                  onClick={() => handleDropdownToggle('resources')}
-                  className="hover:text-primary text-navy font-semibold text-sm flex items-center gap-1 w-full transition-all duration-200 group whitespace-nowrap"
-                >
-                  {menuData.resources.title}
-                  <FiChevronDown className={`w-4 h-4 transition-transform duration-300 flex-shrink-0 ${activeDesktopMenu === 'resources' || openDropdown === 'resources' ? 'rotate-180' : ''}`} />
-                </button>
-                
-                {/* Desktop Dropdown */}
-                {activeDesktopMenu === 'resources' && (
-                  <div 
-                    className="hidden lg:block absolute top-full left-0 mt-3 w-80 bg-white shadow-md rounded-2xl border-2 border-cream py-2 z-50 animate-fadeIn"
-                    onMouseEnter={() => handleMouseEnter('resources')}
-                    onMouseLeave={handleMouseLeave}
-                  >
-                    {menuData.resources.items.map((item, idx) => (
-                      <Link
-                        key={idx}
-                        to={item.url}
-                        onClick={handleLinkClick}
-                        className="flex items-center justify-between px-6 py-3.5 text-sm text-navy hover:bg-cream hover:text-primary transition-all duration-200 group/item border-b border-gray-100 last:border-b-0"
-                      >
-                        <span className="font-medium">{item.title}</span>
-                        <FiChevronRight className="w-5 h-5 opacity-0 group-hover/item:opacity-100 transform group-hover/item:translate-x-2 transition-all duration-200 text-primary" />
-                      </Link>
-                    ))}
-                  </div>
-                )}
-                
-                {/* Mobile Dropdown */}
-                {openDropdown === 'resources' && (
-                  <div className="lg:hidden mt-3 ml-4 space-y-1 animate-slideDown bg-cream rounded-lg p-2">
-                    {menuData.resources.items.map((item, idx) => (
-                      <Link
-                        key={idx}
-                        to={item.url}
-                        onClick={handleLinkClick}
-                        className="flex items-center gap-3 text-sm text-navy hover:text-primary py-2.5 px-3 rounded-lg hover:bg-white transition-all duration-200 border-b border-gray-100 last:border-b-0"
-                      >
-                        <FiChevronRight className="w-4 h-4 text-primary flex-shrink-0" />
-                        <span className="font-medium">{item.title}</span>
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </li>
-
-              {/* Apostolic Plannings */}
-              <li className="max-lg:border-b max-lg:border-gray-200 max-lg:py-3 px-2 xl:px-3">
-                <Link
-                  to="/apostolic-plannings"
-                  className="hover:text-primary text-navy block font-semibold text-sm transition-all duration-200 whitespace-nowrap"
-                  onClick={handleLinkClick}
-                >
-                  Apostolic Plannings
-                </Link>
-              </li>
-
-              {/* Become a Jesuit */}
-              <li className="max-lg:border-b max-lg:border-gray-200 max-lg:py-3 px-2 xl:px-3">
-                <Link
-                  to="/become-a-jesuit"
-                  className="hover:text-primary text-navy block font-semibold text-sm transition-all duration-200 whitespace-nowrap"
-                  onClick={handleLinkClick}
-                >
-                  Become a Jesuit
-                </Link>
-              </li>
-
-              {/* Gallery */}
-              <li className="max-lg:border-b max-lg:border-gray-200 max-lg:py-3 px-2 xl:px-3">
-                <Link
-                  to="/gallery"
-                  className="hover:text-primary text-navy block font-semibold text-sm transition-all duration-200 whitespace-nowrap"
-                  onClick={handleLinkClick}
-                >
-                  Gallery
-                </Link>
-              </li>
-
-              {/* New Initiatives */}
-              <li className="max-lg:border-b max-lg:border-gray-200 max-lg:py-3 px-2 xl:px-3">
-                <Link
-                  to="/new-initiatives"
-                  className="hover:text-primary text-navy block font-semibold text-sm transition-all duration-200 whitespace-nowrap"
-                  onClick={handleLinkClick}
-                >
-                  New Initiatives
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Mobile Menu Toggle */}
-          <div className="flex lg:hidden flex-shrink-0">
-            <button onClick={handleToggle} className="cursor-pointer p-2 hover:bg-cream rounded-lg transition-all">
-              <FiMenu className="w-7 h-7 text-primary" />
+              {isOpen ? <FaTimes className="w-6 h-6" /> : <FaBars className="w-6 h-6" />}
             </button>
           </div>
         </div>
-      </header>
+      </nav>
 
-      {/* Custom Styles */}
+      {/* Mobile Menu */}
+      {isOpen && (
+        <>
+          <div 
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
+            onClick={() => setIsOpen(false)}
+          ></div>
+
+          <div className="fixed top-0 right-0 bottom-0 w-full sm:w-96 bg-white z-50 lg:hidden overflow-y-auto shadow-2xl">
+            
+            {/* Mobile Header */}
+            <div className="bg-gradient-to-r from-amber-500 to-orange-600 p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center space-x-3">
+                  <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-md flex items-center justify-center">
+                    <span className="text-white font-black text-lg">HJ</span>
+                  </div>
+                  <div>
+                    <h2 className="text-white font-bold text-lg">Menu</h2>
+                    <p className="text-orange-100 text-xs">Navigation</p>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => setIsOpen(false)}
+                  className="p-2 text-white hover:bg-white/10 rounded-md transition-all"
+                >
+                  <FaTimes className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+
+            {/* Mobile Menu Items */}
+            <nav className="p-6 space-y-2">
+              <Link 
+                to="/" 
+                onClick={() => setIsOpen(false)}
+                className="block py-3 px-4 text-gray-700 hover:text-orange-600 hover:bg-orange-50 rounded-md transition-all font-semibold"
+              >
+                Home
+              </Link>
+              
+              {Object.keys(megaMenuData).map((key) => (
+                <div key={key} className="border-t border-gray-100 pt-2">
+                  <button 
+                    onClick={() => setActiveMenu(activeMenu === key ? null : key)}
+                    className="w-full flex items-center justify-between py-3 px-4 text-gray-700 hover:text-orange-600 hover:bg-orange-50 rounded-md transition-all font-semibold"
+                  >
+                    <span>{megaMenuData[key].title}</span>
+                    <FaChevronDown 
+                      className={`text-sm transition-transform duration-300 ${
+                        activeMenu === key ? 'rotate-180' : ''
+                      }`} 
+                    />
+                  </button>
+                  
+                  {activeMenu === key && (
+                    <div className="mt-2 bg-gradient-to-br from-orange-50 to-amber-50 rounded-md py-2 max-h-64 overflow-y-auto custom-scrollbar">
+                      {megaMenuData[key].items.map((item, idx) => (
+                        <Link
+                          key={idx}
+                          to={item.url}
+                          onClick={() => setIsOpen(false)}
+                          className="flex items-center px-6 py-2.5 text-gray-700 hover:text-orange-600 hover:bg-white/60 transition-all"
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-orange-400 mr-3"></span>
+                          <span className="text-sm font-medium">{item.title}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </nav>
+
+            {/* Mobile Footer */}
+            <div className="p-6 border-t border-gray-200">
+              <Link 
+                to="/contact" 
+                onClick={() => setIsOpen(false)}
+                className="block w-full py-4 px-6 bg-gradient-to-r from-amber-500 to-orange-600 text-white hover:from-amber-600 hover:to-orange-700 rounded-md transition-all text-center font-bold shadow-lg"
+              >
+                Contact Us
+              </Link>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Custom Scrollbar Styles */}
       <style jsx>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(-10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes slideDown {
-          from {
-            opacity: 0;
-            max-height: 0;
-          }
-          to {
-            opacity: 1;
-            max-height: 600px;
-          }
-        }
-
-        .animate-fadeIn {
-          animation: fadeIn 0.25s ease-out forwards;
-        }
-
-        .animate-slideDown {
-          animation: slideDown 0.35s ease-out forwards;
-        }
-
         .custom-scrollbar::-webkit-scrollbar {
-          width: 8px;
+          width: 6px;
         }
         
         .custom-scrollbar::-webkit-scrollbar-track {
-          background: #F8F4E3;
+          background: #fef3c7;
           border-radius: 10px;
         }
         
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #D4AF37;
+          background: #f59e0b;
           border-radius: 10px;
         }
         
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #800000;
+          background: #d97706;
         }
       `}</style>
     </>
