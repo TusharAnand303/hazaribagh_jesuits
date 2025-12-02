@@ -5,6 +5,7 @@ import LatestNews from '../components/HomePageComponents/LatestNews'
 import LatestVideo from '../components/HomePageComponents/LatestVideo'
 import OurStats from '../components/HomePageComponents/OurStats'
 import Testimonials from '../components/HomePageComponents/Testimonials'
+import Universal from '../components/HomePageComponents/Universal'
 
 const HomePage = () => {
   return (
@@ -14,6 +15,7 @@ const HomePage = () => {
     <LatestNews/>
     <LatestVideo/>
     <OurStats/>
+    <Universal/>
     <Testimonials/>
     </>
   )
