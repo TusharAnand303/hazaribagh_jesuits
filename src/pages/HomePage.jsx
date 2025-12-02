@@ -7,6 +7,7 @@ import OurStats from '../components/HomePageComponents/OurStats'
 import Testimonials from '../components/HomePageComponents/Testimonials'
 import Universal from '../components/HomePageComponents/Universal'
 import ApostolicPlanning from '../components/HomePageComponents/ApostolicPlanning'
+import Maps from '../components/HomePageComponents/Maps'
 
 const HomePage = () => {
   return (
@@ -16,6 +17,7 @@ const HomePage = () => {
     <LatestNews/>
     <LatestVideo/>
     <OurStats/>
+    <Maps />
     <Testimonials/>
     <ApostolicPlanning/>
     <Universal/>
