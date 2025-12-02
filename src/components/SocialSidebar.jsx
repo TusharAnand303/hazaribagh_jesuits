@@ -34,8 +34,8 @@ const SocialSidebar = () => {
 
   return (
     <>
-      {/* Desktop Floating Social - Left Side - MOVED UP */}
-      <div className="hidden lg:block fixed left-0 top-1/3 transform -translate-y-1/2 z-40">
+      {/* Desktop Floating Social - Left Side - SLIGHTLY UP FROM CENTER */}
+      <div className="hidden lg:block fixed left-0 top-[45%] transform -translate-y-1/2 z-40">
         <div className="flex flex-col space-y-0">
           {socialLinks.map((social, index) => (
             <a
@@ -58,7 +58,7 @@ const SocialSidebar = () => {
         </div>
       </div>
 
-      {/* Mobile Floating Social - Bottom Left - MOVED UP */}
+      {/* Mobile Floating Social - Bottom Left - KEPT AS IS */}
       <div className="lg:hidden fixed bottom-24 left-6 z-40">
         <div className="relative">
           {/* Expanded Icons - Vertical */}
