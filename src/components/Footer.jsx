@@ -102,7 +102,7 @@ const Footer = () => {
 
           {/* More Links */}
           <div>
-            <h3 className="text-lg font-bold mb-6 text-orange-400">Resources</h3>
+            {/* <h3 className="text-lg font-bold mb-6 text-orange-400">Resources</h3> */}
             <ul className="space-y-3">
               {[
                 { name: 'Vatican Observatory', url: 'http://www.vaticanobservatory.va/content/specolavaticana/en.html' },
