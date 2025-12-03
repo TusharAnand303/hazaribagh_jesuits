@@ -150,7 +150,7 @@ const Navbar = () => {
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           scrolled 
             ? 'bg-white/95 backdrop-blur-md shadow-xl py-2' 
-            : 'bg-gradient-to-r from-primary via-navy to-primary py-3.5 shadow-lg'
+            : 'bg-linear-to-r from-primary via-navy to-primary py-3.5 shadow-lg'
         }`}
       >
         <div className="w-full px-3 sm:px-4 lg:px-6">
@@ -234,7 +234,7 @@ const Navbar = () => {
                       <div className="w-64 bg-white rounded shadow-2xl overflow-hidden border-t-4 border-primary animate-fadeIn">
                         
                         {/* Menu Header */}
-                        <div className="bg-gradient-to-r from-primary via-navy to-primary px-4 py-3">
+                        <div className="bg-linear-to-r from-primary via-navy to-primary px-4 py-3">
                           <h3 className="text-white text-sm font-bold flex items-center">
                             <span className="w-1.5 h-1.5 rounded-full bg-secondary mr-2"></span>
                             {menuData[key].title}
@@ -248,7 +248,7 @@ const Navbar = () => {
                               key={idx}
                               to={item.url}
                               onClick={() => setActiveMenu(null)}
-                              className="flex items-center px-4 py-2.5 text-navy hover:bg-gradient-to-r hover:from-primary hover:to-navy transition-all duration-200 group"
+                              className="flex items-center px-4 py-2.5 text-navy hover:bg-linear-to-r hover:from-primary hover:to-navy transition-all duration-200 group"
                             >
                               <span className="w-1 h-1 rounded-full bg-secondary mr-3 group-hover:scale-150 transition-transform"></span>
                               <span className="text-sm font-medium group-hover:text-white">
@@ -259,7 +259,7 @@ const Navbar = () => {
                         </div>
                         
                         {/* Bottom Accent */}
-                        <div className="h-1 bg-gradient-to-r from-secondary via-primary to-secondary"></div>
+                        <div className="h-1 bg-linear-to-r from-secondary via-primary to-secondary"></div>
                       </div>
                     </div>
                   )}
@@ -313,7 +313,7 @@ const Navbar = () => {
           <div className="fixed top-0 right-0 bottom-0 w-[85%] sm:w-80 bg-white z-50 lg:hidden overflow-hidden shadow-2xl animate-slideInRight">
             
             {/* Mobile Header */}
-            <div className="bg-gradient-to-r from-primary via-navy to-primary p-4 flex items-center justify-between">
+            <div className="bg-linear-to-r from-primary via-navy to-primary p-4 flex items-center justify-between">
               <div>
                 <h2 className="text-white font-bold text-lg">Navigation</h2>
                 <p className="text-secondary text-xs">Menu</p>
@@ -330,7 +330,7 @@ const Navbar = () => {
             </div>
 
             {/* Divider */}
-            <div className="h-0.5 bg-gradient-to-r from-secondary via-primary to-secondary"></div>
+            <div className="h-0.5 bg-linear-to-r from-secondary via-primary to-secondary"></div>
 
             {/* Mobile Menu Items */}
             <div className="overflow-y-auto h-[calc(100vh-85px)] custom-scrollbar">
@@ -373,7 +373,7 @@ const Navbar = () => {
                             key={idx}
                             to={item.url}
                             onClick={handleLinkClick}
-                            className="flex items-center gap-2 px-4 py-2.5 text-navy hover:bg-gradient-to-r hover:from-primary hover:to-navy hover:text-white transition-all"
+                            className="flex items-center gap-2 px-4 py-2.5 text-navy hover:bg-linear-to-r hover:from-primary hover:to-navy hover:text-white transition-all"
                           >
                             <span className="w-1 h-1 rounded-full bg-secondary"></span>
                             <span className="text-sm">{item.title}</span>

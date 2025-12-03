@@ -2,21 +2,21 @@ import React from "react";
 
 const ApostolicPlanning = () => {
   return (
-    <section className="py-8 sm:py-6 lg:py-8 bg-gradient-to-t from-white to-[#F8F4E3]">
+    <section className="py-8 sm:py-6 lg:py-8 bg-linear-to-t from-white to-cream">
       <div className="container mx-auto px-4 sm:px-8 lg:px-12">
         {/* Section Header */}
         <div className="text-center mb-10">
-          <span className="inline-block px-6 py-2 bg-[#F8F4E3] border border-[#D4AF37]/40 rounded-full text-[#800000] text-sm font-semibold mb-4 shadow-sm">
+          <span className="inline-block px-6 py-2 bg-cream border border-secondary/40 rounded-full text-primary text-sm font-semibold mb-4 shadow-sm">
             Mission Priorities
           </span>
 
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#800000] mb-4 tracking-wide">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-4 tracking-wide">
             Hazaribagh Province Apostolic Planning
           </h2>
 
-          <div className="w-24 h-1 bg-[#D4AF37] mx-auto rounded-full mb-6" />
+          <div className="w-24 h-1 bg-secondary mx-auto rounded-full mb-6" />
 
-          <p className="text-[#01082F] text-base sm:text-lg max-w-3xl mx-auto leading-relaxed">
+          <p className="text-navy text-base sm:text-lg max-w-3xl mx-auto leading-relaxed">
             Key apostolic focus areas through which the Province carries out its
             mission of faith, justice, and service among the people.
           </p>

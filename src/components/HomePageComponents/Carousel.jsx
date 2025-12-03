@@ -161,8 +161,8 @@ const Carousel = () => {
                 alt={slide.title}
                 className="w-full h-full object-cover"
               />
-              {/* Overlay Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-r from-navy/40 via-navy/10 to-navy/40"></div>
+              {/* Overlay linear */}
+              <div className="absolute inset-0 bg-linear-to-r from-navy/40 via-navy/10 to-navy/40"></div>
             </div>
 
 
@@ -178,7 +178,7 @@ const Carousel = () => {
                         : 'translate-y-10 opacity-0'
                     }`}
                   >
-                    <span className="inline-block px-4 py-2 bg-primary/20 backdrop-blur-sm border border-secondary/30 rounded-full text-secondary text-xs sm:text-sm font-semibold mb-4">
+                    <span className="hidden sm:inline-block px-4 py-2 bg-primary/20 backdrop-blur-sm border border-secondary/30 rounded-full text-secondary text-xs sm:text-sm font-semibold mb-4">
                       {slide.subtitle}
                     </span>
                   </div>
@@ -216,7 +216,7 @@ const Carousel = () => {
                         : 'translate-y-10 opacity-0'
                     }`}
                   >
-                    <button className="px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-primary to-navy hover:from-navy hover:to-primary text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                    <button className="px-4 sm:px-6 py-2 sm:py-3 bg-linear-to-r from-primary to-navy hover:from-navy hover:to-primary text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
                       Learn More
                     </button>
                     <button className="px-4 sm:px-6 py-2 sm:py-3 bg-transparent border-2 border-white text-white hover:bg-white hover:text-navy font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">

@@ -55,7 +55,7 @@ const Testimonials = () => {
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0" style={{
-          backgroundImage: 'radial-gradient(circle at 2px 2px, #f97316 1px, transparent 0)',
+          backgroundImage: 'radial-linear(circle at 2px 2px, #f97316 1px, transparent 0)',
           backgroundSize: '40px 40px'
         }}></div>
       </div>
@@ -72,14 +72,14 @@ const Testimonials = () => {
           <p className="text-gray-600 text-base max-w-2xl mx-auto">
             Hear from our students, parents, and community members
           </p>
-          <div className="w-24 h-1 bg-gradient-to-r from-amber-500 to-orange-500 mx-auto mt-6 rounded-full"></div>
+          <div className="w-24 h-1 bg-linear-to-r from-amber-500 to-orange-500 mx-auto mt-6 rounded-full"></div>
         </div>
 
         {/* Horizontal Scrolling Testimonials */}
         <div className="relative">
-          {/* Gradient Overlays - Hidden on mobile (md:block means hidden below 768px) */}
-          <div className="hidden md:block absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
-          <div className="hidden md:block absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
+          {/* linear Overlays - Hidden on mobile (md:block means hidden below 768px) */}
+          <div className="hidden md:block absolute left-0 top-0 bottom-0 w-32 bg-linear-to-r from-white to-transparent z-10 pointer-events-none"></div>
+          <div className="hidden md:block absolute right-0 top-0 bottom-0 w-32 bg-linear-to-l from-white to-transparent z-10 pointer-events-none"></div>
 
           {/* Scrolling Container */}
           <div className="testimonial-scroll-container">
@@ -87,7 +87,7 @@ const Testimonials = () => {
               {duplicatedTestimonials.map((testimonial, index) => (
                 <div
                   key={index}
-                  className="flex-shrink-0 w-80 bg-white rounded-md shadow-md p-6 border border-gray-200 hover:border-orange-500 hover:shadow-lg transition-all duration-300"
+                  className="shrink-0 w-80 bg-white rounded-md shadow-md p-6 border border-gray-200 hover:border-orange-500 hover:shadow-lg transition-all duration-300"
                 >
                   {/* Quote Icon */}
                   <div className="mb-4">

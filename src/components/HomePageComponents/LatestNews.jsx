@@ -69,7 +69,7 @@ const LatestNews = () => {
   };
 
   return (
-    <section className="py-4 sm:py-6 lg:py-8 bg-gradient-to-b from-white to-cream">
+    <section className="py-4 sm:py-6 lg:py-8 bg-linear-to-b from-white to-cream">
       <div className="mx-auto px-4 sm:px-8 lg:px-12">
         {/* Section Header */}
         <motion.div
@@ -122,7 +122,7 @@ const LatestNews = () => {
                   {/* Horizontal Layout - Image Left, Content Right */}
                   <div className="flex flex-row h-40">
                     {/* Image Section - Left Side */}
-                    <div className="relative w-40 flex-shrink-0 overflow-hidden">
+                    <div className="relative w-40 shrink-0 overflow-hidden">
                       <motion.img
                         src={news.image}
                         alt={news.title}
@@ -131,7 +131,7 @@ const LatestNews = () => {
                         transition={{ duration: 0.5 }}
                       />
                       {/* Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-navy/80 via-navy/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
+                      <div className="absolute inset-0 bg-linear-to-r from-navy/80 via-navy/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
                       
                       {/* Category Badge */}
                       <div className="absolute top-2 left-2">

@@ -30,7 +30,7 @@ const Maps = () => {
   };
 
   return (
-    <section className="py-4 sm:py-6 lg:py-8 bg-gradient-to-b from-white to-cream">
+    <section className="py-4 sm:py-6 lg:py-8 bg-linear-to-b from-white to-cream">
       <div className="container mx-auto px-4 sm:px-8 lg:px-12">
         {/* Section Header - More compact */}
         <motion.div
@@ -73,7 +73,7 @@ const Maps = () => {
         >
           <div className="bg-white rounded-xl shadow-lg overflow-hidden">
             {/* Responsive Map Wrapper - Even more reduced height */}
-            <div className="relative w-full aspect-[4/3] sm:aspect-[5/2] lg:aspect-[7/2]">
+            <div className="relative w-full aspect-4/3 sm:aspect-5/2 lg:aspect-7/2">
               <iframe 
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3648.1932617310854!2d90.47817987566367!3d23.88276467858032!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755cf000259f935%3A0x2c370d86aa46cc29!2sArrupe%20Niwas%2C%20Jesuit%20Novitiate!5e0!3m2!1sen!2sin!4v1764678827425!5m2!1sen!2sin" 
                 className="absolute inset-0 w-full h-full"
@@ -86,7 +86,7 @@ const Maps = () => {
             </div>
 
             {/* Location Info - More compact */}
-            <div className="p-4 sm:p-5 bg-gradient-to-r from-primary/5 to-secondary/5">
+            <div className="p-4 sm:p-5 bg-linear-to-r from-primary/5 to-secondary/5">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                 <div>
                   <p className="text-gray text-xs sm:text-sm leading-relaxed">

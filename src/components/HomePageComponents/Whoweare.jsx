@@ -33,7 +33,7 @@ const Whoweare = () => {
   };
 
   return (
-    <section className="py-4 sm:py-6 lg:py-8 bg-gradient-to-b from-white to-cream">
+    <section className="py-4 sm:py-6 lg:py-8 bg-linear-to-b from-white to-cream">
       <div className="container mx-auto px-4 sm:px-6 lg:px-12">
         
         {/* Section Title with Badge */}
@@ -72,7 +72,7 @@ const Whoweare = () => {
             
             {/* Logo Section - Smaller */}
             <motion.div
-              className="w-full lg:w-1/4 flex items-center justify-center flex-shrink-0"
+              className="w-full lg:w-1/4 flex items-center justify-center shrink-0"
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}

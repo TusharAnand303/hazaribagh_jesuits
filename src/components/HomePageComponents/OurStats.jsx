@@ -142,7 +142,7 @@ const SimpleStatCard = ({ stat, variants }) => {
       <div className="bg-linear-to-b from-navy to-primary rounded-xl p-5 sm:p-6 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-secondary/50 text-center group h-full">
         {/* Icon with Gradient Background - Smaller */}
         <motion.div
-          className={`w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br ${stat.color} rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:shadow-xl transition-all duration-300`}
+          className={`w-10 h-10 sm:w-12 sm:h-12 bg-linear-to-br ${stat.color} rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:shadow-xl transition-all duration-300`}
           whileHover={{ rotate: 360, scale: 1.1 }}
           transition={{ duration: 0.6 }}
         >

@@ -7,9 +7,9 @@ const Footer = () => {
     <footer className="bg-gradient-to-b from-gray-900 to-black text-white w-full">
       {/* Main Footer */}
       <div className="w-full px-4 sm:px-6 lg:px-12 pt-16 pb-8">
-        <div className="flex flex-row items-start justify-around mb-10">
+        <div className="flex sm:flex-row flex-col gap-10 sm:gap-0 items-start sm:p-0 sm:pl-0 pl-3 sm:items-start justify-around mb-10">
           {/* Logo and Social Links Only */}
-          <div className="flex flex-col items-center md:items-start">
+          <div className="flex flex-col items-start sm:items-center">
             {/* Large Logo */}
             <div className="mb-6">
               <img 
@@ -90,9 +90,9 @@ const Footer = () => {
                     href={link.url} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="text-gray-400 hover:text-orange-400 transition-colors duration-300 text-sm flex items-center group break-words"
+                    className="text-gray-400 hover:text-orange-400 transition-colors duration-300 text-sm flex items-center group wrap-break-word"
                   >
-                    <span className="w-0 group-hover:w-2 h-0.5 bg-orange-400 mr-0 group-hover:mr-2 transition-all duration-300 flex-shrink-0"></span>
+                    <span className="w-0 group-hover:w-2 h-0.5 bg-orange-400 mr-0 group-hover:mr-2 transition-all duration-300 shrink-0"></span>
                     {link.name}
                   </a>
                 </li>

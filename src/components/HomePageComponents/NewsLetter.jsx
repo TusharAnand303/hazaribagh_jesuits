@@ -84,7 +84,7 @@ const NewsLetter = () => {
   };
 
   return (
-    <section className="py-4 sm:py-6 lg:py-8 bg-gradient-to-b from-cream to-white overflow-hidden">
+    <section className="py-4 sm:py-6 lg:py-8 bg-linear-to-b from-cream to-white overflow-hidden">
       {/* Section Header - With container */}
       <div className="container mx-auto px-4 sm:px-8 lg:px-12 mb-8">
         <motion.div
@@ -142,9 +142,9 @@ const NewsLetter = () => {
           <FiChevronRight className="w-8 h-8 lg:w-10 lg:h-10" />
         </motion.button>
 
-        {/* Gradient Overlays - Hidden on mobile */}
-        <div className="hidden md:block absolute left-0 top-0 bottom-0 w-48 bg-gradient-to-r from-cream to-transparent z-10 pointer-events-none"></div>
-        <div className="hidden md:block absolute right-0 top-0 bottom-0 w-48 bg-gradient-to-l from-cream to-transparent z-10 pointer-events-none"></div>
+        {/* linear Overlays - Hidden on mobile */}
+        <div className="hidden md:block absolute left-0 top-0 bottom-0 w-48 bg-linear-to-r from-cream to-transparent z-10 pointer-events-none"></div>
+        <div className="hidden md:block absolute right-0 top-0 bottom-0 w-48 bg-linear-to-l from-cream to-transparent z-10 pointer-events-none"></div>
 
         {/* Scrollable Container - Increased side padding */}
         <div
@@ -154,7 +154,7 @@ const NewsLetter = () => {
           {newsletters.map((newsletter, index) => (
             <motion.div
               key={newsletter.id}
-              className="flex-shrink-0 w-80 snap-center"
+              className="shrink-0 w-80 snap-center"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -163,13 +163,13 @@ const NewsLetter = () => {
               {/* Fixed height card */}
               <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group h-[280px] flex flex-col">
                 {/* Newsletter Image - Fixed height */}
-                <div className="relative h-32 flex-shrink-0 overflow-hidden">
+                <div className="relative h-32 shrink-0 overflow-hidden">
                   <img
                     src={newsletter.image}
                     alt={newsletter.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-navy/20 to-transparent"></div>
+                  <div className="absolute inset-0 bg-linear-to-t from-navy/80 via-navy/20 to-transparent"></div>
                   
                   {/* Date Badge */}
                   <div className="absolute top-2 right-2">

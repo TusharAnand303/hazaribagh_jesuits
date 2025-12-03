@@ -65,14 +65,14 @@ const Universal = () => {
                   color: '#F8F4E3', 
                   textShadow: '0 1px 2px rgba(0,0,0,0.6)'
                 }}>
-                  <span className="group-hover:text-[#D4AF37] transition-colors duration-300">
+                  <span className="group-hover:text-secondary transition-colors duration-300">
                     {item.text}
                   </span>
                 </h3>
               </div>
 
               {/* Subtle gradient overlay on hover */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute inset-0 bg-linear-to-t from-black/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </div>
           ))}
         </div>
