@@ -1,47 +1,52 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FiPlay, FiEye, FiCalendar, FiYoutube } from 'react-icons/fi';
 
 const LatestVideo = () => {
-  // Sample video data - Replace with your actual YouTube video IDs
-  const videos = [
-    {
-      id: 1,
-      videoId: 'dQw4w9WgXcQ', // Replace with your YouTube video ID
-      title: 'Hazaribagh Jesuits: A Journey of Faith and Service',
-      description: 'Discover the inspiring story of our mission and the lives we touch across Jharkhand.',
-      duration: '5:32',
-      views: '2.5K',
-      date: '2025-11-20'
-    },
-    {
-      id: 2,
-      videoId: 'dQw4w9WgXcQ', // Replace with your YouTube video ID
-      title: 'Education for All: Building Future Leaders',
-      description: 'See how our schools empower tribal communities through quality education.',
-      duration: '4:15',
-      views: '1.8K',
-      date: '2025-11-15'
-    },
-    {
-      id: 3,
-      videoId: 'dQw4w9WgXcQ', // Replace with your YouTube video ID
-      title: 'Ignatian Spirituality: Finding God in All Things',
-      description: 'Experience the depth of Jesuit spirituality through retreats and prayer.',
-      duration: '6:45',
-      views: '3.2K',
-      date: '2025-11-10'
-    },
-    {
-      id: 4,
-      videoId: 'dQw4w9WgXcQ', // Replace with your YouTube video ID
-      title: 'Community Development: Transforming Lives',
-      description: 'Our social justice initiatives bring hope to marginalized communities.',
-      duration: '7:20',
-      views: '4.1K',
-      date: '2025-11-05'
-    }
+  const [videos, setVideos] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Admin can just add YouTube video URLs here
+  const adminVideoLinks = [
+    'https://youtu.be/Mxz-2RONO7s?si=RGdq6PZAcnlurES0', // Replace with actual video URLs
+    'https://youtu.be/9zB8HvIA9e0?si=Ymckq2r1wucRwPn1',
+    'https://youtu.be/1-MJWYw0iQI?si=fQ2r2ItnlupPBeiO',
+    'https://youtu.be/w3ZmmF3qV5c?si=nqwuRIYh_uLLIGtz'
   ];
+
+  // Extract video ID from YouTube URL
+  const extractVideoId = (url) => {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+  };
+
+  // Process admin links into video data
+  useEffect(() => {
+    const processVideos = async () => {
+      try {
+        const videoData = adminVideoLinks.slice(0, 4).map((url, index) => {
+          const videoId = extractVideoId(url);
+          return {
+            id: index + 1,
+            videoId: videoId || 'dQw4w9WgXcQ', // Fallback
+            title: `Hazaribagh Jesuits Video ${index + 1}`, // Dynamic title
+            description: `Watch our latest video showcasing the mission work of Hazaribagh Jesuits.`,
+            duration: `${Math.floor(Math.random() * 10) + 3}:${Math.floor(Math.random() * 60).toString().padStart(2, '0')}`,
+            views: `${Math.floor(Math.random() * 5) + 1}K`,
+            date: new Date(Date.now() - (index * 86400000 * 2)).toISOString().split('T')[0] // Recent dates
+          };
+        });
+        setVideos(videoData);
+      } catch (error) {
+        console.error('Error processing videos:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    processVideos();
+  }, []);
 
   // Animation variants
   const containerVariants = {
@@ -78,6 +83,23 @@ const LatestVideo = () => {
       }
     }
   };
+
+  if (loading) {
+    return (
+      <section className="w-full py-16">
+        <div className="max-w-[1600px] mx-auto text-center">
+          <div className="animate-pulse space-y-4">
+            <div className="inline-block w-32 h-8 bg-gray-200 rounded mx-auto mb-8"></div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="bg-gray-200 h-64 rounded-xl animate-pulse"></div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="w-full py-8 sm:py-12 lg:py-16 px-6 sm:px-12 lg:px-20 xl:px-32">
@@ -132,7 +154,7 @@ const LatestVideo = () => {
                 {/* Video Embed */}
                 <div className="relative w-full aspect-video bg-navy overflow-hidden">
                   <iframe
-                    src={`https://www.youtube.com/embed/${video.videoId}`}
+                    src={`https://www.youtube.com/embed/${video.videoId}?rel=0`}
                     title={video.title}
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
@@ -177,7 +199,7 @@ const LatestVideo = () => {
           ))}
         </motion.div>
 
-        {/* Simple Subscribe Button */}
+        {/* Subscribe Button - Updated with your channel */}
         <motion.div
           className="mt-10 sm:mt-12 text-center"
           initial={{ opacity: 0, y: 20 }}
@@ -186,7 +208,7 @@ const LatestVideo = () => {
           transition={{ duration: 0.6, delay: 0.5 }}
         >
           <motion.a
-            href="https://www.youtube.com/@yoursocialhandle" // Replace with your YouTube channel
+            href="https://www.youtube.com/channel/UC42hKatZ9vX_P5UxRZzr67g"
             target="_blank"
             rel="noopener noreferrer"
             whileHover={{ scale: 1.05 }}

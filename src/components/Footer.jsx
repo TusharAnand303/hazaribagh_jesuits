@@ -55,15 +55,26 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Ministries */}
+          {/* Related Links - Replaced Ministries */}
           <div>
-            <h3 className="text-lg font-bold mb-6 text-orange-400">Our Ministries</h3>
+            <h3 className="text-lg font-bold mb-6 text-orange-400">Related Links</h3>
             <ul className="space-y-3">
-              {['Education', 'Social Work', 'Pastoral Care', 'Formation', 'Retreat Centers', 'Media & Communication'].map((link, idx) => (
+              {[
+                { name: 'Jesuit Curia in Rome', url: 'https://sjcuria.global/en/' },
+                { name: 'Jesuit Conference of South Asia', url: 'https://jcsaweb.org/' },
+                { name: 'Universal Apostolic Preferences', url: 'https://sites.google.com/view/universalpreferences/home' },
+                { name: 'Jesuit Refugee Service', url: 'https://jrs.net/en/jesuit-refugee-service/' },
+                { name: "Pope's Worldwide Prayer Network", url: 'https://www.popesprayer.va/' }
+              ].map((link, idx) => (
                 <li key={idx}>
-                  <a href={`#${link.toLowerCase().replace(/\s+/g, '-')}`} className="text-gray-400 hover:text-orange-400 transition-colors duration-300 text-sm flex items-center group">
+                  <a 
+                    href={link.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-gray-400 hover:text-orange-400 transition-colors duration-300 text-sm flex items-center group break-words"
+                  >
                     <span className="w-0 group-hover:w-2 h-0.5 bg-orange-400 mr-0 group-hover:mr-2 transition-all duration-300"></span>
-                    {link}
+                    {link.name}
                   </a>
                 </li>
               ))}
@@ -72,40 +83,33 @@ const Footer = () => {
 
           {/* Contact Info */}
           <div>
-            <h3 className="text-lg font-bold mb-6 text-orange-400">Contact Us</h3>
-            <div className="space-y-4">
-              <div className="flex items-start group">
-                <div className="w-10 h-10 bg-gray-800 group-hover:bg-orange-600 rounded-lg flex items-center justify-center flex-shrink-0 mr-3 transition-all duration-300">
-                  <FaMapMarkerAlt className="text-orange-400 group-hover:text-white" />
-                </div>
-                <div>
-                  <p className="text-gray-400 text-sm leading-relaxed">
-                    Provincial House<br />
-                    Hazaribagh, Jharkhand<br />
-                    India - 825301
-                  </p>
-                </div>
-              </div>
-              
-              <div className="flex items-center group">
-                <div className="w-10 h-10 bg-gray-800 group-hover:bg-orange-600 rounded-lg flex items-center justify-center flex-shrink-0 mr-3 transition-all duration-300">
-                  <FaPhone className="text-orange-400 group-hover:text-white" />
-                </div>
-                <a href="tel:+916546123456" className="text-gray-400 hover:text-orange-400 transition-colors text-sm">
-                  +91 6546 123456
-                </a>
-              </div>
-              
-              <div className="flex items-center group">
-                <div className="w-10 h-10 bg-gray-800 group-hover:bg-orange-600 rounded-lg flex items-center justify-center flex-shrink-0 mr-3 transition-all duration-300">
-                  <FaEnvelope className="text-orange-400 group-hover:text-white" />
-                </div>
-                <a href="mailto:provincial@hazaribaghjesuits.org" className="text-gray-400 hover:text-orange-400 transition-colors text-sm break-all">
-                  provincial@hazaribaghjesuits.org
-                </a>
-              </div>
-            </div>
+            <ul className="space-y-3">
+              {[
+                { name: 'Vatican Observatory', url: 'http://www.vaticanobservatory.va/content/specolavaticana/en.html' },
+                { name: 'Lok Manch', url: 'http://www.hamaralokmanch.net/Default.aspx' },
+                { name: 'JIVAN', url: 'https://jcsaweb.org/resources/publications/jivan/' },
+                { name: 'IGNIS', url: 'https://jcsaweb.org/resources/publications/' },
+                { name: 'America Magazine', url: 'https://www.americamagazine.org/' },
+                { name: 'Online Ministries', url: 'https://onlineministries.creighton.edu/CollaborativeMinistry/online.html' },
+                { name: 'Ignatian Spirituality', url: 'https://www.ignatianspirituality.com/' },
+                { name: 'Loyola Press', url: 'https://www.loyolapress.com/our-catholic-faith/ignatian-spirituality' },
+                { name: 'Archives', url: 'https://jesuitarchives.blogspot.com/' }
+              ].map((link, idx) => (
+                <li key={idx}>
+                  <a 
+                    href={link.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-gray-400 hover:text-orange-400 transition-colors duration-300 text-sm flex items-center group break-words hover:underline"
+                  >
+                    <span className="w-0 group-hover:w-2 h-0.5 bg-orange-400 mr-0 group-hover:mr-2 transition-all duration-300 flex-shrink-0"></span>
+                    {link.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
+
         </div>
 
         {/* Bottom Bar */}
