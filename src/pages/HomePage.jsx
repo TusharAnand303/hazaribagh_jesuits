@@ -8,6 +8,8 @@ import Testimonials from '../components/HomePageComponents/Testimonials'
 import Universal from '../components/HomePageComponents/Universal'
 import ApostolicPlanning from '../components/HomePageComponents/ApostolicPlanning'
 import Maps from '../components/HomePageComponents/Maps'
+import NewsLetter from '../components/HomePageComponents/NewsLetter'
+import Whoweare from '../components/HomePageComponents/Whoweare'
 
 const HomePage = () => {
   return (
@@ -15,10 +17,12 @@ const HomePage = () => {
     <Carousel/>
     <AboutHead/>
     <LatestNews/>
+    <NewsLetter/>
+    <Whoweare/>
     <LatestVideo/>
     <OurStats/>
-    <Maps />
     <Testimonials/>
+    <Maps/>
     <ApostolicPlanning/>
     <Universal/>
     </>

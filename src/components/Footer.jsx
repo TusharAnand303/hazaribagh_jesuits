@@ -1,41 +1,57 @@
 import React from 'react';
 import { FaFacebook, FaTwitter, FaInstagram, FaYoutube, FaEnvelope, FaPhone, FaMapMarkerAlt, FaHeart } from 'react-icons/fa';
+import footer_logo from './../assets/images/web_images/logoo.png';
 
 const Footer = () => {
   return (
-    <footer className="bg-gradient-to-b from-gray-900 to-black text-white">
+    <footer className="bg-gradient-to-b from-gray-900 to-black text-white w-full">
       {/* Main Footer */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-          {/* About Section */}
-          <div>
-            <div className="flex items-center space-x-2 mb-6">
-              <div className="bg-gradient-to-br from-amber-600 to-orange-600 p-2 rounded-lg">
-                <div className="w-8 h-8 flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">HJ</span>
-                </div>
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-white">Hazaribagh Province</h3>
-                <p className="text-xs text-gray-400">Society of Jesus</p>
-              </div>
+      <div className="w-full px-4 sm:px-6 lg:px-12 pt-16 pb-8">
+        <div className="flex flex-row items-start justify-around mb-10">
+          {/* Logo and Social Links Only */}
+          <div className="flex flex-col items-center md:items-start">
+            {/* Large Logo */}
+            <div className="mb-6">
+              <img 
+                src={footer_logo} 
+                alt="Hazaribagh Province Logo" 
+                className="w-32 h-32 sm:w-40 sm:h-40 object-contain transition-transform duration-300 hover:scale-105" 
+              />
             </div>
-            <p className="text-gray-400 text-sm leading-relaxed mb-6">
-              The Hazaribagh Province of the Society of Jesus is committed to education, 
-              social justice, and spiritual formation, serving communities across Jharkhand.
-            </p>
+            
+            {/* Social Links */}
             <div className="flex space-x-3">
-              <a href="https://facebook.com" className="w-10 h-10 bg-gray-800 hover:bg-orange-600 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110">
-                <FaFacebook className="text-lg" />
+              <a 
+                href="https://facebook.com" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-11 h-11 bg-gray-800 hover:bg-orange-600 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg"
+              >
+                <FaFacebook className="text-xl" />
               </a>
-              <a href="https://twitter.com" className="w-10 h-10 bg-gray-800 hover:bg-orange-600 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110">
-                <FaTwitter className="text-lg" />
+              <a 
+                href="https://twitter.com" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-11 h-11 bg-gray-800 hover:bg-orange-600 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg"
+              >
+                <FaTwitter className="text-xl" />
               </a>
-              <a href="https://instagram.com" className="w-10 h-10 bg-gray-800 hover:bg-orange-600 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110">
-                <FaInstagram className="text-lg" />
+              <a 
+                href="https://instagram.com" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-11 h-11 bg-gray-800 hover:bg-orange-600 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg"
+              >
+                <FaInstagram className="text-xl" />
               </a>
-              <a href="https://youtube.com" className="w-10 h-10 bg-gray-800 hover:bg-orange-600 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110">
-                <FaYoutube className="text-lg" />
+              <a 
+                href="https://youtube.com" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-11 h-11 bg-gray-800 hover:bg-orange-600 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg"
+              >
+                <FaYoutube className="text-xl" />
               </a>
             </div>
           </div>
@@ -46,7 +62,10 @@ const Footer = () => {
             <ul className="space-y-3">
               {['About Us', 'Our Ministries', 'Communities', 'Vocations', 'News & Events', 'Support Us'].map((link, idx) => (
                 <li key={idx}>
-                  <a href={`#${link.toLowerCase().replace(/\s+/g, '-')}`} className="text-gray-400 hover:text-orange-400 transition-colors duration-300 text-sm flex items-center group">
+                  <a 
+                    href={`#${link.toLowerCase().replace(/\s+/g, '-')}`} 
+                    className="text-gray-400 hover:text-orange-400 transition-colors duration-300 text-sm flex items-center group"
+                  >
                     <span className="w-0 group-hover:w-2 h-0.5 bg-orange-400 mr-0 group-hover:mr-2 transition-all duration-300"></span>
                     {link}
                   </a>
@@ -55,7 +74,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Related Links - Replaced Ministries */}
+          {/* Related Links */}
           <div>
             <h3 className="text-lg font-bold mb-6 text-orange-400">Related Links</h3>
             <ul className="space-y-3">
@@ -73,7 +92,7 @@ const Footer = () => {
                     rel="noopener noreferrer"
                     className="text-gray-400 hover:text-orange-400 transition-colors duration-300 text-sm flex items-center group break-words"
                   >
-                    <span className="w-0 group-hover:w-2 h-0.5 bg-orange-400 mr-0 group-hover:mr-2 transition-all duration-300"></span>
+                    <span className="w-0 group-hover:w-2 h-0.5 bg-orange-400 mr-0 group-hover:mr-2 transition-all duration-300 flex-shrink-0"></span>
                     {link.name}
                   </a>
                 </li>
@@ -81,8 +100,9 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Contact Info */}
+          {/* More Links */}
           <div>
+            <h3 className="text-lg font-bold mb-6 text-orange-400">Resources</h3>
             <ul className="space-y-3">
               {[
                 { name: 'Vatican Observatory', url: 'http://www.vaticanobservatory.va/content/specolavaticana/en.html' },
@@ -100,7 +120,7 @@ const Footer = () => {
                     href={link.url} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="text-gray-400 hover:text-orange-400 transition-colors duration-300 text-sm flex items-center group break-words hover:underline"
+                    className="text-gray-400 hover:text-orange-400 transition-colors duration-300 text-sm flex items-center group break-words"
                   >
                     <span className="w-0 group-hover:w-2 h-0.5 bg-orange-400 mr-0 group-hover:mr-2 transition-all duration-300 flex-shrink-0"></span>
                     {link.name}
@@ -109,7 +129,6 @@ const Footer = () => {
               ))}
             </ul>
           </div>
-
         </div>
 
         {/* Bottom Bar */}

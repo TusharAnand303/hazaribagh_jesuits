@@ -2,7 +2,7 @@ import React from "react";
 
 const ApostolicPlanning = () => {
   return (
-    <section className="py-8 sm:py-12 lg:py-14 bg-gradient-to-t from-white to-[#F8F4E3]">
+    <section className="py-8 sm:py-6 lg:py-8 bg-gradient-to-t from-white to-[#F8F4E3]">
       <div className="container mx-auto px-4 sm:px-8 lg:px-12">
         {/* Section Header */}
         <div className="text-center mb-10">
@@ -25,17 +25,17 @@ const ApostolicPlanning = () => {
         {/* Cards Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
           {[
-            "Strengthening and Expanding our Mission in North Karnataka",
+            "Strengthening and Expanding our Mission in North Hazaribagh",
             "Responding to Communalism and Fundamentalism",
             "Imparting Integral Formation to Youth",
             "Training in Collaboration and Leadership",
           ].map((text, index) => (
             <div
               key={index}
-              className="group bg-white/80 backdrop-blur-sm rounded-2xl p-8 flex flex-col justify-center items-center text-center cursor-pointer 
-                         shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-white/50 hover:border-[#D4AF37]/30"
+              className="group text-white bg-linear-to-r from-primary to-navy backdrop-blur-sm rounded-2xl p-4 flex flex-col justify-center items-center text-center cursor-pointer 
+                         shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-cream hover:border-cream"
             >
-              <p className="text-[#01082F] font-semibold text-sm sm:text-base leading-relaxed group-hover:text-[#800000] transition-colors duration-300">
+              <p className="text-white font-semibold text-sm sm:text-base leading-relaxed group-hover:text-white transition-colors duration-300">
                 {text}
               </p>
             </div>
@@ -46,7 +46,7 @@ const ApostolicPlanning = () => {
         <div className="text-center mt-12">
           <button
             className="px-10 py-4 rounded-xl font-bold text-lg shadow-lg transition-all duration-300 
-                       bg-[#800000] text-[#F8F4E3] hover:bg-[#01082F] hover:shadow-2xl hover:-translate-y-1"
+                       bg-secondary text-white cursor-pointer hover:shadow-2xl hover:-translate-y-1"
           >
             Download the PDF
           </button>

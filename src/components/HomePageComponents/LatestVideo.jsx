@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FiPlay, FiEye, FiCalendar, FiYoutube } from 'react-icons/fi';
+import { FiYoutube } from 'react-icons/fi';
 
 const LatestVideo = () => {
   const [videos, setVideos] = useState([]);
@@ -8,7 +8,7 @@ const LatestVideo = () => {
 
   // Admin can just add YouTube video URLs here
   const adminVideoLinks = [
-    'https://youtu.be/Mxz-2RONO7s?si=RGdq6PZAcnlurES0', // Replace with actual video URLs
+    'https://youtu.be/Mxz-2RONO7s?si=RGdq6PZAcnlurES0',
     'https://youtu.be/9zB8HvIA9e0?si=Ymckq2r1wucRwPn1',
     'https://youtu.be/1-MJWYw0iQI?si=fQ2r2ItnlupPBeiO',
     'https://youtu.be/w3ZmmF3qV5c?si=nqwuRIYh_uLLIGtz'
@@ -29,12 +29,7 @@ const LatestVideo = () => {
           const videoId = extractVideoId(url);
           return {
             id: index + 1,
-            videoId: videoId || 'dQw4w9WgXcQ', // Fallback
-            title: `Hazaribagh Jesuits Video ${index + 1}`, // Dynamic title
-            description: `Watch our latest video showcasing the mission work of Hazaribagh Jesuits.`,
-            duration: `${Math.floor(Math.random() * 10) + 3}:${Math.floor(Math.random() * 60).toString().padStart(2, '0')}`,
-            views: `${Math.floor(Math.random() * 5) + 1}K`,
-            date: new Date(Date.now() - (index * 86400000 * 2)).toISOString().split('T')[0] // Recent dates
+            videoId: videoId || 'dQw4w9WgXcQ'
           };
         });
         setVideos(videoData);
@@ -102,7 +97,7 @@ const LatestVideo = () => {
   }
 
   return (
-    <section className="w-full py-8 sm:py-12 lg:py-16 px-6 sm:px-12 lg:px-20 xl:px-32">
+    <section className="w-full py-4 sm:py-6 lg:py-8 px-6 sm:px-12 lg:px-20 xl:px-32 bg-linear-to-b from-cream to-white">
       <div className="max-w-[1600px] mx-auto">
         {/* Section Header */}
         <motion.div
@@ -150,56 +145,23 @@ const LatestVideo = () => {
               whileHover={{ y: -8 }}
               transition={{ duration: 0.3 }}
             >
-              <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 h-full flex flex-col group">
-                {/* Video Embed */}
+              <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group">
+                {/* Video Embed - Only Thumbnail */}
                 <div className="relative w-full aspect-video bg-navy overflow-hidden">
                   <iframe
-                    src={`https://www.youtube.com/embed/${video.videoId}?rel=0`}
-                    title={video.title}
+                    src={`https://www.youtube.com/embed/${video.videoId}?rel=0&modestbranding=1`}
+                    title={`Video ${video.id}`}
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                     className="w-full h-full"
                   />
-                  
-                  {/* Duration Badge */}
-                  <div className="absolute bottom-2 right-2 bg-black/80 backdrop-blur-sm px-2 py-1 rounded text-white text-xs font-semibold">
-                    {video.duration}
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="p-5 flex-1 flex flex-col">
-                  {/* Title */}
-                  <h3 className="text-base sm:text-lg font-bold text-navy mb-2 line-clamp-2 group-hover:text-primary transition-colors duration-300">
-                    {video.title}
-                  </h3>
-
-                  {/* Description */}
-                  <p className="text-sm text-gray leading-relaxed mb-3 line-clamp-2 flex-1">
-                    {video.description}
-                  </p>
-
-                  {/* Meta Information */}
-                  <div className="flex items-center justify-between text-xs text-gray pt-3 border-t border-gray-200">
-                    <span className="flex items-center gap-1">
-                      <FiEye className="w-3 h-3" />
-                      {video.views} views
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <FiCalendar className="w-3 h-3" />
-                      {new Date(video.date).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric'
-                      })}
-                    </span>
-                  </div>
                 </div>
               </div>
             </motion.div>
           ))}
         </motion.div>
 
-        {/* Subscribe Button - Updated with your channel */}
+        {/* Subscribe Button */}
         <motion.div
           className="mt-10 sm:mt-12 text-center"
           initial={{ opacity: 0, y: 20 }}

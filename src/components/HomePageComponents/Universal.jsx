@@ -21,8 +21,8 @@ const Universal = () => {
   ];
 
   return (
-    <section className="py-8 sm:py-12 lg:py-16 bg-linear-to-b from-white to-primary">
-      <div className="container mx-auto px-4 sm:px-8 lg:px-12">
+    <section className="py-8 sm:py-6 lg:py-8 bg-linear-to-b from-white to-primary">
+      <div className="container mx-auto px-4 sm:px-8 lg:px-12 pb-10">
         {/* Heading */}
         <div className="text-center max-w-3xl mx-auto">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 tracking-wide" style={{ color: '#800000' }}>
@@ -37,11 +37,11 @@ const Universal = () => {
         </div>
 
         {/* Cards */}
-        <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4 max-w-6xl mx-auto">
+        <div className="mt-6 grid gap-8 sm:grid-cols-2 lg:grid-cols-4 max-w-6xl mx-auto">
           {cards.map((item) => (
             <div
               key={item.text}
-              className="relative h-72 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 group cursor-pointer"
+              className="relative h-60 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 group cursor-pointer"
             >
               {/* Background Image */}
               <div 
@@ -53,7 +53,7 @@ const Universal = () => {
               />
               
               {/* Minimal dark gradient overlay for subtle text readability */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[#01082F]/40 via-[#800000]/30 to-[#01082F]/40" />
+           
               
               {/* Content container */}
               <div className="relative z-10 flex flex-col items-center justify-end h-full p-6 pb-8">

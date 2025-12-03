@@ -54,7 +54,7 @@ const AboutHead = () => {
   };
 
   return (
-    <section className="py-6 sm:py-10 lg:py-12 overflow-hidden bg-gradient-to-b from-white to-cream/30">
+    <section className="py-6 sm:py-10 lg:py-12 overflow-hidden bg-linear-to-b from-cream to-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Title */}
         <motion.div
@@ -95,17 +95,17 @@ const AboutHead = () => {
             <div className="flex flex-col lg:flex-row items-center lg:items-stretch">
               {/* Image Section */}
               <motion.div
-                className="relative w-full lg:w-2/5 flex-shrink-0"
+                className="relative w-full lg:w-2/5 shrink-0"
                 variants={imageVariants}
               >
-                <div className="relative h-64 sm:h-80 lg:h-full min-h-[320px] overflow-hidden group">
+                <div className="relative h-64 sm:h-80 lg:h-full min-h-80 overflow-hidden group">
                   <img
                     src={principalImage}
                     alt="Fr Vincent Hansdak S.J - Provincial"
                     className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-105"
                   />
                   {/* Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-navy/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  <div className="absolute inset-0 bg-linear-to-t from-navy/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                   
                   {/* Quote Icon */}
                   <motion.div
@@ -163,6 +163,14 @@ const AboutHead = () => {
                   variants={itemVariants}
                 >
                   <motion.button
+                    className="flex items-center justify-center gap-2 px-5 py-2.5 bg-white border-2 border-primary text-primary rounded-lg font-medium text-sm hover:bg-primary hover:text-white transition-all duration-300"
+                    whileHover={{ scale: 1.03, y: -2 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    Read More
+                    <HiArrowRight className="w-4 h-4" />
+                  </motion.button>
+                  <motion.button
                     className="flex items-center justify-center gap-2 px-5 py-2.5 bg-primary text-white rounded-lg font-medium text-sm shadow-md hover:shadow-lg transition-all duration-300"
                     whileHover={{ scale: 1.03, y: -2 }}
                     whileTap={{ scale: 0.98 }}
@@ -171,14 +179,6 @@ const AboutHead = () => {
                     Upcoming Programme
                   </motion.button>
                   
-                  <motion.button
-                    className="flex items-center justify-center gap-2 px-5 py-2.5 bg-white border-2 border-primary text-primary rounded-lg font-medium text-sm hover:bg-primary hover:text-white transition-all duration-300"
-                    whileHover={{ scale: 1.03, y: -2 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    Read More
-                    <HiArrowRight className="w-4 h-4" />
-                  </motion.button>
                 </motion.div>
               </motion.div>
             </div>
@@ -194,7 +194,7 @@ const AboutHead = () => {
           transition={{ duration: 0.5, delay: 0.3 }}
         >
           <motion.div
-            className="bg-gradient-to-r from-cream to-white p-5 sm:p-6 rounded-xl shadow-md border border-secondary/20"
+            className="bg-linear-to-r from-cream to-white p-5 sm:p-6 rounded-xl shadow-md border border-secondary/20"
             whileHover={{ scale: 1.01, boxShadow: "0 8px 25px rgba(0,0,0,0.08)" }}
             transition={{ duration: 0.3 }}
           >
@@ -203,7 +203,7 @@ const AboutHead = () => {
                 whileHover={{ rotate: 180 }}
                 transition={{ duration: 0.5 }}
               >
-                <BsQuote className="w-6 h-6 text-secondary flex-shrink-0 mt-0.5" />
+                <BsQuote className="w-6 h-6 text-secondary shrink-0 mt-0.5" />
               </motion.div>
               <div className="space-y-1.5">
                 <p className="text-sm sm:text-base text-navy leading-relaxed italic">
