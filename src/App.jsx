@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar.jsx"
 import Footer from "./components/Footer.jsx"
 import ScrollToTop from "./components/ScrollToTop.jsx"
 import SocialSidebar from "./components/SocialSidebar.jsx"
+import NotFound from "./pages/NotFound.jsx"
 
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
       <Navbar/>
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer/>
         <ScrollToTop />
