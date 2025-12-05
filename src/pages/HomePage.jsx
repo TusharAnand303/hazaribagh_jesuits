@@ -20,11 +20,11 @@ const HomePage = () => {
     <NewsLetter/>
     <Whoweare/>
     <LatestVideo/>
+    <ApostolicPlanning/>
+    <Universal/>
     <OurStats/>
     <Testimonials/>
     <Maps/>
-    <ApostolicPlanning/>
-    <Universal/>
     </>
   )
 }

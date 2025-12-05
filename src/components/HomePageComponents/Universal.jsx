@@ -21,7 +21,7 @@ const Universal = () => {
   ];
 
   return (
-    <section className="py-8 sm:py-6 lg:py-8 bg-linear-to-b from-white to-primary">
+    <section className="py-8 sm:py-6 lg:py-8 bg-linear-to-b from-cream to-white">
       <div className="container mx-auto px-4 sm:px-8 lg:px-12 pb-10">
         {/* Heading */}
         <div className="text-center max-w-3xl mx-auto">

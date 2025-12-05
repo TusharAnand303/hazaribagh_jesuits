@@ -1,36 +1,46 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FiCalendar, FiArrowRight, FiTag } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 
 const LatestNews = () => {
-  // Sample news data - 3 cards
-  const newsData = [
-    {
-      id: 1,
-      image: 'https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=800&h=600&fit=crop',
-      category: 'Education',
-      title: 'New School Inaugurated in Latehar',
-      date: '2025-11-28',
-      link: '/news/new-school-latehar'
-    },
-    {
-      id: 2,
-      image: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=800&h=600&fit=crop',
-      category: 'Spirituality',
-      title: 'Annual Ignatian Retreat Concludes',
-      date: '2025-11-25',
-      link: '/news/ignatian-retreat'
-    },
-    {
-      id: 3,
-      image: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=800&h=600&fit=crop',
-      category: 'Community',
-      title: 'Social Development Programs Impact Lives',
-      date: '2025-11-20',
-      link: '/news/social-development'
-    },
-  ];
+  const [newsData, setNewsData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch news from API
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/news`);
+        const result = await response.json();
+        
+        if (result.status && result.data) {
+          // Take only first 3 items for homepage
+          setNewsData(result.data.slice(0, 3));
+        }
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching news:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchNews();
+  }, []);
+
+  // Strip HTML tags from content
+  const stripHtml = (html) => {
+    if (!html) return '';
+    const tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || '';
+  };
+
+  // Get short excerpt from content
+  const getExcerpt = (content, maxLength = 100) => {
+    const text = stripHtml(content);
+    return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+  };
 
   // Animation variants
   const containerVariants = {
@@ -67,6 +77,32 @@ const LatestNews = () => {
       }
     }
   };
+
+  // Loading state
+  if (loading) {
+    return (
+      <section className="py-4 sm:py-6 lg:py-8 bg-linear-to-b from-white to-cream">
+        <div className="mx-auto px-4 sm:px-8 lg:px-12">
+          <div className="text-center">
+            <p className="text-gray">Loading news...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // No news state
+  if (!newsData || newsData.length === 0) {
+    return (
+      <section className="py-4 sm:py-6 lg:py-8 bg-linear-to-b from-white to-cream">
+        <div className="mx-auto px-4 sm:px-8 lg:px-12">
+          <div className="text-center">
+            <p className="text-gray">No news available at the moment.</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-4 sm:py-6 lg:py-8 bg-linear-to-b from-white to-cream">
@@ -117,18 +153,21 @@ const LatestNews = () => {
               transition={{ duration: 0.3 }}
               className="w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]"
             >
-              <Link to={news.link}>
+              <Link to={`/news/${news.id}`}>
                 <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 h-full group">
                   {/* Horizontal Layout - Image Left, Content Right */}
                   <div className="flex flex-row h-40">
                     {/* Image Section - Left Side */}
                     <div className="relative w-40 shrink-0 overflow-hidden">
                       <motion.img
-                        src={news.image}
+                        src={news.main_image_url || 'https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=800&h=600&fit=crop'}
                         alt={news.title}
                         className="w-full h-full object-cover"
                         whileHover={{ scale: 1.1 }}
                         transition={{ duration: 0.5 }}
+                        onError={(e) => {
+                          e.target.src = 'https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=800&h=600&fit=crop';
+                        }}
                       />
                       {/* Overlay */}
                       <div className="absolute inset-0 bg-linear-to-r from-navy/80 via-navy/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
@@ -137,7 +176,7 @@ const LatestNews = () => {
                       <div className="absolute top-2 left-2">
                         <span className="flex items-center gap-1 px-2 py-1 bg-white/95 backdrop-blur-sm rounded-full text-xs font-semibold text-primary shadow-lg">
                           <FiTag className="w-3 h-3" />
-                          {news.category}
+                          News
                         </span>
                       </div>
                     </div>
@@ -147,7 +186,7 @@ const LatestNews = () => {
                       {/* Date */}
                       <div className="flex items-center gap-1 text-xs text-gray mb-2">
                         <FiCalendar className="w-3 h-3" />
-                        {new Date(news.date).toLocaleDateString('en-US', {
+                        {new Date(news.created_at).toLocaleDateString('en-US', {
                           month: 'short',
                           day: 'numeric',
                           year: 'numeric'

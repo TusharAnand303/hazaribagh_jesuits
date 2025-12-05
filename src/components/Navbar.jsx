@@ -1,15 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaBars, FaTimes, FaChevronDown } from 'react-icons/fa';
+import { FaBars, FaTimes, FaChevronDown, FaChevronRight } from 'react-icons/fa';
 import logo from './../assets/images/web_images/logo.png'; 
+
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState(null);
+  const [activeSubMenu, setActiveSubMenu] = useState(null);
   const [scrolled, setScrolled] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
   const hoverTimeoutRef = useRef(null);
+  const subMenuHoverTimeoutRef = useRef(null);
+
 
   // Scroll effect
   useEffect(() => {
@@ -20,16 +24,18 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+
   // Close dropdown when clicking outside (Desktop only)
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // Only apply to desktop
       if (window.innerWidth >= 1024) {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
           setActiveMenu(null);
+          setActiveSubMenu(null);
         }
       }
     };
+
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
@@ -37,25 +43,31 @@ const Navbar = () => {
     };
   }, []);
 
+
   const handleNavigation = (path) => {
     navigate(path);
     setIsOpen(false);
     setActiveMenu(null);
+    setActiveSubMenu(null);
   };
+
 
   const handleLinkClick = () => {
     setIsOpen(false);
     setActiveMenu(null);
+    setActiveSubMenu(null);
   };
+
 
   // Desktop: Toggle on click
   const toggleDropdown = (key) => {
     setActiveMenu(activeMenu === key ? null : key);
+    setActiveSubMenu(null);
   };
 
-  // Desktop: Hover handlers
+
+  // Desktop: Hover handlers for main menu
   const handleMouseEnter = (key) => {
-    // Only work on desktop
     if (window.innerWidth >= 1024) {
       if (hoverTimeoutRef.current) {
         clearTimeout(hoverTimeoutRef.current);
@@ -64,27 +76,62 @@ const Navbar = () => {
     }
   };
 
+
   const handleMouseLeave = () => {
-    // Only work on desktop
     if (window.innerWidth >= 1024) {
       hoverTimeoutRef.current = setTimeout(() => {
         setActiveMenu(null);
+        setActiveSubMenu(null);
       }, 150);
     }
   };
 
+
+  // Desktop: Hover handlers for submenu (third level)
+  const handleSubMenuMouseEnter = (key) => {
+    if (window.innerWidth >= 1024) {
+      if (subMenuHoverTimeoutRef.current) {
+        clearTimeout(subMenuHoverTimeoutRef.current);
+      }
+      setActiveSubMenu(key);
+    }
+  };
+
+
+  const handleSubMenuMouseLeave = () => {
+    if (window.innerWidth >= 1024) {
+      subMenuHoverTimeoutRef.current = setTimeout(() => {
+        setActiveSubMenu(null);
+      }, 150);
+    }
+  };
+
+
   // Mobile: Toggle dropdown properly with explicit state check
   const toggleMobileDropdown = (key, event) => {
-    event.stopPropagation(); // Prevent event bubbling
+    event.stopPropagation();
     setActiveMenu(prevState => {
-      // If clicking the same menu that's open, close it
       if (prevState === key) {
+        setActiveSubMenu(null);
         return null;
       }
-      // Otherwise, open the clicked menu
+      setActiveSubMenu(null);
       return key;
     });
   };
+
+
+  // Mobile: Toggle third level dropdown
+  const toggleMobileSubDropdown = (key, event) => {
+    event.stopPropagation();
+    setActiveSubMenu(prevState => {
+      if (prevState === key) {
+        return null;
+      }
+      return key;
+    });
+  };
+
 
   const menuData = {
     aboutUs: {
@@ -93,9 +140,10 @@ const Navbar = () => {
         { title: 'Our History', url: '/about/history' },
         { title: 'Foundation', url: '/about/foundation' },
         { title: 'Legacy', url: '/about/legacy' },
-        { title: 'Governance', url: '/about/governance' },
-        { title: 'Administration', url: '/about/administration' },
-        { title: 'Councils', url: '/about/councils' },
+        { title: 'Governance', url: '/about/governance',
+          submenu: [
+            { title: 'Administration Councils', url: '/about/governance/councils' },
+          ] },
         { title: 'Support Us', url: '/about/support' },
         { title: 'Contact Us', url: '/about/contact' }
       ]
@@ -114,10 +162,35 @@ const Navbar = () => {
     ministries: {
       title: 'Ministries',
       items: [
-        { title: 'Education', url: '/education' },
-        { title: 'Pastoral', url: '/pastoral' },
-        { title: 'Mass Centers', url: '/mass_center' },
-        { title: 'Social Centers', url: '/social_center' },
+        { title: 'Education', url: '/education',
+          submenu: [
+            { title: 'English Medium School', url: '/education/english-medium-school' },
+            { title: 'Hindi Medium School', url: '/education/hindi-medium-school' },
+          ] },
+        { title: 'Pastoral', url: '/pastoral',
+          submenu: [
+            { title: 'Parish centers', url: '/pastoral/parish-centers' },
+            { title: 'Mahuahar', url: '/pastoral/mahuahar' },
+            { title: 'Bhurkunda pakripath Jamuniatar', url: '/pastoral/bhurkunda-pakripath-jamuniatar' },
+          ]
+         },
+        { title: 'Mass Centers', url: '/mass_center',
+          submenu: [
+            { title: 'Tarwa', url: '/mass_center/tarwa' },
+            { title: 'Hutpa', url: '/mass_center/hutpa' },
+            { title: 'Patra', url: '/mass_center/patra' },
+            { title: 'Latehar', url: '/mass_center/latehar' },
+          ]
+         },
+        { title: 'Social Centers', url: '/social_center',
+          submenu: [
+            { title: 'Jamuniatar', url: '/social_center/jamuniatar' },
+            { title: 'Kajarkilo', url: '/social_center/hutpa' },
+            { title: 'Patki', url: '/social_center/patki' },
+            { title: 'Churadohar', url: '/social_center/churadohar' },
+            { title: 'Patra', url: '/social_center/patra' },
+          ]
+         },
         { title: 'Youth', url: '/youth/jamuniatar' },
         { title: 'Formation', url: '/formation/tarwa' },
         { title: 'Vocation Promotion', url: '/vocation' },
@@ -128,12 +201,13 @@ const Navbar = () => {
     resources: {
       title: 'Resources',
       items: [
-        { title: 'Publications', url: '/resources/publications' },
+        { title: 'Publications', url: '/resources/publications'},
         { title: 'Books', url: '/resources/books' },
         { title: 'Jesuit Blogs', url: '/resources/blogs' }
       ]
     }
   };
+
 
   // Single menu items (no dropdown)
   const singleMenuItems = [
@@ -142,6 +216,7 @@ const Navbar = () => {
     { title: 'Gallery', url: '/gallery' },
     { title: 'New Initiatives', url: '/new-initiatives' }
   ];
+
 
   return (
     <>
@@ -187,11 +262,12 @@ const Navbar = () => {
               </div>
             </Link>
 
+
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center gap-1 xl:gap-2" ref={dropdownRef}>
               <Link 
                 to="/" 
-                className={`px-2.5 xl:px-3 py-2 font-semibold text-sm rounded transition-all duration-300 whitespace-nowrap ${
+                className={`px-2.5 xl:px-3 py-2 font-semibold text-sm rounded transition-all duration-300 whitespace-nowrap cursor-pointer ${
                   scrolled 
                     ? 'text-navy hover:text-primary hover:bg-cream' 
                     : 'text-white hover:text-secondary hover:bg-white/10'
@@ -224,37 +300,95 @@ const Navbar = () => {
                     />
                   </button>
                   
-                  {/* Dropdown Menu */}
+                  {/* Dropdown Menu (Second Level) */}
                   {activeMenu === key && (
                     <div 
                       className="absolute left-0 pt-2 z-50"
                       onMouseEnter={() => handleMouseEnter(key)}
                       onMouseLeave={handleMouseLeave}
                     >
-                      <div className="w-64 bg-white rounded shadow-2xl overflow-hidden border-t-4 border-primary animate-fadeIn">
+                      <div className="w-64 bg-white rounded shadow-2xl border-t-4 border-primary animate-fadeIn">
                         
                         {/* Menu Header */}
                         <div className="bg-linear-to-r from-primary via-navy to-primary px-4 py-3">
                           <h3 className="text-white text-sm font-bold flex items-center">
-                            <span className="w-1.5 h-1.5 rounded-full bg-secondary mr-2"></span>
+                            <FaChevronRight className="text-secondary text-[10px] mr-2" />
                             {menuData[key].title}
                           </h3>
                         </div>
                         
                         {/* Menu Items */}
-                        <div className="max-h-96 overflow-y-auto py-1 custom-scrollbar">
+                        <div className="py-1 max-h-96 overflow-visible">
                           {menuData[key].items.map((item, idx) => (
-                            <Link
+                            <div 
                               key={idx}
-                              to={item.url}
-                              onClick={() => setActiveMenu(null)}
-                              className="flex items-center px-4 py-2.5 text-navy hover:bg-linear-to-r hover:from-primary hover:to-navy transition-all duration-200 group"
+                              className="relative"
+                              onMouseEnter={() => item.submenu && handleSubMenuMouseEnter(`${key}-${idx}`)}
+                              onMouseLeave={() => item.submenu && handleSubMenuMouseLeave()}
                             >
-                              <span className="w-1 h-1 rounded-full bg-secondary mr-3 group-hover:scale-150 transition-transform"></span>
-                              <span className="text-sm font-medium group-hover:text-white">
-                                {item.title}
-                              </span>
-                            </Link>
+                              {item.submenu ? (
+                                <>
+                                  <div className="flex items-center justify-between px-4 py-2.5 text-navy hover:bg-linear-to-r hover:from-primary hover:to-navy transition-all duration-200 group cursor-pointer">
+                                    <div className="flex items-center">
+                                      <FaChevronRight className="text-secondary text-[8px] mr-3 group-hover:text-white group-hover:scale-125 transition-all" />
+                                      <span className="text-sm font-medium group-hover:text-white">
+                                        {item.title}
+                                      </span>
+                                    </div>
+                                    <FaChevronRight className="text-[10px] group-hover:text-white" />
+                                  </div>
+                                  
+                                  {/* Third Level Dropdown */}
+                                  {activeSubMenu === `${key}-${idx}` && (
+                                    <div 
+                                      className="absolute left-full top-0 ml-1"
+                                      style={{ zIndex: 9999 }}
+                                      onMouseEnter={() => handleSubMenuMouseEnter(`${key}-${idx}`)}
+                                      onMouseLeave={handleSubMenuMouseLeave}
+                                    >
+                                      <div className="w-64 bg-white rounded shadow-2xl border-t-4 border-primary animate-fadeIn">
+                                        <div className="bg-linear-to-r from-secondary via-primary to-secondary px-4 py-3">
+                                          <h4 className="text-white text-sm font-bold flex items-center">
+                                            <FaChevronRight className="text-secondary text-[10px] mr-2" />
+                                            {item.title}
+                                          </h4>
+                                        </div>
+                                        <div className="py-1">
+                                          {item.submenu.map((subItem, subIdx) => (
+                                            <Link
+                                              key={subIdx}
+                                              to={subItem.url}
+                                              onClick={() => {
+                                                setActiveMenu(null);
+                                                setActiveSubMenu(null);
+                                              }}
+                                              className="flex items-center px-4 py-2.5 text-navy hover:bg-linear-to-r hover:from-primary hover:to-navy transition-all duration-200 group"
+                                            >
+                                              <FaChevronRight className="text-secondary text-[8px] mr-3 group-hover:text-white group-hover:scale-125 transition-all" />
+                                              <span className="text-sm font-medium group-hover:text-white">
+                                                {subItem.title}
+                                              </span>
+                                            </Link>
+                                          ))}
+                                        </div>
+                                        <div className="h-1 bg-linear-to-r from-secondary via-primary to-secondary"></div>
+                                      </div>
+                                    </div>
+                                  )}
+                                </>
+                              ) : (
+                                <Link
+                                  to={item.url}
+                                  onClick={() => setActiveMenu(null)}
+                                  className="flex items-center px-4 py-2.5 text-navy hover:bg-linear-to-r hover:from-primary hover:to-navy transition-all duration-200 group"
+                                >
+                                  <FaChevronRight className="text-secondary text-[8px] mr-3 group-hover:text-white group-hover:scale-125 transition-all" />
+                                  <span className="text-sm font-medium group-hover:text-white">
+                                    {item.title}
+                                  </span>
+                                </Link>
+                              )}
+                            </div>
                           ))}
                         </div>
                         
@@ -265,6 +399,7 @@ const Navbar = () => {
                   )}
                 </div>
               ))}
+
 
               {/* Single Menu Items */}
               {singleMenuItems.map((item, idx) => (
@@ -282,6 +417,7 @@ const Navbar = () => {
               ))}
             </div>
 
+
             {/* Mobile Menu Button */}
             <button 
               onClick={() => setIsOpen(!isOpen)} 
@@ -297,6 +433,7 @@ const Navbar = () => {
         </div>
       </nav>
 
+
       {/* Mobile Menu */}
       {isOpen && (
         <>
@@ -305,9 +442,11 @@ const Navbar = () => {
             className="fixed inset-0 bg-navy/80 backdrop-blur-sm z-40 lg:hidden animate-fadeIn"
             onClick={() => {
               setIsOpen(false);
-              setActiveMenu(null); // Reset dropdown state when closing sidebar
+              setActiveMenu(null);
+              setActiveSubMenu(null);
             }}
           ></div>
+
 
           {/* Sidebar */}
           <div className="fixed top-0 right-0 bottom-0 w-[85%] sm:w-80 bg-white z-50 lg:hidden overflow-hidden shadow-2xl animate-slideInRight">
@@ -321,7 +460,8 @@ const Navbar = () => {
               <button 
                 onClick={() => {
                   setIsOpen(false);
-                  setActiveMenu(null); // Reset dropdown state
+                  setActiveMenu(null);
+                  setActiveSubMenu(null);
                 }}
                 className="p-2 text-white hover:bg-white/20 rounded-full transition-all"
               >
@@ -329,8 +469,10 @@ const Navbar = () => {
               </button>
             </div>
 
+
             {/* Divider */}
             <div className="h-0.5 bg-linear-to-r from-secondary via-primary to-secondary"></div>
+
 
             {/* Mobile Menu Items */}
             <div className="overflow-y-auto h-[calc(100vh-85px)] custom-scrollbar">
@@ -341,7 +483,7 @@ const Navbar = () => {
                   onClick={handleLinkClick}
                   className="flex items-center gap-2 py-3 px-4 mb-1 text-navy font-semibold rounded hover:bg-cream hover:text-primary transition-all"
                 >
-                  <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                  <FaChevronRight className="text-primary text-[10px]" />
                   Home
                 </Link>
                 
@@ -355,7 +497,7 @@ const Navbar = () => {
                       }`}
                     >
                       <span className="flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                        <FaChevronRight className="text-primary text-[10px]" />
                         {menuData[key].title}
                       </span>
                       <FaChevronDown 
@@ -365,24 +507,64 @@ const Navbar = () => {
                       />
                     </button>
                     
-                    {/* Dropdown Items */}
+                    {/* Dropdown Items (Second Level) */}
                     {activeMenu === key && (
                       <div className="mt-1 ml-4 bg-cream/50 rounded overflow-hidden border-l-2 border-secondary animate-slideDown">
                         {menuData[key].items.map((item, idx) => (
-                          <Link
-                            key={idx}
-                            to={item.url}
-                            onClick={handleLinkClick}
-                            className="flex items-center gap-2 px-4 py-2.5 text-navy hover:bg-linear-to-r hover:from-primary hover:to-navy hover:text-white transition-all"
-                          >
-                            <span className="w-1 h-1 rounded-full bg-secondary"></span>
-                            <span className="text-sm">{item.title}</span>
-                          </Link>
+                          <div key={idx}>
+                            {item.submenu ? (
+                              <>
+                                <button
+                                  onClick={(e) => toggleMobileSubDropdown(`${key}-${idx}`, e)}
+                                  className={`w-full flex items-center justify-between px-4 py-2.5 text-navy transition-all ${
+                                    activeSubMenu === `${key}-${idx}` ? 'bg-primary/10' : 'hover:bg-primary/5'
+                                  }`}
+                                >
+                                  <span className="flex items-center gap-2">
+                                    <FaChevronRight className="text-secondary text-[8px]" />
+                                    <span className="text-sm">{item.title}</span>
+                                  </span>
+                                  <FaChevronRight 
+                                    className={`text-[10px] transition-transform duration-300 ${
+                                      activeSubMenu === `${key}-${idx}` ? 'rotate-90' : ''
+                                    }`} 
+                                  />
+                                </button>
+                                
+                                {/* Third Level Dropdown - Mobile */}
+                                {activeSubMenu === `${key}-${idx}` && (
+                                  <div className="ml-4 bg-cream/70 rounded overflow-hidden border-l-2 border-primary animate-slideDown">
+                                    {item.submenu.map((subItem, subIdx) => (
+                                      <Link
+                                        key={subIdx}
+                                        to={subItem.url}
+                                        onClick={handleLinkClick}
+                                        className="flex items-center gap-2 px-4 py-2 text-navy hover:bg-linear-to-r hover:from-secondary hover:to-primary hover:text-white transition-all"
+                                      >
+                                        <FaChevronRight className="text-primary text-[8px]" />
+                                        <span className="text-xs">{subItem.title}</span>
+                                      </Link>
+                                    ))}
+                                  </div>
+                                )}
+                              </>
+                            ) : (
+                              <Link
+                                to={item.url}
+                                onClick={handleLinkClick}
+                                className="flex items-center gap-2 px-4 py-2.5 text-navy hover:bg-linear-to-r hover:from-primary hover:to-navy hover:text-white transition-all"
+                              >
+                                <FaChevronRight className="text-secondary text-[8px]" />
+                                <span className="text-sm">{item.title}</span>
+                              </Link>
+                            )}
+                          </div>
                         ))}
                       </div>
                     )}
                   </div>
                 ))}
+
 
                 {/* Single Menu Items */}
                 {singleMenuItems.map((item, idx) => (
@@ -392,7 +574,7 @@ const Navbar = () => {
                     onClick={handleLinkClick}
                     className="flex items-center gap-2 py-3 px-4 mb-1 text-navy font-semibold rounded hover:bg-cream hover:text-primary transition-all"
                   >
-                    <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                    <FaChevronRight className="text-primary text-[10px]" />
                     {item.title}
                   </Link>
                 ))}
@@ -401,6 +583,7 @@ const Navbar = () => {
           </div>
         </>
       )}
+
 
       {/* Custom Styles */}
       <style jsx>{`
@@ -421,6 +604,7 @@ const Navbar = () => {
           background: #800000;
         }
 
+
         @keyframes fadeIn {
           from {
             opacity: 0;
@@ -429,6 +613,7 @@ const Navbar = () => {
             opacity: 1;
           }
         }
+
 
         @keyframes slideInRight {
           from {
@@ -441,6 +626,7 @@ const Navbar = () => {
           }
         }
 
+
         @keyframes slideDown {
           from {
             opacity: 0;
@@ -452,13 +638,16 @@ const Navbar = () => {
           }
         }
 
+
         .animate-fadeIn {
           animation: fadeIn 0.3s ease-out;
         }
 
+
         .animate-slideInRight {
           animation: slideInRight 0.3s ease-out;
         }
+
 
         .animate-slideDown {
           animation: slideDown 0.3s ease-out;
@@ -467,5 +656,6 @@ const Navbar = () => {
     </>
   );
 };
+
 
 export default Navbar;

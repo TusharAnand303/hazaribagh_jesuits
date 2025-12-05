@@ -2,7 +2,7 @@ import React from "react";
 
 const ApostolicPlanning = () => {
   return (
-    <section className="py-8 sm:py-6 lg:py-8 bg-linear-to-t from-white to-cream">
+    <section className="py-8 sm:py-6 lg:py-8 bg-linear-to-t from-cream to-white">
       <div className="container mx-auto px-4 sm:px-8 lg:px-12">
         {/* Section Header */}
         <div className="text-center mb-10">
