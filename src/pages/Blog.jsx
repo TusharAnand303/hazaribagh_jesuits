@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import Breadcrumb from '../components/Breadcrumb';
 
 const Blog = () => {
   // Blog sections data
@@ -69,16 +70,21 @@ const Blog = () => {
       description: 'Arrupe\'s vision for a faith that does justice in the modern world.',
     },
   ];
+     const breadcrumbItems = [
+    { label: "Home", path: "/" },
+    { label: "Jesuit Blogs", path: "/blogs" },
+  ];
 
   return (
     <div className="min-h-screen bg-cream text-navy">
       {/* Header */}
-      <header className="bg-primary text-white p-4 shadow-md mt-24">
-        <h1 className="text-3xl font-bold text-center">Hazaribag Jesuits Blog</h1>
-        <p className="text-center text-sm mt-2 opacity-90">
+      <header className="p-6 mt-24 sm:ml-24 -mb-10">
+        <h1 className="sm:text-4xl text-2xl font-bold ">Hazaribag Jesuits Blog</h1>
+        <p className=" text-sm mt-2 opacity-90">
           Stories, Reflections, and News from the Jesuit Community
         </p>
       </header>
+      <Breadcrumb items={breadcrumbItems} />
 
       {/* Main Content */}
       <main className="container mx-auto px-6 py-12">

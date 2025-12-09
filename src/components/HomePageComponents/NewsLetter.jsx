@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
-import { FiChevronLeft, FiChevronRight, FiDownload, FiCalendar, FiFileText } from 'react-icons/fi';
+import { FiChevronLeft, FiChevronRight, FiDownload, FiCalendar, FiFileText, FiEye } from 'react-icons/fi';
 
 const NewsLetter = () => {
   const scrollRef = useRef(null);
@@ -198,8 +198,8 @@ const NewsLetter = () => {
                     download
                     className="inline-flex items-center gap-2 px-3 py-2 bg-primary hover:bg-primary/90 text-white text-xs font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 w-full justify-center mt-auto"
                   >
-                    <FiDownload className="w-3 h-3" />
-                    Download PDF
+                    <FiEye className="w-3 h-3" />
+                    View PDF
                   </a>
                 </div>
               </div>

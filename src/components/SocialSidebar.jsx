@@ -97,7 +97,7 @@ const SocialSidebar = () => {
           {/* Toggle Button - Primary/Navy Colors */}
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="relative bg-gradient-to-r from-primary to-navy text-white p-4 rounded-full shadow-2xl hover:from-navy hover:to-primary transition-all duration-300 transform hover:scale-110"
+            className="relative bg-linear-to-r from-primary to-navy text-white p-4 rounded-full shadow-2xl hover:from-navy hover:to-primary transition-all duration-300 transform hover:scale-110"
           >
             {isExpanded ? (
               <FaTimes className="text-2xl transition-transform duration-300" />

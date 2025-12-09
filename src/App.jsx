@@ -12,6 +12,11 @@ import History from "./pages/History.jsx"
 import Gallery from "./pages/Gallery.jsx"
 import NewInitiative from "./pages/NewInitiative.jsx"
 import BecomeJesuits from "./pages/BecomeJesuits.jsx"
+import ScrollOnRouteChange from "./components/ScrollOnRouteChange.jsx"
+import Education from "./pages/Education.jsx"
+import News from "./pages/News.jsx"
+import NewsDetail from "./pages/NewsDetail.jsx"
+import PublicationDetail from "./pages/PublicationDetail.jsx"
 
 
 function App() {
@@ -19,6 +24,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
+      <ScrollOnRouteChange />
       <Navbar/>
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -30,6 +36,10 @@ function App() {
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/new-initiatives" element={<NewInitiative />} />
           <Route path="/become-a-jesuit" element={<BecomeJesuits />} />
+          <Route path="/education" element={<Education />} />
+          <Route path="/news" element={<News />} />
+          <Route path="/news/:id" element={<NewsDetail />} />
+          <Route path="/publications/:id" element={<PublicationDetail />} />
         </Routes>
         <Footer/>
         <ScrollToTop />

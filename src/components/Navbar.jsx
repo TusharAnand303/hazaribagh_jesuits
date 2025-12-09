@@ -165,10 +165,11 @@ const Navbar = () => {
       title: 'Ministries',
       items: [
         { title: 'Education', url: '/education',
-          submenu: [
-            { title: 'English Medium School', url: '/education/english-medium-school' },
-            { title: 'Hindi Medium School', url: '/education/hindi-medium-school' },
-          ] },
+          // submenu: [
+          //   { title: 'English Medium School', url: '/education/english-medium-school' },
+          //   { title: 'Hindi Medium School', url: '/education/hindi-medium-school' },
+          // ] 
+        },
         { title: 'Pastoral', url: '/pastoral',
           submenu: [
             { title: 'Parish centers', url: '/pastoral/parish-centers' },

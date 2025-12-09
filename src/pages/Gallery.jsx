@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Breadcrumb from '../components/Breadcrumb';
 
 const Gallery = () => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -87,18 +88,24 @@ const Gallery = () => {
     ? galleryItems 
     : galleryItems.filter(item => item.category === filter);
 
+    const breadcrumbItems = [
+    { label: "Home", path: "/" },
+    { label: "Gallery", path: "/gallery" },
+  ];
+
   return (
     <div className="min-h-screen bg-cream text-navy">
       {/* Header */}
-      <header className="bg-primary text-white p-4 shadow-md mt-24">
-        <h1 className="text-3xl font-bold text-center">Gallery</h1>
-        <p className="text-center text-sm mt-2 opacity-90">
+      <header className="p-6 sm:ml-24 -mb-10 mt-24">
+        <h1 className="sm:text-4xl text-2xl font-bold ">Gallery</h1>
+        <p className="text-sm mt-2 opacity-90">
           Moments and Memories from Hazaribag Jesuits
         </p>
       </header>
+       <Breadcrumb items={breadcrumbItems}/>
 
       {/* Filter Buttons */}
-      <div className="container mx-auto px-6 py-8">
+      <div className="container mx-auto px-6 py-8 mt-10 sm:mt-0">
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}

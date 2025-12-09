@@ -60,10 +60,10 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-bold mb-6 text-orange-400">Quick Links</h3>
             <ul className="space-y-3">
-              {['About Us', 'Our Ministries', 'Communities', 'Vocations', 'News & Events', 'Support Us'].map((link, idx) => (
+              {['History', 'Our Ministries', 'Communities', 'Vocations', 'News & Events', 'Support Us'].map((link, idx) => (
                 <li key={idx}>
                   <a 
-                    href={`#${link.toLowerCase().replace(/\s+/g, '-')}`} 
+                    href={`${link.toLowerCase().replace(/\s+/g, '-')}`} 
                     className="text-gray-400 hover:text-orange-400 transition-colors duration-300 text-sm flex items-center group"
                   >
                     <span className="w-0 group-hover:w-2 h-0.5 bg-orange-400 mr-0 group-hover:mr-2 transition-all duration-300"></span>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import Breadcrumb from '../components/Breadcrumb';
 
 const BecomeJesuits = () => {
   // Content sections data
@@ -70,15 +71,22 @@ const BecomeJesuits = () => {
     },
   ];
 
+   const breadcrumbItems = [
+    { label: "Home", path: "/" },
+    { label: "Become a Jesuit", path: "/become-a-jesuit" },
+  ];
+
   return (
     <div className="min-h-screen bg-cream text-navy">
       {/* Header */}
-      <header className="bg-primary text-white p-4 shadow-md mt-24">
-        <h1 className="text-3xl font-bold text-center">Become a Jesuit</h1>
-        <p className="text-center text-sm mt-2 opacity-90">
+      <header className="p-6 sm:ml-24 mt-24 -mb-10">
+        <h1 className="sm:text-4xl text-2xl font-bold ">Become a Jesuit</h1>
+        <p className=" text-sm mt-2 opacity-90">
           Answer the Call to Serve God and Others
         </p>
       </header>
+
+      <Breadcrumb items={breadcrumbItems} />
 
       {/* Main Content */}
       <main className="container mx-auto px-6 py-12">

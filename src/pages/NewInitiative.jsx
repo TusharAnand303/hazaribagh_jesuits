@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Breadcrumb from '../components/Breadcrumb';
 
 const NewInitiative = () => {
   const [selectedInitiative, setSelectedInitiative] = useState(null);
@@ -68,15 +69,24 @@ const NewInitiative = () => {
     },
   ];
 
+  
+   const breadcrumbItems = [
+    { label: "Home", path: "/" },
+    { label: "New Initiatives", path: "/new-initiatives" },
+  ];
+
   return (
     <div className="min-h-screen bg-cream text-navy">
       {/* Header */}
-      <header className="bg-primary text-white p-4 shadow-md mt-24">
-        <h1 className="text-3xl font-bold text-center">New Initiatives</h1>
-        <p className="text-center text-sm mt-2 opacity-90">
+      <header className="p-6 sm:ml-24 sm:-mb-8 mt-24">
+        <h1 className="sm:text-4xl text-2xl font-bold">New Initiatives</h1>
+        <p className="text-sm mt-2 opacity-90">
           Innovative Programs Transforming Lives in Hazaribag
         </p>
       </header>
+
+      <Breadcrumb items={breadcrumbItems} />
+
       {/* Initiatives Grid */}
       <main className="container mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

@@ -1,29 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FiCalendar, FiArrowRight, FiTag } from 'react-icons/fi';
+import { FiCalendar, FiArrowRight, FiTag, FiAlertCircle } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 
 const LatestNews = () => {
   const [newsData, setNewsData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Fetch news from API
+  // Fetch news from API with timeout
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await fetch(`http://admin.hazaribagjesuits.org/api/news`);
-        // const response = await fetch(`${import.meta.env.VITE_API_URL}/news`);
+        setLoading(true);
+        setError(null);
+
+        // Create fetch promise
+        const fetchPromise = fetch(`${import.meta.env.VITE_API_BASE_URL}/news`);
+        
+        // Create timeout promise (15 seconds)
+        const timeoutPromise = new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Request timeout')), 15000)
+        );
+
+        // Race between fetch and timeout
+        const response = await Promise.race([fetchPromise, timeoutPromise]);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const result = await response.json();
-        // console.log(result);
-        // return;
         
         if (result.status && result.data) {
           // Take only first 3 items for homepage
           setNewsData(result.data.slice(0, 3));
+        } else {
+          setNewsData([]);
         }
+        
         setLoading(false);
       } catch (error) {
         console.error('Error fetching news:', error);
+        setError(error.message);
         setLoading(false);
       }
     };
@@ -81,14 +100,54 @@ const LatestNews = () => {
     }
   };
 
-  // Loading state
+  // Loading state with spinner
   if (loading) {
     return (
-      <section className="py-4 sm:py-6 lg:py-8 bg-linear-to-b from-white to-cream">
+      <section className="py-4 sm:py-6 lg:py-8 bg-gradient-to-b from-white to-cream">
         <div className="mx-auto px-4 sm:px-8 lg:px-12">
-          <div className="text-center">
-            <p className="text-gray">Loading news...</p>
-          </div>
+          <motion.div
+            className="text-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            <div className="flex flex-col items-center gap-4">
+              {/* Spinner */}
+              <div className="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+              <p className="text-gray-600 text-lg">Loading latest news...</p>
+              <p className="text-gray-400 text-sm">Please wait while we fetch the updates</p>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <section className="py-4 sm:py-6 lg:py-8 bg-gradient-to-b from-white to-cream">
+        <div className="mx-auto px-4 sm:px-8 lg:px-12">
+          <motion.div
+            className="text-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <div className="flex flex-col items-center gap-4 max-w-md mx-auto">
+              <FiAlertCircle className="w-16 h-16 text-red-500" />
+              <h3 className="text-xl font-bold text-navy">Unable to Load News</h3>
+              <p className="text-gray-600">
+                {error === 'Request timeout' 
+                  ? 'The request is taking longer than expected. Please check your connection and try again.'
+                  : 'There was an error loading the news. Please try again later.'}
+              </p>
+              <button
+                onClick={() => window.location.reload()}
+                className="px-6 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors"
+              >
+                Retry
+              </button>
+            </div>
+          </motion.div>
         </div>
       </section>
     );
@@ -97,18 +156,30 @@ const LatestNews = () => {
   // No news state
   if (!newsData || newsData.length === 0) {
     return (
-      <section className="py-4 sm:py-6 lg:py-8 bg-linear-to-b from-white to-cream">
+      <section className="py-4 sm:py-6 lg:py-8 bg-gradient-to-b from-white to-cream">
         <div className="mx-auto px-4 sm:px-8 lg:px-12">
-          <div className="text-center">
-            <p className="text-gray">No news available at the moment.</p>
-          </div>
+          <motion.div
+            className="text-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
+                <FiTag className="w-8 h-8 text-gray-400" />
+              </div>
+              <h3 className="text-xl font-bold text-navy">No News Available</h3>
+              <p className="text-gray-600 max-w-md">
+                There are no news updates available at the moment. Please check back later.
+              </p>
+            </div>
+          </motion.div>
         </div>
       </section>
     );
   }
 
   return (
-    <section className="py-4 sm:py-6 lg:py-8 bg-linear-to-b from-white to-cream">
+    <section className="py-4 sm:py-6 lg:py-8 bg-gradient-to-b from-white to-cream">
       <div className="mx-auto px-4 sm:px-8 lg:px-12">
         {/* Section Header */}
         <motion.div
@@ -173,7 +244,7 @@ const LatestNews = () => {
                         }}
                       />
                       {/* Overlay */}
-                      <div className="absolute inset-0 bg-linear-to-r from-navy/80 via-navy/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
+                      <div className="absolute inset-0 bg-gradient-to-r from-navy/80 via-navy/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
                       
                       {/* Category Badge */}
                       <div className="absolute top-2 left-2">
@@ -224,7 +295,7 @@ const LatestNews = () => {
         >
           <Link to="/news">
             <motion.button
-              className="px-6 py-3 bg-primary hover:bg-primary/90 text-white text-sm font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 mx-auto"
+              className="px-6 py-3 bg-primary hover:bg-primary/90 text-white text-sm font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 mx-auto cursor-pointer"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
