@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { FaBars, FaTimes, FaChevronDown, FaChevronRight } from 'react-icons/fa';
 import logo from './../assets/images/web_images/logo.png'; 
-
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,9 +10,9 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
+  const location = useLocation();
   const hoverTimeoutRef = useRef(null);
   const subMenuHoverTimeoutRef = useRef(null);
-
 
   // Scroll effect
   useEffect(() => {
@@ -23,7 +22,6 @@ const Navbar = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
 
   // Close dropdown when clicking outside (Desktop only)
   useEffect(() => {
@@ -36,13 +34,11 @@ const Navbar = () => {
       }
     };
 
-
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-
 
   const handleNavigation = (path) => {
     navigate(path);
@@ -51,20 +47,17 @@ const Navbar = () => {
     setActiveSubMenu(null);
   };
 
-
   const handleLinkClick = () => {
     setIsOpen(false);
     setActiveMenu(null);
     setActiveSubMenu(null);
   };
 
-
   // Desktop: Toggle on click
   const toggleDropdown = (key) => {
     setActiveMenu(activeMenu === key ? null : key);
     setActiveSubMenu(null);
   };
-
 
   // Desktop: Hover handlers for main menu
   const handleMouseEnter = (key) => {
@@ -76,7 +69,6 @@ const Navbar = () => {
     }
   };
 
-
   const handleMouseLeave = () => {
     if (window.innerWidth >= 1024) {
       hoverTimeoutRef.current = setTimeout(() => {
@@ -85,7 +77,6 @@ const Navbar = () => {
       }, 150);
     }
   };
-
 
   // Desktop: Hover handlers for submenu (third level)
   const handleSubMenuMouseEnter = (key) => {
@@ -97,7 +88,6 @@ const Navbar = () => {
     }
   };
 
-
   const handleSubMenuMouseLeave = () => {
     if (window.innerWidth >= 1024) {
       subMenuHoverTimeoutRef.current = setTimeout(() => {
@@ -105,7 +95,6 @@ const Navbar = () => {
       }, 150);
     }
   };
-
 
   // Mobile: Toggle dropdown properly with explicit state check
   const toggleMobileDropdown = (key, event) => {
@@ -120,7 +109,6 @@ const Navbar = () => {
     });
   };
 
-
   // Mobile: Toggle third level dropdown
   const toggleMobileSubDropdown = (key, event) => {
     event.stopPropagation();
@@ -132,12 +120,26 @@ const Navbar = () => {
     });
   };
 
+  // Check if link is active
+  const isLinkActive = (url) => {
+    return location.pathname === url;
+  };
+
+  // Check if any submenu item is active
+  const isSubmenuActive = (items) => {
+    return items.some(item => {
+      if (item.submenu) {
+        return item.submenu.some(subItem => location.pathname === subItem.url);
+      }
+      return location.pathname === item.url;
+    });
+  };
 
   const menuData = {
     aboutUs: {
       title: 'About Us',
       items: [
-        { title: 'Our History', url: '/about/history' },
+        { title: 'Our History', url: '/history' },
         { title: 'Foundation', url: '/about/foundation' },
         { title: 'Legacy', url: '/about/legacy' },
         { title: 'Governance', url: '/about/governance',
@@ -201,13 +203,12 @@ const Navbar = () => {
     resources: {
       title: 'Resources',
       items: [
-        { title: 'Publications', url: '/resources/publications'},
-        { title: 'Books', url: '/resources/books' },
-        { title: 'Jesuit Blogs', url: '/resources/blogs' }
+        { title: 'Publications', url: '/publications'},
+        { title: 'Books', url: '/book' },
+        { title: 'Jesuit Blogs', url: '/blogs' }
       ]
     }
   };
-
 
   // Single menu items (no dropdown)
   const singleMenuItems = [
@@ -216,7 +217,6 @@ const Navbar = () => {
     { title: 'Gallery', url: '/gallery' },
     { title: 'New Initiatives', url: '/new-initiatives' }
   ];
-
 
   return (
     <>
@@ -262,15 +262,16 @@ const Navbar = () => {
               </div>
             </Link>
 
-
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center gap-1 xl:gap-2" ref={dropdownRef}>
               <Link 
                 to="/" 
                 className={`px-2.5 xl:px-3 py-2 font-semibold text-sm rounded transition-all duration-300 whitespace-nowrap cursor-pointer ${
-                  scrolled 
-                    ? 'text-navy hover:text-primary hover:bg-cream' 
-                    : 'text-white hover:text-secondary hover:bg-white/10'
+                  isLinkActive('/') 
+                    ? (scrolled ? 'bg-primary text-white' : 'bg-white text-primary')
+                    : (scrolled 
+                        ? 'text-navy hover:text-primary hover:bg-cream' 
+                        : 'text-white hover:text-secondary hover:bg-white/10')
                 }`}
               >
                 Home
@@ -287,9 +288,11 @@ const Navbar = () => {
                   <button 
                     onClick={() => toggleDropdown(key)}
                     className={`px-2.5 xl:px-3 py-2 font-semibold text-sm rounded transition-all duration-300 flex items-center gap-1.5 whitespace-nowrap ${
-                      scrolled 
-                        ? 'text-navy hover:text-primary hover:bg-cream' 
-                        : 'text-white hover:text-secondary hover:bg-white/10'
+                      isSubmenuActive(menuData[key].items)
+                        ? (scrolled ? 'bg-primary text-white' : 'bg-white text-primary')
+                        : (scrolled 
+                            ? 'text-navy hover:text-primary hover:bg-cream' 
+                            : 'text-white hover:text-secondary hover:bg-white/10')
                     } ${activeMenu === key ? (scrolled ? 'bg-cream text-primary' : 'bg-white/10 text-secondary') : ''}`}
                   >
                     <span>{menuData[key].title}</span>
@@ -328,14 +331,22 @@ const Navbar = () => {
                             >
                               {item.submenu ? (
                                 <>
-                                  <div className="flex items-center justify-between px-4 py-2.5 text-navy hover:bg-linear-to-r hover:from-primary hover:to-navy transition-all duration-200 group cursor-pointer">
+                                  <div className={`flex items-center justify-between px-4 py-2.5 transition-all duration-200 group cursor-pointer ${
+                                    isLinkActive(item.url) || item.submenu.some(sub => isLinkActive(sub.url))
+                                      ? 'bg-primary text-white'
+                                      : 'text-navy hover:bg-linear-to-r hover:from-primary hover:to-navy hover:text-white'
+                                  }`}>
                                     <div className="flex items-center">
-                                      <FaChevronRight className="text-secondary text-[8px] mr-3 group-hover:text-white group-hover:scale-125 transition-all" />
-                                      <span className="text-sm font-medium group-hover:text-white">
+                                      <FaChevronRight className={`text-[8px] mr-3 group-hover:scale-125 transition-all ${
+                                        isLinkActive(item.url) || item.submenu.some(sub => isLinkActive(sub.url))
+                                          ? 'text-secondary'
+                                          : 'text-secondary group-hover:text-white'
+                                      }`} />
+                                      <span className="text-sm font-medium">
                                         {item.title}
                                       </span>
                                     </div>
-                                    <FaChevronRight className="text-[10px] group-hover:text-white" />
+                                    <FaChevronRight className="text-[10px]" />
                                   </div>
                                   
                                   {/* Third Level Dropdown */}
@@ -362,10 +373,18 @@ const Navbar = () => {
                                                 setActiveMenu(null);
                                                 setActiveSubMenu(null);
                                               }}
-                                              className="flex items-center px-4 py-2.5 text-navy hover:bg-linear-to-r hover:from-primary hover:to-navy transition-all duration-200 group"
+                                              className={`flex items-center px-4 py-2.5 transition-all duration-200 group ${
+                                                isLinkActive(subItem.url)
+                                                  ? 'bg-primary text-white'
+                                                  : 'text-navy hover:bg-linear-to-r hover:from-primary hover:to-navy hover:text-white'
+                                              }`}
                                             >
-                                              <FaChevronRight className="text-secondary text-[8px] mr-3 group-hover:text-white group-hover:scale-125 transition-all" />
-                                              <span className="text-sm font-medium group-hover:text-white">
+                                              <FaChevronRight className={`text-[8px] mr-3 group-hover:scale-125 transition-all ${
+                                                isLinkActive(subItem.url)
+                                                  ? 'text-secondary'
+                                                  : 'text-secondary group-hover:text-white'
+                                              }`} />
+                                              <span className="text-sm font-medium">
                                                 {subItem.title}
                                               </span>
                                             </Link>
@@ -380,10 +399,18 @@ const Navbar = () => {
                                 <Link
                                   to={item.url}
                                   onClick={() => setActiveMenu(null)}
-                                  className="flex items-center px-4 py-2.5 text-navy hover:bg-linear-to-r hover:from-primary hover:to-navy transition-all duration-200 group"
+                                  className={`flex items-center px-4 py-2.5 transition-all duration-200 group ${
+                                    isLinkActive(item.url)
+                                      ? 'bg-primary text-white'
+                                      : 'text-navy hover:bg-linear-to-r hover:from-primary hover:to-navy hover:text-white'
+                                  }`}
                                 >
-                                  <FaChevronRight className="text-secondary text-[8px] mr-3 group-hover:text-white group-hover:scale-125 transition-all" />
-                                  <span className="text-sm font-medium group-hover:text-white">
+                                  <FaChevronRight className={`text-[8px] mr-3 group-hover:scale-125 transition-all ${
+                                    isLinkActive(item.url)
+                                      ? 'text-secondary'
+                                      : 'text-secondary group-hover:text-white'
+                                  }`} />
+                                  <span className="text-sm font-medium">
                                     {item.title}
                                   </span>
                                 </Link>
@@ -400,23 +427,23 @@ const Navbar = () => {
                 </div>
               ))}
 
-
               {/* Single Menu Items */}
               {singleMenuItems.map((item, idx) => (
                 <Link 
                   key={idx}
                   to={item.url}
                   className={`px-2.5 xl:px-3 py-2 font-semibold text-sm rounded transition-all duration-300 whitespace-nowrap ${
-                    scrolled 
-                      ? 'text-navy hover:text-primary hover:bg-cream' 
-                      : 'text-white hover:text-secondary hover:bg-white/10'
+                    isLinkActive(item.url)
+                      ? (scrolled ? 'bg-primary text-white' : 'bg-white text-primary')
+                      : (scrolled 
+                          ? 'text-navy hover:text-primary hover:bg-cream' 
+                          : 'text-white hover:text-secondary hover:bg-white/10')
                   }`}
                 >
                   {item.title}
                 </Link>
               ))}
             </div>
-
 
             {/* Mobile Menu Button */}
             <button 
@@ -433,7 +460,6 @@ const Navbar = () => {
         </div>
       </nav>
 
-
       {/* Mobile Menu */}
       {isOpen && (
         <>
@@ -446,7 +472,6 @@ const Navbar = () => {
               setActiveSubMenu(null);
             }}
           ></div>
-
 
           {/* Sidebar */}
           <div className="fixed top-0 right-0 bottom-0 w-[85%] sm:w-80 bg-white z-50 lg:hidden overflow-hidden shadow-2xl animate-slideInRight">
@@ -469,10 +494,8 @@ const Navbar = () => {
               </button>
             </div>
 
-
             {/* Divider */}
             <div className="h-0.5 bg-linear-to-r from-secondary via-primary to-secondary"></div>
-
 
             {/* Mobile Menu Items */}
             <div className="overflow-y-auto h-[calc(100vh-85px)] custom-scrollbar">
@@ -481,9 +504,15 @@ const Navbar = () => {
                 <Link 
                   to="/" 
                   onClick={handleLinkClick}
-                  className="flex items-center gap-2 py-3 px-4 mb-1 text-navy font-semibold rounded hover:bg-cream hover:text-primary transition-all"
+                  className={`flex items-center gap-2 py-3 px-4 mb-1 font-semibold rounded transition-all ${
+                    isLinkActive('/')
+                      ? 'bg-primary text-white'
+                      : 'text-navy hover:bg-cream hover:text-primary'
+                  }`}
                 >
-                  <FaChevronRight className="text-primary text-[10px]" />
+                  <FaChevronRight className={`text-[10px] ${
+                    isLinkActive('/') ? 'text-secondary' : 'text-primary'
+                  }`} />
                   Home
                 </Link>
                 
@@ -492,12 +521,18 @@ const Navbar = () => {
                   <div key={key} className="mb-1">
                     <button 
                       onClick={(e) => toggleMobileDropdown(key, e)}
-                      className={`w-full flex items-center justify-between py-3 px-4 text-navy font-semibold rounded transition-all ${
-                        activeMenu === key ? 'bg-cream text-primary' : 'hover:bg-cream hover:text-primary'
+                      className={`w-full flex items-center justify-between py-3 px-4 font-semibold rounded transition-all ${
+                        (activeMenu === key || isSubmenuActive(menuData[key].items)) 
+                          ? 'bg-primary text-white' 
+                          : 'text-navy hover:bg-cream hover:text-primary'
                       }`}
                     >
                       <span className="flex items-center gap-2">
-                        <FaChevronRight className="text-primary text-[10px]" />
+                        <FaChevronRight className={`text-[10px] ${
+                          (activeMenu === key || isSubmenuActive(menuData[key].items))
+                            ? 'text-secondary'
+                            : 'text-primary'
+                        }`} />
                         {menuData[key].title}
                       </span>
                       <FaChevronDown 
@@ -516,8 +551,10 @@ const Navbar = () => {
                               <>
                                 <button
                                   onClick={(e) => toggleMobileSubDropdown(`${key}-${idx}`, e)}
-                                  className={`w-full flex items-center justify-between px-4 py-2.5 text-navy transition-all ${
-                                    activeSubMenu === `${key}-${idx}` ? 'bg-primary/10' : 'hover:bg-primary/5'
+                                  className={`w-full flex items-center justify-between px-4 py-2.5 transition-all ${
+                                    (activeSubMenu === `${key}-${idx}` || isLinkActive(item.url) || item.submenu.some(sub => isLinkActive(sub.url)))
+                                      ? 'bg-primary/20 text-navy'
+                                      : 'text-navy hover:bg-primary/5'
                                   }`}
                                 >
                                   <span className="flex items-center gap-2">
@@ -539,9 +576,15 @@ const Navbar = () => {
                                         key={subIdx}
                                         to={subItem.url}
                                         onClick={handleLinkClick}
-                                        className="flex items-center gap-2 px-4 py-2 text-navy hover:bg-linear-to-r hover:from-secondary hover:to-primary hover:text-white transition-all"
+                                        className={`flex items-center gap-2 px-4 py-2 transition-all ${
+                                          isLinkActive(subItem.url)
+                                            ? 'bg-primary text-white'
+                                            : 'text-navy hover:bg-linear-to-r hover:from-secondary hover:to-primary hover:text-white'
+                                        }`}
                                       >
-                                        <FaChevronRight className="text-primary text-[8px]" />
+                                        <FaChevronRight className={`text-[8px] ${
+                                          isLinkActive(subItem.url) ? 'text-secondary' : 'text-primary'
+                                        }`} />
                                         <span className="text-xs">{subItem.title}</span>
                                       </Link>
                                     ))}
@@ -552,9 +595,15 @@ const Navbar = () => {
                               <Link
                                 to={item.url}
                                 onClick={handleLinkClick}
-                                className="flex items-center gap-2 px-4 py-2.5 text-navy hover:bg-linear-to-r hover:from-primary hover:to-navy hover:text-white transition-all"
+                                className={`flex items-center gap-2 px-4 py-2.5 transition-all ${
+                                  isLinkActive(item.url)
+                                    ? 'bg-primary text-white'
+                                    : 'text-navy hover:bg-linear-to-r hover:from-primary hover:to-navy hover:text-white'
+                                }`}
                               >
-                                <FaChevronRight className="text-secondary text-[8px]" />
+                                <FaChevronRight className={`text-[8px] ${
+                                  isLinkActive(item.url) ? 'text-secondary' : 'text-secondary'
+                                }`} />
                                 <span className="text-sm">{item.title}</span>
                               </Link>
                             )}
@@ -565,16 +614,21 @@ const Navbar = () => {
                   </div>
                 ))}
 
-
                 {/* Single Menu Items */}
                 {singleMenuItems.map((item, idx) => (
                   <Link 
                     key={idx}
                     to={item.url}
                     onClick={handleLinkClick}
-                    className="flex items-center gap-2 py-3 px-4 mb-1 text-navy font-semibold rounded hover:bg-cream hover:text-primary transition-all"
+                    className={`flex items-center gap-2 py-3 px-4 mb-1 font-semibold rounded transition-all ${
+                      isLinkActive(item.url)
+                        ? 'bg-primary text-white'
+                        : 'text-navy hover:bg-cream hover:text-primary'
+                    }`}
                   >
-                    <FaChevronRight className="text-primary text-[10px]" />
+                    <FaChevronRight className={`text-[10px] ${
+                      isLinkActive(item.url) ? 'text-secondary' : 'text-primary'
+                    }`} />
                     {item.title}
                   </Link>
                 ))}
@@ -583,7 +637,6 @@ const Navbar = () => {
           </div>
         </>
       )}
-
 
       {/* Custom Styles */}
       <style jsx>{`
@@ -604,7 +657,6 @@ const Navbar = () => {
           background: #800000;
         }
 
-
         @keyframes fadeIn {
           from {
             opacity: 0;
@@ -613,7 +665,6 @@ const Navbar = () => {
             opacity: 1;
           }
         }
-
 
         @keyframes slideInRight {
           from {
@@ -626,7 +677,6 @@ const Navbar = () => {
           }
         }
 
-
         @keyframes slideDown {
           from {
             opacity: 0;
@@ -638,16 +688,13 @@ const Navbar = () => {
           }
         }
 
-
         .animate-fadeIn {
           animation: fadeIn 0.3s ease-out;
         }
 
-
         .animate-slideInRight {
           animation: slideInRight 0.3s ease-out;
         }
-
 
         .animate-slideDown {
           animation: slideDown 0.3s ease-out;
@@ -656,6 +703,5 @@ const Navbar = () => {
     </>
   );
 };
-
 
 export default Navbar;

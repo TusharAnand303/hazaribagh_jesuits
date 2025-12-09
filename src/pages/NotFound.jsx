@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 
 const NotFound = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-cream to-white flex items-center justify-center px-4 py-16">
+    <div className="min-h-screen bg-linear-to-b from-cream to-white flex items-center justify-center px-4 py-16 sm:mt-20 mt-10">
       <div className="max-w-4xl mx-auto text-center">
         
         {/* Animated 404 */}
@@ -15,7 +15,7 @@ const NotFound = () => {
           transition={{ duration: 0.5 }}
           className="mb-8"
         >
-          <h1 className="text-[120px] sm:text-[180px] lg:text-[240px] font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-navy leading-none">
+          <h1 className="text-[120px] sm:text-[180px] lg:text-[240px] font-bold text-transparent bg-clip-text bg-linear-to-r from-primary via-secondary to-navy leading-none">
             404
           </h1>
         </motion.div>
@@ -44,7 +44,7 @@ const NotFound = () => {
         >
           <Link
             to="/"
-            className="group flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary to-navy text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+            className="group flex items-center gap-2 px-6 py-3 bg-linear-to-r from-primary to-navy text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
           >
             <FiHome className="w-5 h-5" />
             <span>Go to Homepage</span>

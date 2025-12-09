@@ -11,8 +11,11 @@ const LatestNews = () => {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/news`);
+        const response = await fetch(`http://admin.hazaribagjesuits.org/api/news`);
+        // const response = await fetch(`${import.meta.env.VITE_API_URL}/news`);
         const result = await response.json();
+        // console.log(result);
+        // return;
         
         if (result.status && result.data) {
           // Take only first 3 items for homepage

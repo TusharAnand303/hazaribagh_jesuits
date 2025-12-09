@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FaFacebookF, FaTwitter, FaYoutube, FaInstagram, FaLinkedinIn, FaWhatsapp, FaTimes } from 'react-icons/fa';
 import { RiShareBoxLine } from 'react-icons/ri';
+import { FaXTwitter } from "react-icons/fa6";
 
 const SocialSidebar = () => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -29,6 +30,18 @@ const SocialSidebar = () => {
       icon: <FaWhatsapp />,
       url: 'https://wa.me/1234567890',
       bgColor: 'bg-green-500'
+    },
+    {
+      name: 'X (Twitter)',
+      icon: <FaXTwitter />,
+      url: 'https://twitter.com',
+      bgColor: 'bg-black'
+    },
+    {
+      name: 'LinkedIn',
+      icon: <FaLinkedinIn />,
+      url: 'https://linkedin.com',
+      bgColor: 'bg-sky-500'
     }
   ];
 
