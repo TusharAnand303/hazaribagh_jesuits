@@ -1,10 +1,50 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaFacebook, FaTwitter, FaInstagram, FaYoutube, FaEnvelope, FaPhone, FaMapMarkerAlt, FaHeart } from 'react-icons/fa';
 import footer_logo from './../assets/images/web_images/logoo.png';
 
 const Footer = () => {
+  // logo states
+  const [logoData, setLogoData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch logo data
+  useEffect(() => {
+    const fetchLogoData = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/logo`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch logo data');
+        }
+        const data = await response.json();
+
+        // API: { status: true, data: [ { ...logo objects... } ] }
+        const logosArray = Array.isArray(data?.data) ? data.data : [];
+        // pick Footer Logo if exists, otherwise first logo, otherwise null
+        const footerLogo =
+          logosArray.find((item) => item.title === 'Footer Logo') ||
+          logosArray[0] ||
+          null;
+
+        setLogoData(footerLogo);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching logo data:', error);
+        setError(error.message);
+        setLoading(false);
+      }
+    };
+    fetchLogoData();
+  }, []);
+
+  // decide which logo src to use
+  const logoSrc =
+    !loading && !error && logoData && logoData.image_url
+      ? logoData.image_url
+      : footer_logo; // fallback to local footer_logo
+
   return (
-    <footer className="bg-gradient-to-b from-gray-900 to-black text-white w-full">
+    <footer className="bg-linear-to-b from-gray-900 to-black text-white w-full">
       {/* Main Footer */}
       <div className="w-full px-4 sm:px-6 lg:px-12 pt-16 pb-8">
         <div className="flex sm:flex-row flex-col gap-10 sm:gap-0 items-start sm:p-0 sm:pl-0 pl-3 sm:items-start justify-around mb-10">
@@ -13,8 +53,8 @@ const Footer = () => {
             {/* Large Logo */}
             <div className="mb-6">
               <img 
-                src={footer_logo} 
-                alt="Hazaribagh Province Logo" 
+                src={logoSrc} 
+                alt={logoData?.title || "Hazaribagh Province Logo"}
                 className="w-32 h-32 sm:w-40 sm:h-40 object-contain transition-transform duration-300 hover:scale-105" 
               />
             </div>
@@ -120,9 +160,9 @@ const Footer = () => {
                     href={link.url} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="text-gray-400 hover:text-orange-400 transition-colors duration-300 text-sm flex items-center group break-words"
+                    className="text-gray-400 hover:text-orange-400 transition-colors duration-300 text-sm flex items-center group wrap-break-word"
                   >
-                    <span className="w-0 group-hover:w-2 h-0.5 bg-orange-400 mr-0 group-hover:mr-2 transition-all duration-300 flex-shrink-0"></span>
+                    <span className="w-0 group-hover:w-2 h-0.5 bg-orange-400 mr-0 group-hover:mr-2 transition-all duration-300 shrink-0"></span>
                     {link.name}
                   </a>
                 </li>

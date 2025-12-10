@@ -5,43 +5,50 @@ import { FiYoutube } from 'react-icons/fi';
 const LatestVideo = () => {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Admin can just add YouTube video URLs here
-  const adminVideoLinks = [
-    'https://youtu.be/Mxz-2RONO7s?si=RGdq6PZAcnlurES0',
-    'https://youtu.be/9zB8HvIA9e0?si=Ymckq2r1wucRwPn1',
-    'https://youtu.be/1-MJWYw0iQI?si=fQ2r2ItnlupPBeiO',
-    'https://youtu.be/w3ZmmF3qV5c?si=nqwuRIYh_uLLIGtz'
-  ];
-
-  // Extract video ID from YouTube URL
-  const extractVideoId = (url) => {
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-    const match = url.match(regExp);
-    return (match && match[2].length === 11) ? match[2] : null;
-  };
-
-  // Process admin links into video data
+  // Fetch YouTube videos from API
   useEffect(() => {
-    const processVideos = async () => {
+    const fetchVideos = async () => {
       try {
-        const videoData = adminVideoLinks.slice(0, 4).map((url, index) => {
-          const videoId = extractVideoId(url);
-          return {
-            id: index + 1,
-            videoId: videoId || 'dQw4w9WgXcQ'
-          };
-        });
-        setVideos(videoData);
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/youtubelinks`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch videos');
+        }
+        const data = await response.json();
+
+        // API: { status: true, data: [ { ...video objects... } ] }
+        const videosArray = Array.isArray(data?.data) ? data.data : [];
+        
+        // Take first 4 videos
+        const processedVideos = videosArray.slice(0, 4).map((video) => ({
+          id: video.id,
+          title: video.title,
+          videoId: extractVideoId(video.youtube_url || video.embed_url),
+          embedUrl: video.embed_url,
+          youtubeUrl: video.youtube_url,
+          description: video.description
+        }));
+
+        setVideos(processedVideos);
+        setLoading(false);
       } catch (error) {
-        console.error('Error processing videos:', error);
-      } finally {
+        console.error('Error fetching videos:', error);
+        setError(error.message);
         setLoading(false);
       }
     };
 
-    processVideos();
+    fetchVideos();
   }, []);
+
+  // Extract video ID from YouTube URL
+  const extractVideoId = (url) => {
+    if (!url) return null;
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+  };
 
   // Animation variants
   const containerVariants = {
@@ -91,6 +98,18 @@ const LatestVideo = () => {
               ))}
             </div>
           </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error || videos.length === 0) {
+    return (
+      <section className="w-full py-4 sm:py-6 lg:py-8 px-6 sm:px-12 lg:px-20 xl:px-32 bg-linear-to-b from-cream to-white">
+        <div className="max-w-[1600px] mx-auto text-center py-12">
+          <p className="text-navy">
+            {error ? 'Unable to load videos' : 'No videos available'}
+          </p>
         </div>
       </section>
     );
@@ -146,16 +165,25 @@ const LatestVideo = () => {
               transition={{ duration: 0.3 }}
             >
               <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group">
-                {/* Video Embed - Only Thumbnail */}
+                {/* Video Embed */}
                 <div className="relative w-full aspect-video bg-navy overflow-hidden">
                   <iframe
-                    src={`https://www.youtube.com/embed/${video.videoId}?rel=0&modestbranding=1`}
-                    title={`Video ${video.id}`}
+                    src={video.embedUrl || `https://www.youtube.com/embed/${video.videoId}?rel=0&modestbranding=1`}
+                    title={video.title || `Video ${video.id}`}
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                     className="w-full h-full"
                   />
                 </div>
+
+                {/* Video Title (Optional) */}
+                {video.title && (
+                  <div className="p-3">
+                    <h3 className="text-sm font-semibold text-navy line-clamp-2">
+                      {video.title}
+                    </h3>
+                  </div>
+                )}
               </div>
             </motion.div>
           ))}
@@ -170,14 +198,14 @@ const LatestVideo = () => {
           transition={{ duration: 0.6, delay: 0.5 }}
         >
           <motion.a
-            href="https://www.youtube.com/channel/UC42hKatZ9vX_P5UxRZzr67g"
+            href="https://youtube.com/channel/UC42hKatZ9vX_P5UxRZzr67g"
             target="_blank"
             rel="noopener noreferrer"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
             <motion.button
-              className="px-8 py-4 bg-primary hover:bg-primary/90 text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-3 mx-auto"
+              className="px-8 py-4 bg-primary hover:bg-primary/90 text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-3 mx-auto cursor-pointer"
               animate={{
                 boxShadow: [
                   "0 10px 30px rgba(128, 0, 0, 0.2)",
@@ -197,6 +225,17 @@ const LatestVideo = () => {
           </motion.a>
         </motion.div>
       </div>
+
+      {/* CSS for line clamp */}
+      <style jsx>{`
+        .line-clamp-2 {
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      `}</style>
     </section>
   );
 };

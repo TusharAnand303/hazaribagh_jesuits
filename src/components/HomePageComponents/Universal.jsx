@@ -1,24 +1,67 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 const Universal = () => {
-  const cards = [
-    { 
-      text: "SHOWING THE WAY TO GOD", 
-      image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=500&h=400&fit=crop"
-    },
-    { 
-      text: "WALKING WITH THE EXCLUDED", 
-      image: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=500&h=400&fit=crop"
-    },
-    { 
-      text: "JOURNEYING WITH YOUTH", 
-      image: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=500&h=400&fit=crop"
-    },
-    { 
-      text: "CARING FOR OUR COMMON HOME", 
-      image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=500&h=400&fit=crop"
-    }
-  ];
+  // API states
+  const [uapData, setUapData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch UAP data
+  useEffect(() => {
+    const fetchUapData = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/uap`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch UAP data');
+        }
+        const data = await response.json();
+
+        // API: { status: true, data: [ { ...uap objects... } ] }
+        const uapArray = Array.isArray(data?.data) ? data.data : [];
+        
+        setUapData(uapArray);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching UAP data:', error);
+        setError(error.message);
+        setLoading(false);
+      }
+    };
+
+    fetchUapData();
+  }, []);
+
+  // Loading state
+  if (loading) {
+    return (
+      <section className="py-8 sm:py-6 lg:py-8 bg-linear-to-b from-cream to-white">
+        <div className="container mx-auto px-4 sm:px-8 lg:px-12">
+          <div className="text-center py-12">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mb-4"></div>
+            <p className="text-navy">Loading Universal Apostolic Preferences...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Error or no data state
+  if (error || uapData.length === 0) {
+    return (
+      <section className="py-8 sm:py-6 lg:py-8 bg-linear-to-b from-cream to-white">
+        <div className="container mx-auto px-4 sm:px-8 lg:px-12">
+          <div className="text-center py-12">
+            <p className="text-navy text-lg">
+              {error ? 'Unable to load Universal Apostolic Preferences' : 'No preferences available'}
+            </p>
+            <p className="text-gray-600 text-sm mt-2">
+              {error ? 'Please try again later' : 'Check back soon for updates'}
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-8 sm:py-6 lg:py-8 bg-linear-to-b from-cream to-white">
@@ -38,22 +81,19 @@ const Universal = () => {
 
         {/* Cards */}
         <div className="mt-6 grid gap-8 sm:grid-cols-2 lg:grid-cols-4 max-w-6xl mx-auto">
-          {cards.map((item) => (
+          {uapData.map((item) => (
             <div
-              key={item.text}
+              key={item.id}
               className="relative h-60 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 group cursor-pointer"
             >
               {/* Background Image */}
               <div 
                 className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700"
                 style={{ 
-                  backgroundImage: `url(${item.image})`,
+                  backgroundImage: `url(${item.image_url})`,
                   backgroundBlendMode: 'multiply'
                 }}
               />
-              
-              {/* Minimal dark gradient overlay for subtle text readability */}
-           
               
               {/* Content container */}
               <div className="relative z-10 flex flex-col items-center justify-end h-full p-6 pb-8">
@@ -66,7 +106,7 @@ const Universal = () => {
                   textShadow: '0 1px 2px rgba(0,0,0,0.6)'
                 }}>
                   <span className="group-hover:text-secondary transition-colors duration-300">
-                    {item.text}
+                    {item.title}
                   </span>
                 </h3>
               </div>

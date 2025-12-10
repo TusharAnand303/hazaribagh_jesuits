@@ -1,106 +1,87 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { FiPause, FiPlay } from 'react-icons/fi';
-import b1 from './../../assets/images/web_images/banner1.jpeg';
-import b2 from './../../assets/images/web_images/banner2.jpeg';
-import b3 from './../../assets/images/web_images/banner3.jpeg';
-import b4 from './../../assets/images/web_images/banner4.jpeg';
-import b5 from './../../assets/images/web_images/banner5.jpeg';
-import b6 from './../../assets/images/web_images/banner6.jpeg';
-
 
 const Carousel = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
+  
+  // Banner API states
+  const [slides, setSlides] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  // Fetch banner data
+  useEffect(() => {
+    const fetchBannerData = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/banner`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch banner data');
+        }
+        const data = await response.json();
 
-  // Sample slides data - Replace with your actual images and content
-  const slides = [
-    {
-      id: 1,
-      image: b1,
-      title: 'Hazaribagh Jesuits',
-      subtitle: 'Society of Jesus',
-      description: 'Serving God through Education, Social Development, and Spiritual Formation'
-    },
-    {
-      id: 2,
-      image: b2,
-      title: 'Education for All',
-      subtitle: 'Building Future Leaders',
-      description: 'Empowering communities through quality education and holistic development'
-    },
-    {
-      id: 3,
-      image: b3,
-      title: 'Ignatian Spirituality',
-      subtitle: 'Finding God in All Things',
-      description: 'Deepening faith through retreats, prayer, and spiritual accompaniment'
-    },
-    {
-      id: 4,
-      image: b4,
-      title: 'Social Justice',
-      subtitle: 'Serving the Marginalized',
-      description: 'Working with the poor and marginalized communities across Jharkhand'
-    },
-    {
-      id: 5,
-      image: b5,
-      title: 'Social Justice',
-      subtitle: 'Serving the Marginalized',
-      description: 'Working with the poor and marginalized communities across Jharkhand'
-    },
-    {
-      id: 6,
-      image: b6,
-      title: 'Social Justice',
-      subtitle: 'Serving the Marginalized',
-      description: 'Working with the poor and marginalized communities across Jharkhand'
-    }
-  ];
+        // API: { status: true, data: [ { ...banner objects... } ] }
+        const bannersArray = Array.isArray(data?.data) ? data.data : [];
+        
+        // Transform API data to slides format
+        const transformedSlides = bannersArray
+          .filter(banner => banner.status === 1) // only active banners
+          .map(banner => ({
+            id: banner.id,
+            image: banner.image_url,
+            title: banner.title || 'Hazaribagh Jesuits',
+            subtitle: 'Society of Jesus',
+            description: 'Serving God through Education, Social Development, and Spiritual Formation'
+          }));
 
+        setSlides(transformedSlides);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching banner data:', error);
+        setError(error.message);
+        setLoading(false);
+      }
+    };
+    fetchBannerData();
+  }, []);
 
   // Auto-play functionality
   const nextSlide = useCallback(() => {
+    if (slides.length === 0) return;
     setCurrentSlide((prev) => (prev + 1) % slides.length);
   }, [slides.length]);
 
-
   const prevSlide = () => {
+    if (slides.length === 0) return;
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   };
-
 
   const goToSlide = (index) => {
     setCurrentSlide(index);
   };
-
 
   const toggleAutoPlay = () => {
     setIsAutoPlaying(!isAutoPlaying);
     setIsPaused(!isPaused);
   };
 
-
   // Auto-play effect
   useEffect(() => {
-    if (!isAutoPlaying) return;
-
+    if (!isAutoPlaying || slides.length === 0) return;
 
     const interval = setInterval(() => {
       nextSlide();
     }, 5000); // Change slide every 5 seconds
 
-
     return () => clearInterval(interval);
-  }, [isAutoPlaying, nextSlide]);
-
+  }, [isAutoPlaying, nextSlide, slides.length]);
 
   // Keyboard navigation
   useEffect(() => {
     const handleKeyPress = (e) => {
+      if (slides.length === 0) return;
       if (e.key === 'ArrowLeft') prevSlide();
       if (e.key === 'ArrowRight') nextSlide();
       if (e.key === ' ') {
@@ -109,26 +90,21 @@ const Carousel = () => {
       }
     };
 
-
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [nextSlide]);
-
+  }, [nextSlide, slides.length]);
 
   // Touch/Swipe support
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
 
-
   const handleTouchStart = (e) => {
     setTouchStart(e.targetTouches[0].clientX);
   };
 
-
   const handleTouchMove = (e) => {
     setTouchEnd(e.targetTouches[0].clientX);
   };
-
 
   const handleTouchEnd = () => {
     if (touchStart - touchEnd > 75) {
@@ -139,6 +115,33 @@ const Carousel = () => {
     }
   };
 
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="relative w-full h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden bg-navy flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-secondary mb-4"></div>
+          <p className="text-white text-xl">Loading banners...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error or empty state
+  if (error || slides.length === 0) {
+    return (
+      <div className="relative w-full h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden bg-navy flex items-center justify-center">
+        <div className="text-center px-4">
+          <p className="text-white text-xl mb-2">
+            {error ? 'Unable to load banners' : 'No banners available'}
+          </p>
+          <p className="text-gray-400 text-sm">
+            {error ? 'Please try again later' : 'Check back soon for updates'}
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative w-full h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden bg-navy group">
@@ -165,7 +168,6 @@ const Carousel = () => {
               <div className="absolute inset-0 bg-linear-to-r from-navy/40 via-navy/10 to-navy/40"></div>
             </div>
 
-
             {/* Content */}
             <div className="relative z-20 h-full flex items-center">
               <div className="container mx-auto px-4 sm:px-8 lg:px-16">
@@ -183,7 +185,6 @@ const Carousel = () => {
                     </span>
                   </div>
 
-
                   {/* Title */}
                   <h1
                     className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 leading-tight transform transition-all duration-700 delay-300 ${
@@ -194,7 +195,6 @@ const Carousel = () => {
                   >
                     {slide.title}
                   </h1>
-
 
                   {/* Description */}
                   <p
@@ -207,7 +207,6 @@ const Carousel = () => {
                     {slide.description}
                   </p>
 
-
                   {/* CTA Buttons */}
                   <div
                     className={`flex flex-wrap gap-4 transform transition-all duration-700 delay-700 ${
@@ -216,10 +215,10 @@ const Carousel = () => {
                         : 'translate-y-10 opacity-0'
                     }`}
                   >
-                    <button className="px-4 sm:px-6 py-2 sm:py-3 bg-linear-to-r from-primary to-navy hover:from-navy hover:to-primary text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                    <button className="px-4 sm:px-14 py-2 sm:py-3 bg-linear-to-r from-primary to-navy hover:from-navy hover:to-primary text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 cursor-pointer">
                       Learn More
                     </button>
-                    <button className="px-4 sm:px-6 py-2 sm:py-3 bg-transparent border-2 border-white text-white hover:bg-white hover:text-navy font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                    <button className="px-4 sm:px-14 py-2 sm:py-3 bg-transparent border-2 border-white text-white hover:bg-white hover:text-navy font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 cursor-pointer">
                       Join Us
                     </button>
                   </div>
@@ -230,7 +229,6 @@ const Carousel = () => {
         ))}
       </div>
 
-
       {/* Previous Button - COMMENTED OUT */}
       {/* <button
         onClick={prevSlide}
@@ -240,7 +238,6 @@ const Carousel = () => {
         <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
       </button> */}
 
-
       {/* Next Button - COMMENTED OUT */}
       {/* <button
         onClick={nextSlide}
@@ -249,7 +246,6 @@ const Carousel = () => {
       >
         <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
       </button> */}
-
 
       {/* Play/Pause Button */}
       <button
@@ -263,7 +259,6 @@ const Carousel = () => {
           <FiPause className="w-4 h-4 sm:w-5 sm:h-5" />
         )}
       </button>
-
 
       {/* Indicators/Dots */}
       <div className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-30 flex gap-2 sm:gap-3 ">
@@ -281,14 +276,12 @@ const Carousel = () => {
         ))}
       </div>
 
-
       {/* Slide Counter */}
       <div className="absolute top-6 sm:top-8 right-4 sm:right-8 z-30 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20">
         <span className="text-white text-xs sm:text-sm font-semibold">
           {currentSlide + 1} / {slides.length}
         </span>
       </div>
-
 
       {/* Progress Bar */}
       <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20 z-30">
@@ -302,6 +295,5 @@ const Carousel = () => {
     </div>
   );
 };
-
 
 export default Carousel;

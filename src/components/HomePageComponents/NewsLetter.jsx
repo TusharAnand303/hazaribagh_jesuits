@@ -1,61 +1,39 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FiChevronLeft, FiChevronRight, FiDownload, FiCalendar, FiFileText, FiEye } from 'react-icons/fi';
 
 const NewsLetter = () => {
   const scrollRef = useRef(null);
+  
+  // API states
+  const [newsletters, setNewsletters] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Newsletter data
-  const newsletters = [
-    {
-      id: 1,
-      title: 'January 2025 Edition',
-      description: 'New year, new beginnings - Stories of hope and transformation from our community',
-      date: 'January 2025',
-      image: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&h=300&fit=crop',
-      pdfLink: '#'
-    },
-    {
-      id: 2,
-      title: 'December 2024 Edition',
-      description: 'Christmas special - Celebrating faith and community with joy',
-      date: 'December 2024',
-      image: 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=400&h=300&fit=crop',
-      pdfLink: '#'
-    },
-    {
-      id: 3,
-      title: 'November 2024 Edition',
-      description: 'Mission updates from tribal regions of Jharkhand and beyond',
-      date: 'November 2024',
-      image: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&h=300&fit=crop',
-      pdfLink: '#'
-    },
-    {
-      id: 4,
-      title: 'October 2024 Edition',
-      description: 'Education initiatives and student success stories that inspire',
-      date: 'October 2024',
-      image: 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=400&h=300&fit=crop',
-      pdfLink: '#'
-    },
-    {
-      id: 5,
-      title: 'September 2024 Edition',
-      description: 'Community development and social impact across the region',
-      date: 'September 2024',
-      image: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&h=300&fit=crop',
-      pdfLink: '#'
-    },
-    {
-      id: 6,
-      title: 'August 2024 Edition',
-      description: 'Summer programs and youth engagement activities for all',
-      date: 'August 2024',
-      image: 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=400&h=300&fit=crop',
-      pdfLink: '#'
-    }
-  ];
+  // Fetch newsletter data
+  useEffect(() => {
+    const fetchNewsletterData = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/newsletter`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch newsletter data');
+        }
+        const data = await response.json();
+
+        // API: { status: true, data: [ { ...newsletter objects... } ] }
+        const newslettersArray = Array.isArray(data?.data) ? data.data : [];
+        
+        setNewsletters(newslettersArray);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching newsletter data:', error);
+        setError(error.message);
+        setLoading(false);
+      }
+    };
+
+    fetchNewsletterData();
+  }, []);
 
   // Scroll functions
   const scrollLeft = () => {
@@ -82,6 +60,42 @@ const NewsLetter = () => {
       }
     }
   };
+
+  // Format date helper
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  };
+
+  // Loading state
+  if (loading) {
+    return (
+      <section className="py-4 sm:py-6 lg:py-8 bg-linear-to-b from-cream to-white overflow-hidden">
+        <div className="container mx-auto px-4 sm:px-8 lg:px-12">
+          <div className="text-center py-12">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mb-4"></div>
+            <p className="text-navy">Loading newsletters...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Error or no data state
+  if (error || newsletters.length === 0) {
+    return (
+      <section className="py-4 sm:py-6 lg:py-8 bg-linear-to-b from-cream to-white overflow-hidden">
+        <div className="container mx-auto px-4 sm:px-8 lg:px-12">
+          <div className="text-center py-12">
+            <p className="text-navy">
+              {error ? 'Unable to load newsletters' : 'No newsletters available'}
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-4 sm:py-6 lg:py-8 bg-linear-to-b from-cream to-white overflow-hidden">
@@ -123,7 +137,7 @@ const NewsLetter = () => {
         {/* Large Left Navigation Button */}
         <motion.button
           onClick={scrollLeft}
-          className="hidden md:flex absolute left-8 lg:left-16 top-1/2 -translate-y-1/2 z-20 w-16 h-16 lg:w-20 lg:h-20 items-center justify-center bg-white hover:bg-primary text-navy hover:text-white rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 border-4 border-white"
+          className="hidden md:flex absolute left-8 lg:left-16 top-1/2 -translate-y-1/2 z-20 w-16 h-16 lg:w-20 lg:h-20 items-center justify-center bg-white hover:bg-primary text-navy hover:text-white rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 border-4 border-white cursor-pointer"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           aria-label="Scroll left"
@@ -134,7 +148,7 @@ const NewsLetter = () => {
         {/* Large Right Navigation Button */}
         <motion.button
           onClick={scrollRight}
-          className="hidden md:flex absolute right-8 lg:right-16 top-1/2 -translate-y-1/2 z-20 w-16 h-16 lg:w-20 lg:h-20 items-center justify-center bg-white hover:bg-primary text-navy hover:text-white rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 border-4 border-white"
+          className="hidden md:flex absolute right-8 lg:right-16 top-1/2 -translate-y-1/2 z-20 w-16 h-16 lg:w-20 lg:h-20 items-center justify-center bg-white hover:bg-primary text-navy hover:text-white rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 border-4 border-white cursor-pointer"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           aria-label="Scroll right"
@@ -142,7 +156,7 @@ const NewsLetter = () => {
           <FiChevronRight className="w-8 h-8 lg:w-10 lg:h-10" />
         </motion.button>
 
-        {/* linear Overlays - Hidden on mobile */}
+        {/* Gradient Overlays - Hidden on mobile */}
         <div className="hidden md:block absolute left-0 top-0 bottom-0 w-48 bg-linear-to-r from-cream to-transparent z-10 pointer-events-none"></div>
         <div className="hidden md:block absolute right-0 top-0 bottom-0 w-48 bg-linear-to-l from-cream to-transparent z-10 pointer-events-none"></div>
 
@@ -165,7 +179,7 @@ const NewsLetter = () => {
                 {/* Newsletter Image - Fixed height */}
                 <div className="relative h-32 shrink-0 overflow-hidden">
                   <img
-                    src={newsletter.image}
+                    src={newsletter.image_url}
                     alt={newsletter.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
@@ -175,7 +189,7 @@ const NewsLetter = () => {
                   <div className="absolute top-2 right-2">
                     <span className="flex items-center gap-1 px-2 py-1 bg-white/95 backdrop-blur-sm rounded-full text-xs font-semibold text-primary shadow-lg">
                       <FiCalendar className="w-3 h-3" />
-                      {newsletter.date}
+                      {formatDate(newsletter.created_at)}
                     </span>
                   </div>
                 </div>
@@ -189,13 +203,18 @@ const NewsLetter = () => {
                   
                   {/* Description - Fixed height with ellipsis */}
                   <p className="text-xs text-gray leading-relaxed mb-3 flex-1 line-clamp-2">
-                    {newsletter.description}
+                    {newsletter.description || 'Stay informed with our monthly newsletters featuring stories, updates, and insights'}
                   </p>
-
-                  {/* Download Button - Fixed at bottom */}
+                  {/* View PDF Button - Fixed at bottom */}
                   <a
-                    href={newsletter.pdfLink}
-                    download
+                    href={newsletter.pdf_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => {
+                      // Prevent default and manually open with proper encoding
+                      e.preventDefault();
+                      window.open(encodeURI(newsletter.pdf_url), '_blank', 'noopener,noreferrer');
+                    }}
                     className="inline-flex items-center gap-2 px-3 py-2 bg-primary hover:bg-primary/90 text-white text-xs font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 w-full justify-center mt-auto"
                   >
                     <FiEye className="w-3 h-3" />

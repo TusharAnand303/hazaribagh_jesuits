@@ -8,7 +8,7 @@ const Publications = () => {
   const [publications, setPublications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+ 
   useEffect(() => {
     const fetchPublications = async () => {
       try {

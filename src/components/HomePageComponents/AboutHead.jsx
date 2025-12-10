@@ -1,10 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { BsQuote } from 'react-icons/bs';
 import { HiCalendar, HiArrowRight } from 'react-icons/hi';
+import { Link } from 'react-router-dom';
 import principalImage from './../../assets/images/web_images/prin.jpeg';
 
 const AboutHead = () => {
+  // API states
+  const [provincialData, setProvincialData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch provincial data
+  useEffect(() => {
+    const fetchProvincialData = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/provincial`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch provincial data');
+        }
+        const data = await response.json();
+
+        // API: { status: true, data: [ { ...provincial objects... } ] }
+        const provincialsArray = Array.isArray(data?.data) ? data.data : [];
+        
+        // Get first provincial (most recent)
+        const provincial = provincialsArray[0] || null;
+        
+        setProvincialData(provincial);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching provincial data:', error);
+        setError(error.message);
+        setLoading(false);
+      }
+    };
+
+    fetchProvincialData();
+  }, []);
+
   // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -53,6 +87,45 @@ const AboutHead = () => {
     }
   };
 
+  // Loading state
+  if (loading) {
+    return (
+      <section className="py-6 sm:py-10 lg:py-12 overflow-hidden bg-linear-to-b from-cream to-white">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-lg p-8 flex items-center justify-center min-h-[400px]">
+            <div className="text-center">
+              <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mb-4"></div>
+              <p className="text-navy">Loading provincial message...</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Error or no data state
+  if (error || !provincialData) {
+    return (
+      <section className="py-6 sm:py-10 lg:py-12 overflow-hidden bg-linear-to-b from-cream to-white">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-lg p-8 text-center min-h-[400px] flex items-center justify-center">
+            <p className="text-navy">Provincial message not available at this time.</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Truncate description to first 3 sentences for preview
+  const truncateDescription = (text, sentences = 3) => {
+    if (!text) return '';
+    const sentenceArray = text.match(/[^.!?]+[.!?]+/g) || [];
+    return sentenceArray.slice(0, sentences).join(' ').trim();
+  };
+
+  const previewDescription = truncateDescription(provincialData.description);
+  const imageSrc = provincialData.image_url || principalImage;
+
   return (
     <section className="py-6 sm:py-10 lg:py-12 overflow-hidden bg-linear-to-b from-cream to-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -72,7 +145,7 @@ const AboutHead = () => {
             Leadership
           </motion.span>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-navy mb-2">
-            Message from the Provincial
+            {"Message from the Provincial"}
           </h2>
           <motion.div
             className="w-16 h-0.5 bg-secondary mx-auto rounded-full"
@@ -100,8 +173,8 @@ const AboutHead = () => {
               >
                 <div className="relative h-64 sm:h-80 lg:h-full min-h-80 overflow-hidden group">
                   <img
-                    src={principalImage}
-                    alt="Fr Vincent Hansdak S.J - Provincial"
+                    src={imageSrc}
+                    alt={provincialData.title}
                     className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-105"
                   />
                   {/* Overlay */}
@@ -126,10 +199,10 @@ const AboutHead = () => {
                 {/* Name and Title */}
                 <motion.div className="mb-4" variants={itemVariants}>
                   <h3 className="text-xl sm:text-2xl font-bold text-primary mb-1">
-                    Fr. Vincent Hansdak, S.J.
+                    {provincialData.title}
                   </h3>
                   <p className="text-base text-secondary font-semibold">
-                    Provincial
+                    {provincialData.subtitle }
                   </p>
                   <p className="text-sm text-gray-600">
                     Hazaribag Province
@@ -145,14 +218,17 @@ const AboutHead = () => {
                   transition={{ duration: 0.4, delay: 0.2 }}
                 />
 
-                {/* Quote */}
+                {/* Quote/Description Preview */}
                 <motion.div
                   className="mb-5"
                   variants={itemVariants}
                 >
                   <div className="relative pl-4 border-l-2 border-secondary/40">
-                    <p className="text-sm sm:text-base text-navy leading-relaxed italic">
-                      "Discernment is seeking God's will in my life through the inner movements of the Spirit of Love. A Christian life (Vocation) is precisely a response to God's will and call to discipleship."
+                    <p className="text-sm sm:text-base text-navy leading-relaxed">
+                      {previewDescription}
+                      {provincialData.description && provincialData.description.length > previewDescription.length && (
+                        <span className="text-primary font-semibold"> ...</span>
+                      )}
                     </p>
                   </div>
                 </motion.div>
@@ -162,23 +238,27 @@ const AboutHead = () => {
                   className="flex flex-col sm:flex-row gap-3"
                   variants={itemVariants}
                 >
-                  <motion.button
-                    className="flex items-center justify-center gap-2 px-5 py-2.5 bg-white border-2 border-primary text-primary rounded-lg font-medium text-sm hover:bg-primary hover:text-white transition-all duration-300"
-                    whileHover={{ scale: 1.03, y: -2 }}
-                    whileTap={{ scale: 0.98 }}
+                  <Link 
+                    to={provincialData.read_more_link || '#'}
+                    className="no-underline flex-1"
                   >
-                    Read More
-                    <HiArrowRight className="w-4 h-4" />
-                  </motion.button>
+                    <motion.button
+                      className="w-full flex items-center justify-center gap-2 px-5 py-2.5 bg-white border-2 border-primary text-primary rounded-lg font-medium text-sm hover:bg-primary hover:text-white transition-all duration-300 cursor-pointer"
+                      whileHover={{ scale: 1.03, y: -2 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      Read More
+                      <HiArrowRight className="w-4 h-4" />
+                    </motion.button>
+                  </Link>
                   <motion.button
-                    className="flex items-center justify-center gap-2 px-5 py-2.5 bg-primary text-white rounded-lg font-medium text-sm shadow-md hover:shadow-lg transition-all duration-300"
+                    className="flex-1 flex items-center justify-center gap-2 px-5 py-2.5 bg-primary text-white rounded-lg font-medium text-sm shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer"
                     whileHover={{ scale: 1.03, y: -2 }}
                     whileTap={{ scale: 0.98 }}
                   >
                     <HiCalendar className="w-4 h-4" />
                     Upcoming Programme
                   </motion.button>
-                  
                 </motion.div>
               </motion.div>
             </div>

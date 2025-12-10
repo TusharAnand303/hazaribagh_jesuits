@@ -1,61 +1,123 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FaQuoteLeft, FaStar } from 'react-icons/fa';
 
 const Testimonials = () => {
-  const testimonials = [
-    {
-      name: 'Rahul Kumar',
-      role: 'Alumni, Class of 2020',
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80',
-      text: 'The education and values I received at Hazaribagh Jesuit schools have shaped my life. The teachers not only taught academics but also instilled in us a sense of social responsibility.',
-      rating: 5
-    },
-    {
-      name: 'Priya Singh',
-      role: 'Parent',
-      image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80',
-      text: 'My daughter has grown so much in this nurturing environment. The holistic approach to education and the caring teachers have made all the difference in her development.',
-      rating: 5
-    },
-    {
-      name: 'Fr. Thomas Xavier',
-      role: 'Community Member',
-      image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80',
-      text: 'The social work initiatives of Hazaribagh Province have transformed countless lives in our region. Their commitment to serving the marginalized is truly inspiring.',
-      rating: 5
-    },
-    {
-      name: 'Anjali Verma',
-      role: 'Student, Grade 12',
-      image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=80',
-      text: 'The teachers here are not just educators, they are mentors who genuinely care about our future. I feel prepared for both college and life beyond academics.',
-      rating: 5
-    },
-    {
-      name: 'Dr. Suresh Mahato',
-      role: 'Local Physician',
-      image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&q=80',
-      text: 'The healthcare outreach programs run by the Jesuits have made quality medical care accessible to remote villages. Their dedication is commendable.',
-      rating: 5
-    },
-    {
-      name: 'Maria D\'Souza',
-      role: 'Former Teacher',
-      image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&q=80',
-      text: 'Working with Hazaribagh Jesuits was the most fulfilling experience of my career. The focus on character development alongside academics is remarkable.',
-      rating: 5
-    }
-  ];
+  // API states
+  const [testimonials, setTestimonials] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Duplicate testimonials for seamless loop
-  const duplicatedTestimonials = [...testimonials, ...testimonials];
+  // Touch/drag states for mobile
+  const scrollContainerRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+
+  // Fetch testimonials data
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/whatpeople`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch testimonials data');
+        }
+        const data = await response.json();
+
+        // API: { status: true, data: [ { ...testimonial objects... } ] }
+        const testimonialsArray = Array.isArray(data?.data) ? data.data : [];
+        
+        setTestimonials(testimonialsArray);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching testimonials data:', error);
+        setError(error.message);
+        setLoading(false);
+      }
+    };
+
+    fetchTestimonials();
+  }, []);
+
+  // Duplicate for animation only if 3+ cards
+  const shouldAnimate = testimonials.length >= 3;
+  const displayTestimonials = shouldAnimate 
+    ? [...testimonials, ...testimonials, ...testimonials] 
+    : testimonials;
+
+  // Touch/Mouse handlers for mobile drag
+  const handleMouseDown = (e) => {
+    if (window.innerWidth >= 768) return; // Only on mobile
+    setIsDragging(true);
+    setStartX(e.pageX - scrollContainerRef.current.offsetLeft);
+    setScrollLeft(scrollContainerRef.current.scrollLeft);
+  };
+
+  const handleTouchStart = (e) => {
+    if (window.innerWidth >= 768) return; // Only on mobile
+    setIsDragging(true);
+    setStartX(e.touches[0].pageX - scrollContainerRef.current.offsetLeft);
+    setScrollLeft(scrollContainerRef.current.scrollLeft);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging || window.innerWidth >= 768) return;
+    e.preventDefault();
+    const x = e.pageX - scrollContainerRef.current.offsetLeft;
+    const walk = (x - startX) * 2;
+    scrollContainerRef.current.scrollLeft = scrollLeft - walk;
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isDragging || window.innerWidth >= 768) return;
+    const x = e.touches[0].pageX - scrollContainerRef.current.offsetLeft;
+    const walk = (x - startX) * 2;
+    scrollContainerRef.current.scrollLeft = scrollLeft - walk;
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+  };
+
+  // Dummy image fallback
+  const getDummyImage = (name) => {
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(name || 'User')}&background=f97316&color=fff&size=200`;
+  };
+
+  // Loading state
+  if (loading) {
+    return (
+      <section className="py-6 bg-linear-to-b from-cream to-white overflow-hidden relative">
+        <div className="text-center py-12">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500 mb-4"></div>
+          <p className="text-gray-700">Loading testimonials...</p>
+        </div>
+      </section>
+    );
+  }
+
+  // Error or no data state
+  if (error || testimonials.length === 0) {
+    return (
+      <section className="py-6 bg-linear-to-b from-cream to-white overflow-hidden relative">
+        <div className="text-center py-12">
+          <p className="text-gray-700 text-lg">
+            {error ? 'Unable to load testimonials' : 'No testimonials available'}
+          </p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-6 bg-linear-to-b from-cream to-white overflow-hidden relative">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0" style={{
-          backgroundImage: 'radial-linear(circle at 2px 2px, #f97316 1px, transparent 0)',
+          backgroundImage: 'radial-gradient(circle at 2px 2px, #f97316 1px, transparent 0)',
           backgroundSize: '40px 40px'
         }}></div>
       </div>
@@ -72,22 +134,36 @@ const Testimonials = () => {
           <p className="text-gray-600 text-base max-w-2xl mx-auto">
             Hear from our students, parents, and community members
           </p>
-          <div className="w-24 h-1 bg-linear-to-r from-amber-500 to-orange-500 mx-auto mt-6 rounded-full"></div>
+          <div className="w-24 h-1 bg-gradient-to-r from-amber-500 to-orange-500 mx-auto mt-6 rounded-full"></div>
         </div>
 
         {/* Horizontal Scrolling Testimonials */}
         <div className="relative">
-          {/* linear Overlays - Hidden on mobile (md:block means hidden below 768px) */}
-          <div className="hidden md:block absolute left-0 top-0 bottom-0 w-32 bg-linear-to-r from-white to-transparent z-10 pointer-events-none"></div>
-          <div className="hidden md:block absolute right-0 top-0 bottom-0 w-32 bg-linear-to-l from-white to-transparent z-10 pointer-events-none"></div>
+          {/* Gradient Overlays - Only show if animating */}
+          {shouldAnimate && (
+            <>
+              <div className="hidden md:block absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
+              <div className="hidden md:block absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
+            </>
+          )}
 
           {/* Scrolling Container */}
-          <div className="testimonial-scroll-container">
-            <div className="flex space-x-4 animate-scroll">
-              {duplicatedTestimonials.map((testimonial, index) => (
+          <div 
+            ref={scrollContainerRef}
+            className={`testimonial-scroll-container ${shouldAnimate ? 'animate-enabled' : ''}`}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
+            <div className={`flex space-x-4 ${shouldAnimate ? 'desktop-animate' : testimonials.length < 3 ? 'justify-center' : 'justify-start'}`}>
+              {displayTestimonials.map((testimonial, index) => (
                 <div
-                  key={index}
-                  className="shrink-0 w-80 bg-white rounded-md shadow-md p-6 border border-gray-200 hover:border-orange-500 hover:shadow-lg transition-all duration-300"
+                  key={`${testimonial.id}-${index}`}
+                  className="shrink-0 w-80 bg-white rounded-md shadow-md p-6 border border-gray-200 hover:border-orange-500 hover:shadow-lg transition-all duration-300 mb-4"
                 >
                   {/* Quote Icon */}
                   <div className="mb-4">
@@ -96,12 +172,12 @@ const Testimonials = () => {
 
                   {/* Testimonial Text */}
                   <p className="text-gray-700 leading-relaxed mb-4 text-sm line-clamp-4">
-                    "{testimonial.text}"
+                    "{testimonial.message_text}"
                   </p>
 
-                  {/* Rating Stars */}
+                  {/* Rating Stars - Fixed 5 stars */}
                   <div className="flex space-x-1 mb-4">
-                    {[...Array(testimonial.rating)].map((_, i) => (
+                    {[...Array(5)].map((_, i) => (
                       <FaStar key={i} className="text-yellow-400 text-sm" />
                     ))}
                   </div>
@@ -109,13 +185,13 @@ const Testimonials = () => {
                   {/* User Info */}
                   <div className="flex items-center space-x-3 pt-4 border-t border-gray-200">
                     <img
-                      src={testimonial.image}
-                      alt={testimonial.name}
+                      src={testimonial.image_url || getDummyImage(testimonial.author_name)}
+                      alt={testimonial.author_name}
                       className="w-12 h-12 rounded-full object-cover border-2 border-orange-200"
                     />
                     <div>
-                      <h4 className="font-bold text-gray-900 text-sm">{testimonial.name}</h4>
-                      <p className="text-xs text-orange-600">{testimonial.role}</p>
+                      <h4 className="font-bold text-gray-900 text-sm">{testimonial.author_name}</h4>
+                      <p className="text-xs text-orange-600">Community Member</p>
                     </div>
                   </div>
                 </div>
@@ -124,10 +200,15 @@ const Testimonials = () => {
           </div>
         </div>
 
-        {/* Pause Notice */}
+        {/* Instructions */}
         <div className="text-center mt-8">
-          <p className="text-gray-500 text-xs">
-            💡 Hover over a testimonial to pause
+          {shouldAnimate && (
+            <p className="text-gray-500 text-xs hidden md:block">
+              💡 Hover over a testimonial to pause
+            </p>
+          )}
+          <p className="text-gray-500 text-xs md:hidden">
+            👆 Swipe to see more testimonials
           </p>
         </div>
       </div>
@@ -139,17 +220,67 @@ const Testimonials = () => {
             transform: translateX(0);
           }
           100% {
-            transform: translateX(-50%);
+            transform: translateX(calc(-100% / 3));
           }
         }
 
-        .animate-scroll {
-          animation: scroll 40s linear infinite;
-          display: flex;
+        /* Desktop animation - only when enabled */
+        @media (min-width: 768px) {
+          .animate-enabled {
+            overflow: hidden !important;
+          }
+
+          .desktop-animate {
+            animation: scroll 40s linear infinite;
+            will-change: transform;
+          }
+
+          .animate-enabled:hover .desktop-animate {
+            animation-play-state: paused;
+          }
         }
 
-        .testimonial-scroll-container:hover .animate-scroll {
-          animation-play-state: paused;
+        /* Mobile styles */
+        .testimonial-scroll-container {
+          overflow-x: auto;
+          overflow-y: hidden;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+        }
+
+        .testimonial-scroll-container::-webkit-scrollbar {
+          display: none;
+        }
+
+        /* Desktop: Default scrollable for non-animated */
+        @media (min-width: 768px) {
+          .testimonial-scroll-container {
+            padding: 0 2rem;
+            cursor: default;
+          }
+        }
+
+        /* Mobile: Manual scroll */
+        @media (max-width: 767px) {
+          .testimonial-scroll-container {
+            padding: 0 1rem;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            cursor: grab;
+          }
+
+          .testimonial-scroll-container:active {
+            cursor: grabbing;
+          }
+
+          .testimonial-scroll-container > div > div {
+            scroll-snap-align: center;
+          }
+
+          /* Disable animation on mobile */
+          .desktop-animate {
+            animation: none !important;
+          }
         }
 
         .line-clamp-4 {
@@ -157,12 +288,6 @@ const Testimonials = () => {
           -webkit-line-clamp: 4;
           -webkit-box-orient: vertical;
           overflow: hidden;
-        }
-
-        @media (max-width: 768px) {
-          .animate-scroll {
-            animation-duration: 30s;
-          }
         }
       `}</style>
     </section>

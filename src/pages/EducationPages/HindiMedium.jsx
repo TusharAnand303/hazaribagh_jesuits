@@ -1,9 +1,9 @@
-import React from 'react';
 import { motion } from 'framer-motion';
-import Breadcrumb from '../components/Breadcrumb';
+import VisionStatement from './VisionStatement';
 
-const Education = () => {
-  // Sample data - replace with API data later
+
+const HindiMedium = () => {
+    // Sample data - replace with API data later
   const schools = [
     {
       id: 1,
@@ -63,20 +63,16 @@ const Education = () => {
     },
   ];
 
-  const breadcrumbItems = [
-    { label: "Home", path: "/" },
-    { label: "Education", path: "/education" },
-  ];
-
   return (
-    <div className="min-h-screen bg-cream text-navy">
+     <>
+     <VisionStatement/>
+     <div className="min-h-screen bg-linear-to-t from-cream to-white text-navy">
 
       {/* Header */}
-      <header className="p-6 mt-24 sm:ml-24 -mb-10">
-        <h1 className="sm:text-4xl text-2xl font-bold">Education</h1>
+      <header className="p-4 sm:ml-24 -mb-2 -mt-2">
+        <h1 className="sm:text-4xl text-2xl font-bold">Hindi Medium School's</h1>
       </header>
-      <Breadcrumb items={breadcrumbItems} />
-
+      
       {/* Main Content */}
       <main className="container mx-auto p-6 pt-12 pb-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
@@ -113,7 +109,8 @@ const Education = () => {
         </div>
       </main>
     </div>
-  );
-};
+     </>
+  )
+}
 
-export default Education;
+export default HindiMedium;
