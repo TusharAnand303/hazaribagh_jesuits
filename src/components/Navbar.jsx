@@ -581,7 +581,7 @@ const Navbar = () => {
             {/* Mobile Header */}
             <div className="bg-linear-to-r from-primary via-navy to-primary p-4 flex items-center justify-between">
               <div>
-                <h2 className="text-white font-bold text-lg">Navigation</h2>
+                <h2 className="text-white font-bold text-lg">Hazaribag Jesuits</h2>
                 <p className="text-secondary text-xs">Menu</p>
               </div>
               <button
