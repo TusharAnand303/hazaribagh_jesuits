@@ -17,6 +17,7 @@ import News from "./pages/News.jsx"
 import NewsDetail from "./pages/NewsDetail.jsx"
 import PublicationDetail from "./pages/PublicationDetail.jsx"
 import EnglishMedium from "./pages/EducationPages/EnglishMedium.jsx"
+import EducationDetails from "./pages/EducationPages/EducationDetails.jsx"
 import HindiMedium from "./pages/EducationPages/HindiMedium.jsx"
 import HigherInstitute from "./pages/EducationPages/HigherInstitute.jsx"
 import Hostel from "./pages/EducationPages/Hostel.jsx"
@@ -49,11 +50,12 @@ function App() {
           <Route path="/news/:id" element={<NewsDetail />} />
           <Route path="/publications/:id" element={<PublicationDetail />} />
           <Route path="about/contactus" element={<Contactus />} />
-           <Route path="/aboutus" element={<Aboutus />} />
+          <Route path="/aboutus" element={<Aboutus />} />
+          <Route path="/educationdetails/:id" element={<EducationDetails />} />
         </Routes>
-        <Footer/>
+        <Footer/> 
         <ScrollToTop />
-        <SocialSidebar />
+         <SocialSidebar />
       </BrowserRouter>
     </>
   )

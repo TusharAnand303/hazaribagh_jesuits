@@ -15,18 +15,18 @@ import PopupNotice from '../components/HomePageComponents/PopupNotice'
 const HomePage = () => {
   return (
     <>
-    <PopupNotice/>
-    <Carousel/>
+    <PopupNotice/> 
+    <Carousel/> 
     <AboutHead/>
     <LatestNews/>
     <NewsLetter/>
-    <Whoweare/>
+    <Whoweare/> 
     <LatestVideo/>
     <ApostolicPlanning/>
     <Universal/>
-    <Quotes/>
-    <Testimonials/>
-    <Maps/>
+    <Quotes/> 
+   <Testimonials/> 
+    <Maps/> 
     </>
   )
 }
