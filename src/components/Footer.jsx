@@ -62,7 +62,7 @@ const Footer = () => {
             {/* Social Links */}
             <div className="flex space-x-3">
               <a 
-                href="https://facebook.com" 
+                href="https://www.facebook.com/share/1G5q1Cx3b6/" 
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-11 h-11 bg-gray-800 hover:bg-orange-600 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg"
@@ -78,7 +78,7 @@ const Footer = () => {
                 <FaTwitter className="text-xl" />
               </a>
               <a 
-                href="https://instagram.com" 
+                href="https://www.instagram.com/hazaribagjesuits?igsh=MTZ1eG40NmEzbzc5bw==" 
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-11 h-11 bg-gray-800 hover:bg-orange-600 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg"
@@ -86,7 +86,7 @@ const Footer = () => {
                 <FaInstagram className="text-xl" />
               </a>
               <a 
-                href="https://youtube.com" 
+                href="https://www.youtube.com/@HazaribagJesuits" 
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-11 h-11 bg-gray-800 hover:bg-orange-600 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:shadow-lg"
@@ -153,7 +153,7 @@ const Footer = () => {
                 { name: 'Online Ministries', url: 'https://onlineministries.creighton.edu/CollaborativeMinistry/online.html' },
                 { name: 'Ignatian Spirituality', url: 'https://www.ignatianspirituality.com/' },
                 { name: 'Loyola Press', url: 'https://www.loyolapress.com/our-catholic-faith/ignatian-spirituality' },
-                { name: 'Archives', url: 'https://jesuitarchives.blogspot.com/' }
+                
               ].map((link, idx) => (
                 <li key={idx}>
                   <a 

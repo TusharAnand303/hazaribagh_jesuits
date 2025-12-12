@@ -157,10 +157,7 @@ const PublicationDetail = () => {
                     </h2>
                     <div
                       className="prose prose-lg max-w-none text-gray-700 leading-relaxed"
-                      style={{
-                        fontSize: '1rem',
-                        lineHeight: '1.8',
-                      }}
+                      style={{fontSize: '1rem',lineHeight: '1.8',}} 
                       dangerouslySetInnerHTML={{ __html: publication.long_description }}
                     />
                   </div>

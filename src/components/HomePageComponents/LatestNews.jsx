@@ -20,7 +20,7 @@ const LatestNews = () => {
         
         // Create timeout promise (15 seconds)
         const timeoutPromise = new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('Request timeout')), 15000)
+          setTimeout(() => reject(new Error('Request timeout')), 15000) 
         );
 
         // Race between fetch and timeout

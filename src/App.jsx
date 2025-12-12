@@ -20,6 +20,8 @@ import EnglishMedium from "./pages/EducationPages/EnglishMedium.jsx"
 import HindiMedium from "./pages/EducationPages/HindiMedium.jsx"
 import HigherInstitute from "./pages/EducationPages/HigherInstitute.jsx"
 import Hostel from "./pages/EducationPages/Hostel.jsx"
+import Contactus from "./pages/Contactus.jsx"
+import Aboutus from "./pages/Aboutus.jsx"
 
 
 function App() {
@@ -46,6 +48,8 @@ function App() {
           <Route path="/news" element={<News />} />
           <Route path="/news/:id" element={<NewsDetail />} />
           <Route path="/publications/:id" element={<PublicationDetail />} />
+          <Route path="about/contactus" element={<Contactus />} />
+           <Route path="/aboutus" element={<Aboutus />} />
         </Routes>
         <Footer/>
         <ScrollToTop />

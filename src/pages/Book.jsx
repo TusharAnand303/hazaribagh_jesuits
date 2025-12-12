@@ -126,19 +126,7 @@ const Book = () => {
         <p className="text-lg mb-4">
           Books for distribution from the Jesuit Archives of Hazaribag.
         </p>
-        <p className="text-lg mb-4">
-          These following books are available at the Provincialate of the Jesuits in Hazaribag: Loyola Mandir, 96 Lavelle Road, 3rd Cross, Bengaluru - 560001.
-        </p>
-        <p className="text-lg">
-          Write to us at{' '}
-          <a
-            href="mailto:hazaribagjesuitarchives@gmail.com"
-            className="text-secondary underline"
-          >
-            hazaribagjesuitarchives@gmail.com
-          </a>{' '}
-          or send a message to this number: 09483074475
-        </p>
+        
       </div>
 
       {/* Books Grid */}

@@ -160,12 +160,9 @@ const NewsDetail = () => {
                 {/* Content Text */}
                 <div
                   className="text-gray-700 leading-relaxed whitespace-pre-line text-sm"
-                  style={{
-                    lineHeight: '1.8',
-                  }}
-                >
-                  {newsDetail.content}
-                </div>
+                  style={{ lineHeight: "1.8" }}
+                  dangerouslySetInnerHTML={{ __html: newsDetail.content }}
+                ></div>
 
                 {/* Short Description if available */}
                 {newsDetail.short_description && (

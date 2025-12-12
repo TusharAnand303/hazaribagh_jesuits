@@ -18,7 +18,7 @@ const Universal = () => {
 
         // API: { status: true, data: [ { ...uap objects... } ] }
         const uapArray = Array.isArray(data?.data) ? data.data : [];
-        
+
         setUapData(uapArray);
         setLoading(false);
       } catch (error) {
@@ -87,24 +87,28 @@ const Universal = () => {
               className="relative h-60 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 group cursor-pointer"
             >
               {/* Background Image */}
-              <div 
+              <div
                 className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700"
-                style={{ 
+                style={{
                   backgroundImage: `url(${item.image_url})`,
                   backgroundBlendMode: 'multiply'
                 }}
               />
-              
+
               {/* Content container */}
               <div className="relative z-10 flex flex-col items-center justify-end h-full p-6 pb-8">
                 {/* Decorative line */}
                 <div className="w-16 h-0.5 mb-4 group-hover:w-24 transition-all duration-500" style={{ backgroundColor: '#D4AF37' }} />
-                
+
                 {/* Text */}
-                <h3 className="text-center text-base sm:text-lg font-bold tracking-wider leading-tight transition-colors duration-300 text-shadow" style={{ 
-                  color: '#F8F4E3', 
-                  textShadow: '0 1px 2px rgba(0,0,0,0.6)'
-                }}>
+                <h3
+                  className="text-center text-base sm:text-lg font-bold tracking-wider leading-tight transition-colors duration-300 px-3 py-1 rounded-md"
+                  style={{
+                    color: '#FFFFFF',
+                    backgroundColor: 'rgba(0, 0, 0, 0.45)',
+                    textShadow: '0 2px 3px rgba(0,0,0,0.8)',
+                  }}
+                >
                   <span className="group-hover:text-secondary transition-colors duration-300">
                     {item.title}
                   </span>

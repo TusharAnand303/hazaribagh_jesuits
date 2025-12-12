@@ -192,7 +192,8 @@ const Navbar = () => {
           ],
         },
         { title: 'Support Us', url: '/about/support' },
-        { title: 'Contact Us', url: '/about/contact' },
+        { title: 'Contact Us', url: 'about/contactus' },
+        { title: 'About Us', url: '/aboutus' },
       ],
     },
     communities: {
@@ -224,8 +225,11 @@ const Navbar = () => {
           url: '/pastoral',
           submenu: [
             { title: 'Parish centers', url: '/pastoral/parish-centers' },
-            { title: 'Mahuahar', url: '/pastoral/mahuahar' },
-            { title: 'Bhurkunda pakripath Jamuniatar', url: '/pastoral/bhurkunda-pakripath-jamuniatar' },
+            { title: 'Mahuadanr', url: '/pastoral/mahuadanr' },
+            { title: 'Bhurkunda', url: '/pastoral/bhurkunda' },
+            { title: 'Pakripath', url: '/pastoral/pakripath' },
+            { title: 'Jamuniatar', url: '/pastoral/jamuniatar' },
+            
           ],
         },
         {
