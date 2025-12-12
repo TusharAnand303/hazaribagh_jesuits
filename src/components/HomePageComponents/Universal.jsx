@@ -90,10 +90,12 @@ const Universal = () => {
               <div 
                 className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700"
                 style={{ 
-                  backgroundImage: `url(${item.image_url})`,
-                  backgroundBlendMode: 'multiply'
+                  backgroundImage: `url('${item.image_url}')`
                 }}
               />
+              
+              {/* Dark overlay for better text visibility */}
+              <div className="absolute inset-0 bg-black/30"></div>
               
               {/* Content container */}
               <div className="relative z-10 flex flex-col items-center justify-end h-full p-6 pb-8">
@@ -103,7 +105,7 @@ const Universal = () => {
                 {/* Text */}
                 <h3 className="text-center text-base sm:text-lg font-bold tracking-wider leading-tight transition-colors duration-300 text-shadow" style={{ 
                   color: '#F8F4E3', 
-                  textShadow: '0 1px 2px rgba(0,0,0,0.6)'
+                  textShadow: '0 2px 4px rgba(0,0,0,0.8)'
                 }}>
                   <span className="group-hover:text-secondary transition-colors duration-300">
                     {item.title}
