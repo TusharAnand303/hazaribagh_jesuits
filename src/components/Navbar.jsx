@@ -19,6 +19,11 @@ const Navbar = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Nav menu API states
+  const [navMenuData, setNavMenuData] = useState(null);
+  const [navMenuLoading, setNavMenuLoading] = useState(true);
+  const [navMenuError, setNavMenuError] = useState(null);
+
   // Fetch logo data
   useEffect(() => {
     const fetchLogoData = async () => {
@@ -29,9 +34,7 @@ const Navbar = () => {
         }
         const data = await response.json();
 
-        // API: { status: true, data: [ { ...logo objects... } ] }
         const logosArray = Array.isArray(data?.data) ? data.data : [];
-        // pick Top Logo if exists, otherwise first logo, otherwise null
         const topLogo =
           logosArray.find((item) => item.title === 'Top Logo') ||
           logosArray[0] ||
@@ -47,6 +50,44 @@ const Navbar = () => {
     };
     fetchLogoData();
   }, []);
+
+  // Fetch nav menu data
+  useEffect(() => {
+    const fetchNavMenuData = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/navmenu`);
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch nav menu data');
+        }
+        const data = await response.json();
+
+        // API response: { status: true, data: { pastoral: [...], mass_centers: [...], social_centers: [...] } }
+        setNavMenuData(data?.data || {});
+        setNavMenuLoading(false);
+      } catch (error) {
+        console.error('Error fetching nav menu data:', error);
+        setNavMenuError(error.message);
+        setNavMenuLoading(false);
+      }
+    };
+    fetchNavMenuData();
+  }, []);
+
+  const pastoralSubmenu = navMenuData?.pastoral?.map((item) => ({
+    title: item.title,  // Use exact API title
+    url: `/pastoral/${item.title.toLowerCase().replace(/\s+/g, '-')}`  // Generate URL from title
+  })) || [];
+
+  const socialcentersubmenu = navMenuData?.social_centers?.map((item) => ({
+    title: item.title,  // Use exact API title
+    url: `/social_centers/${item.title.toLowerCase().replace(/\s+/g, '-')}`  // Generate URL from title
+  })) || [];
+
+  const masscentersubmenu = navMenuData?.mass_centers?.map((item) => ({
+    title: item.title,  // Use exact API title
+    url: `/mass_centers/${item.title.toLowerCase().replace(/\s+/g, '-')}`  // Generate URL from title
+  })) || [];
 
   // Handle logo click
   const handleLogoClick = () => {
@@ -177,7 +218,8 @@ const Navbar = () => {
     });
   };
 
-  const menuData = {
+  // Base menu data structure
+  const baseMenuData = {
     aboutUs: {
       title: 'About Us',
       items: [
@@ -219,35 +261,21 @@ const Navbar = () => {
             { title: 'Hostels', url: '/education/hostels' },
           ] 
         },
+        // Pastoral menu will be dynamically populated from API
         {
-          title: 'Pastoral',
-          url: '/pastoral',
-          submenu: [
-            { title: 'Parish centers', url: '/pastoral/parish-centers' },
-            { title: 'Mahuahar', url: '/pastoral/mahuahar' },
-            { title: 'Bhurkunda pakripath Jamuniatar', url: '/pastoral/bhurkunda-pakripath-jamuniatar' },
-          ],
-        },
+      title: 'Pastoral',
+      url: '/pastoral',
+      submenu: pastoralSubmenu  // ✅ ONLY API data, empty array if no data
+    },
         {
           title: 'Mass Centers',
           url: '/mass_center',
-          submenu: [
-            { title: 'Tarwa', url: '/mass_center/tarwa' },
-            { title: 'Hutpa', url: '/mass_center/hutpa' },
-            { title: 'Patra', url: '/mass_center/patra' },
-            { title: 'Latehar', url: '/mass_center/latehar' },
-          ],
+          submenu: masscentersubmenu
         },
         {
           title: 'Social Centers',
           url: '/social_center',
-          submenu: [
-            { title: 'Jamuniatar', url: '/social_center/jamuniatar' },
-            { title: 'Kajarkilo', url: '/social_center/hutpa' },
-            { title: 'Patki', url: '/social_center/patki' },
-            { title: 'Churadohar', url: '/social_center/churadohar' },
-            { title: 'Patra', url: '/social_center/patra' },
-          ],
+          submenu: socialcentersubmenu  // ✅ ONLY API data, empty array if no data
         },
         { title: 'Youth', url: '/youth/jamuniatar' },
         { title: 'Formation', url: '/formation/tarwa' },
@@ -351,7 +379,7 @@ const Navbar = () => {
               </Link>
 
               {/* Dropdown Menus with Hover and Click */}
-              {Object.keys(menuData).map((key) => (
+              {Object.keys(baseMenuData).map((key) => (
                 <div
                   key={key}
                   className="relative"
@@ -361,7 +389,7 @@ const Navbar = () => {
                   <button
                     onClick={() => toggleDropdown(key)}
                     className={`px-2.5 xl:px-3 py-2 font-semibold text-sm rounded transition-all duration-300 flex items-center gap-1.5 whitespace-nowrap ${
-                      isSubmenuActive(menuData[key].items)
+                      isSubmenuActive(baseMenuData[key].items)
                         ? scrolled
                           ? 'bg-primary text-white'
                           : 'bg-white text-primary'
@@ -376,7 +404,7 @@ const Navbar = () => {
                         : ''
                     }`}
                   >
-                    <span>{menuData[key].title}</span>
+                    <span>{baseMenuData[key].title}</span>
                     <FaChevronDown
                       className={`text-[10px] transition-all duration-300 ${
                         activeMenu === key ? 'rotate-180' : ''
@@ -396,13 +424,13 @@ const Navbar = () => {
                         <div className="bg-linear-to-r from-primary via-navy to-primary px-4 py-3">
                           <h3 className="text-white text-sm font-bold flex items-center">
                             <FaChevronRight className="text-secondary text-[10px] mr-2" />
-                            {menuData[key].title}
+                            {baseMenuData[key].title}
                           </h3>
                         </div>
 
                         {/* Menu Items */}
                         <div className="py-1 max-h-96 overflow-visible">
-                          {menuData[key].items.map((item, idx) => (
+                          {baseMenuData[key].items.map((item, idx) => (
                             <div
                               key={idx}
                               className="relative"
@@ -439,6 +467,9 @@ const Navbar = () => {
                                       />
                                       <span className="text-sm font-medium">
                                         {item.title}
+                                        {key === 'ministries' && item.title === 'Pastoral' && navMenuLoading && (
+                                          <span className="ml-2 text-xs text-gray-400">(Loading...)</span>
+                                        )}
                                       </span>
                                     </div>
                                     <FaChevronRight className="text-[10px]" />
@@ -621,12 +652,12 @@ const Navbar = () => {
                 </Link>
 
                 {/* Dropdown Menus - Mobile */}
-                {Object.keys(menuData).map((key) => (
+                {Object.keys(baseMenuData).map((key) => (
                   <div key={key} className="mb-1">
                     <button
                       onClick={(e) => toggleMobileDropdown(key, e)}
                       className={`w-full flex items-center justify-between py-3 px-4 font-semibold rounded transition-all ${
-                        activeMenu === key || isSubmenuActive(menuData[key].items)
+                        activeMenu === key || isSubmenuActive(baseMenuData[key].items)
                           ? 'bg-primary text-white'
                           : 'text-navy hover:bg-cream hover:text-primary'
                       }`}
@@ -634,12 +665,12 @@ const Navbar = () => {
                       <span className="flex items-center gap-2">
                         <FaChevronRight
                           className={`text-[10px] ${
-                            activeMenu === key || isSubmenuActive(menuData[key].items)
+                            activeMenu === key || isSubmenuActive(baseMenuData[key].items)
                               ? 'text-secondary'
                               : 'text-primary'
                           }`}
                         />
-                        {menuData[key].title}
+                        {baseMenuData[key].title}
                       </span>
                       <FaChevronDown
                         className={`text-xs transition-transform duration-300 ${
@@ -651,7 +682,7 @@ const Navbar = () => {
                     {/* Dropdown Items (Second Level) */}
                     {activeMenu === key && (
                       <div className="mt-1 ml-4 bg-cream/50 rounded overflow-hidden border-l-2 border-secondary animate-slideDown">
-                        {menuData[key].items.map((item, idx) => (
+                        {baseMenuData[key].items.map((item, idx) => (
                           <div key={idx}>
                             {item.submenu ? (
                               <>
@@ -671,7 +702,12 @@ const Navbar = () => {
                                 >
                                   <span className="flex items-center gap-2">
                                     <FaChevronRight className="text-secondary text-[8px]" />
-                                    <span className="text-sm">{item.title}</span>
+                                    <span className="text-sm">
+                                      {item.title}
+                                      {key === 'ministries' && item.title === 'Pastoral' && navMenuLoading && (
+                                        <span className="ml-2 text-xs text-gray-400">(Loading...)</span>
+                                      )}
+                                    </span>
                                   </span>
                                   <FaChevronRight
                                     className={`text-[10px] transition-transform duration-300 ${
