@@ -28,7 +28,7 @@ function App() {
     <>
       <BrowserRouter>
       <ScrollOnRouteChange />
-      <Navbar/>
+      {/* <Navbar/> */}
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="*" element={<NotFound />} />
@@ -47,9 +47,9 @@ function App() {
           <Route path="/news/:id" element={<NewsDetail />} />
           <Route path="/publications/:id" element={<PublicationDetail />} />
         </Routes>
-        <Footer/>
-        <ScrollToTop />
-        <SocialSidebar />
+        {/* <Footer/> */}
+        {/* <ScrollToTop /> */}
+        {/* <SocialSidebar /> */}
       </BrowserRouter>
     </>
   )
