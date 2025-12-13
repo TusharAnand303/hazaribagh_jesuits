@@ -23,6 +23,7 @@ const Navbar = () => {
   const [navMenuData, setNavMenuData] = useState(null);
   const [navMenuLoading, setNavMenuLoading] = useState(true);
   const [navMenuError, setNavMenuError] = useState(null);
+  const [communityData, setCommunityData] = useState([]);
 
   // Fetch logo data
   useEffect(() => {
@@ -74,20 +75,70 @@ const Navbar = () => {
     fetchNavMenuData();
   }, []);
 
+  useEffect(() => {
+  const fetchCommunityData = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/community`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch community data');
+      }
+      const data = await response.json();
+      setCommunityData(data?.data || []); // Array from API response
+    } catch (error) {
+      console.error('Error fetching community data:', error);
+    }
+  };
+  fetchCommunityData();
+}, []);
+
+// Generate community submenu
+  const communitySubmenu = communityData.map((item) => ({
+    title: item.community_name,  // "Hazaribagh"
+    id: item.id,                 // 1
+    url: `/communities/${item.id}` // /community/1
+  }));
+
+  {communitySubmenu.map((item) => (
+    <Link key={item.id} to={item.url}>
+      {item.title}
+    </Link>
+  ))}
+
   const pastoralSubmenu = navMenuData?.pastoral?.map((item) => ({
-    title: item.title,  // Use exact API title
-    url: `/pastoral/${item.title.toLowerCase().replace(/\s+/g, '-')}`  // Generate URL from title
+    title: item.title.split(':')[0].trim(),  
+    id: item.id,                             
+    url: `/pastoral/${item.id}`         
   })) || [];
+
+  {pastoralSubmenu.map((item) => (
+    <Link key={item.id} to={item.url}>
+      {item.title}
+    </Link>
+  ))}
 
   const socialcentersubmenu = navMenuData?.social_centers?.map((item) => ({
-    title: item.title,  // Use exact API title
-    url: `/social_centers/${item.title.toLowerCase().replace(/\s+/g, '-')}`  // Generate URL from title
+    title: item.title,
+    id: item.id,  // Use exact API title
+    url: `/socialcenters/${item.id}`  // Generate URL from title
   })) || [];
+    
+  {socialcentersubmenu.map((item) => (
+    <Link key={item.id} to={item.url}>
+      {item.title}
+    </Link>
+  ))}
 
   const masscentersubmenu = navMenuData?.mass_centers?.map((item) => ({
-    title: item.title,  // Use exact API title
-    url: `/mass_centers/${item.title.toLowerCase().replace(/\s+/g, '-')}`  // Generate URL from title
+    title: item.title,
+    id: item.id,  // Use exact API title
+    url: `/masscenteres/${item.id}`  // Generate URL from title
   })) || [];
+
+  {masscentersubmenu.map((item) => (
+    <Link key={item.id} to={item.url}>
+      {item.title}
+    </Link>
+  ))}
 
   // Handle logo click
   const handleLogoClick = () => {
@@ -240,14 +291,7 @@ const Navbar = () => {
     },
     communities: {
       title: 'Communities',
-      items: [
-        { title: 'Hazaribag', url: '/communities/hazaribag' },
-        { title: 'Bokaro', url: '/communities/bokaro' },
-        { title: 'Palamu', url: '/communities/palamu' },
-        { title: 'Garha', url: '/communities/garha' },
-        { title: 'Latehar', url: '/communities/latehar' },
-        { title: 'Ramgarh', url: '/communities/ramgarh' },
-      ],
+      items: communitySubmenu  // ✅ ONLY API data, empty array if no data
     },
     ministries: {
       title: 'Ministries',

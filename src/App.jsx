@@ -23,6 +23,10 @@ import HigherInstitute from "./pages/EducationPages/HigherInstitute.jsx"
 import Hostel from "./pages/EducationPages/Hostel.jsx"
 import Contactus from "./pages/Contactus.jsx"
 import Aboutus from "./pages/Aboutus.jsx"
+import PastoralDetails from "./pages/PastoralDetails.jsx"
+import SocialCenters from "./pages/SocialCenters.jsx"
+import MassCenters from "./pages/MassCenters.jsx"
+import Communities from "./pages/Communities.jsx"
 
 
 function App() {
@@ -52,6 +56,10 @@ function App() {
           <Route path="about/contactus" element={<Contactus />} />
           <Route path="/aboutus" element={<Aboutus />} />
           <Route path="/educationdetails/:id" element={<EducationDetails />} />
+          <Route path="/pastoral/:id" element={<PastoralDetails />} />
+          <Route path="/socialcenters/:id" element={<SocialCenters />} />
+          <Route path="/masscenteres/:id" element={<MassCenters />} />
+          <Route path="/communities/:id" element={<Communities />} />
         </Routes>
         <Footer/> 
         <ScrollToTop />

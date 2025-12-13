@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-const PastoralDetails = () => {
+const SocialCenters = () => {
   const { id } = useParams();
   const [content, setContent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchPastoralDetails = async () => {
+    const fetchSocialCenters = async () => {
       try {
         setLoading(true);
         setError(null);
 
         const res = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL}/parishes/${id}`
+          `${import.meta.env.VITE_API_BASE_URL}/socialcenteres/${id}`
         );
         if (!res.ok) {
           throw new Error(`Failed to fetch: ${res.status}`);
@@ -24,14 +24,14 @@ const PastoralDetails = () => {
         setContent(response.data);
       } catch (err) {
         console.error(err);
-        setError('Unable to load pastoral details. Please try again later.');
+        setError('Unable to load socialcenters details. Please try again later.');
       } finally {
         setLoading(false);
       }
     };
 
     if (id) {
-      fetchPastoralDetails();
+      fetchSocialCenters();
     }
   }, [id]);
 
@@ -100,4 +100,4 @@ const PastoralDetails = () => {
   );
 };
 
-export default PastoralDetails;
+export default SocialCenters;
