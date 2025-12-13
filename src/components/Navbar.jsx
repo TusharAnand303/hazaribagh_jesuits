@@ -309,7 +309,7 @@ const Navbar = () => {
         // Pastoral menu will be dynamically populated from API
         {
 
-          title: 'Pastoral',
+          title: 'Parishes',
           url: '/pastoral',
           submenu: pastoralSubmenu  // ✅ ONLY API data, empty array if no data
         },
