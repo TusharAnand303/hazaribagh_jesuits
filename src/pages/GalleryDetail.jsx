@@ -16,19 +16,37 @@ const GalleryDetail = () => {
   useEffect(() => {
     const fetchGalleryDetail = async () => {
       try {
-        const response = await fetch(
+        setLoading(true);
+        setError(null);
+
+        const fetchPromise = fetch(
           `${import.meta.env.VITE_API_BASE_URL}/gallery/${id}`
         );
+
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Request timeout')), 15000)
+        );
+
+        const response = await Promise.race([
+          fetchPromise,
+          timeoutPromise,
+        ]);
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         const data = await response.json();
 
         if (data.status) {
           setGallery(data.gallery);
-          setDetails(data.details);
+          setDetails(data.details || []);
         } else {
-          setError('Gallery not found.');
+          throw new Error('Gallery not found');
         }
-      } catch {
-        setError('Error fetching gallery detail.');
+      } catch (err) {
+        console.error('Gallery detail error:', err);
+        setError(err.message);
       } finally {
         setLoading(false);
       }
@@ -39,20 +57,20 @@ const GalleryDetail = () => {
 
   /* ================= SLIDER CONTROLS ================= */
   const nextImage = useCallback(() => {
-    setSelectedIndex((prev) =>
+    setSelectedIndex(prev =>
       prev === details.length - 1 ? 0 : prev + 1
     );
   }, [details.length]);
 
   const prevImage = useCallback(() => {
-    setSelectedIndex((prev) =>
+    setSelectedIndex(prev =>
       prev === 0 ? details.length - 1 : prev - 1
     );
   }, [details.length]);
 
   /* ================= KEYBOARD SUPPORT ================= */
   useEffect(() => {
-    const handleKey = (e) => {
+    const handleKey = e => {
       if (selectedIndex === null) return;
       if (e.key === 'Escape') setSelectedIndex(null);
       if (e.key === 'ArrowRight') nextImage();
@@ -62,32 +80,74 @@ const GalleryDetail = () => {
     return () => window.removeEventListener('keydown', handleKey);
   }, [selectedIndex, nextImage, prevImage]);
 
-  if (loading) return <p className="text-center mt-10">Loading...</p>;
-  if (error) return <p className="text-center mt-10 text-red-500">{error}</p>;
-
   const breadcrumbItems = [
     { label: 'Home', path: '/' },
     { label: 'Gallery', path: '/gallery' },
     { label: gallery?.title || 'Detail', path: `/gallery/${id}` },
   ];
 
+  /* ================= LOADING STATE ================= */
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-linear-to-b from-cream to-white">
+        <Breadcrumb items={breadcrumbItems} />
+        <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+          <div className="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+          <p className="text-gray-600 text-lg">Loading gallery details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  /* ================= ERROR STATE ================= */
+  if (error) {
+    return (
+      <div className="min-h-screen bg-linear-to-b from-cream to-white">
+        <Breadcrumb items={breadcrumbItems} />
+        <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+          <div className="text-red-500 text-3xl">⚠️</div>
+          <h3 className="text-xl font-bold text-navy">
+            Unable to Load Gallery
+          </h3>
+          <p className="text-gray-600 text-center">
+            {error === 'Request timeout'
+              ? 'The request is taking longer than expected.'
+              : error}
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-6 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg transition"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  /* ================= PAGE UI ================= */
   return (
     <div className="min-h-screen bg-cream text-navy">
-      {/* ================= HEADER ================= */}
+      {/* Header */}
       <header className="p-6 sm:ml-24 mt-24">
-        <h1 className="sm:text-4xl text-2xl font-bold">{gallery?.title}</h1>
+        <motion.h1
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="sm:text-4xl text-2xl font-bold"
+        >
+          {gallery?.title}
+        </motion.h1>
       </header>
 
       <Breadcrumb items={breadcrumbItems} />
 
-     
-
-      {/* ================= DETAIL GRID ================= */}
+      {/* Detail Grid */}
       <div className="container mx-auto px-6 py-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {details.map((img, index) => (
           <motion.div
             key={img.id}
-            whileHover={{ scale: 1.04 }}
+            whileHover={{ scale: 1.05 }}
             className="cursor-pointer bg-white rounded-lg shadow-lg overflow-hidden"
             onClick={() => setSelectedIndex(index)}
           >
@@ -95,12 +155,13 @@ const GalleryDetail = () => {
               src={img.image_url}
               alt={img.file_name}
               className="w-full h-64 object-cover"
+              loading="lazy"
             />
           </motion.div>
         ))}
       </div>
 
-      {/* ================= POPUP SLIDER ================= */}
+      {/* Popup Slider */}
       <AnimatePresence>
         {selectedIndex !== null && (
           <motion.div
@@ -111,13 +172,12 @@ const GalleryDetail = () => {
             onClick={() => setSelectedIndex(null)}
           >
             <motion.div
-              initial={{ scale: 0.8 }}
+              initial={{ scale: 0.85 }}
               animate={{ scale: 1 }}
-              exit={{ scale: 0.8 }}
-              onClick={(e) => e.stopPropagation()}
+              exit={{ scale: 0.85 }}
+              onClick={e => e.stopPropagation()}
               className="relative max-w-5xl w-full px-4"
             >
-              {/* Image */}
               <img
                 src={details[selectedIndex].image_url}
                 alt=""
