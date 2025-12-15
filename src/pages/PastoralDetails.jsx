@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { FiArrowLeft, FiAlertCircle, FiMapPin, FiBookOpen, FiCalendar } from 'react-icons/fi';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import Breadcrumb from '../components/Breadcrumb';
 
 const PastoralDetails = () => {
   const { id } = useParams();
@@ -13,18 +16,27 @@ const PastoralDetails = () => {
         setLoading(true);
         setError(null);
 
-        const res = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL}/parishes/${id}`
+        const fetchPromise = fetch(`${import.meta.env.VITE_API_BASE_URL}/parishes/${id}`);
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Request timeout')), 15000)
         );
+
+        const res = await Promise.race([fetchPromise, timeoutPromise]);
+
         if (!res.ok) {
           throw new Error(`Failed to fetch: ${res.status}`);
         }
 
         const response = await res.json();
-        setContent(response.data);
+        if (response.status && response.data) {
+          setContent(response.data);
+          document.title = `${response.data.title} - Pastoral Details`;
+        } else {
+          setError('Pastoral details not found');
+        }
       } catch (err) {
         console.error(err);
-        setError('Unable to load pastoral details. Please try again later.');
+        setError(err.message || 'Unable to load pastoral details. Please try again later.');
       } finally {
         setLoading(false);
       }
@@ -35,67 +47,185 @@ const PastoralDetails = () => {
     }
   }, [id]);
 
+  const breadcrumbItems = [
+    { label: 'Home', path: '/' },
+    { label: content?.title || 'Details', path: `/parishes/${id}` },
+  ];
+
+  // Loading state
   if (loading) {
-    return <div className="container mx-auto py-10">Loading...</div>;
+    return (
+      <div className="min-h-screen bg-cream">
+        <Breadcrumb items={breadcrumbItems} />
+        <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+          <div className="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+          <p className="text-gray-600 text-lg">Loading pastoral details...</p>
+        </div>
+      </div>
+    );
   }
 
-  if (error) {
-    return <div className="container mx-auto py-10 text-red-600">{error}</div>;
-  }
-
-  if (!content) {
-    return <div className="container mx-auto py-10">No data found.</div>;
+  // Error state
+  if (error || !content) {
+    return (
+      <div className="min-h-screen bg-cream">
+        <Breadcrumb items={breadcrumbItems} />
+        <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+          <FiAlertCircle className="w-16 h-16 text-red-500" />
+          <h3 className="text-xl font-bold text-navy">Unable to Load Details</h3>
+          <p className="text-gray-600">
+            {error === 'Request timeout'
+              ? 'The request is taking longer than expected.'
+              : error || 'Pastoral details could not be found.'}
+          </p>
+          <Link to="/parishes">
+            <button className="px-6 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors">
+              Back to Parishes
+            </button>
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="container mx-auto py-25 max-w-4xl px-4 sm:px-6 lg:px-8">
-      <div className="bg-white shadow-xl rounded-3xl overflow-hidden">
-        <div className="p-6 sm:p-8 lg:p-12">
-              {content.image_url && (
-          <div className="w-full">
-            <img 
-              src={content.image_url} 
-              alt={content.title}
-              className="w-full h-64 sm:h-80 lg:h-96 object-cover"
-              onError={(e) => {
-                e.target.style.display = 'none';
-              }}
-            />
-          </div>
-        )}
-          
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6 sm:mb-8 text-gray-800 leading-tight">
-            {content.title}
-          </h1>
-          
-          {/* Description */}
-          {content.description && (
-            <div className="prose prose-lg max-w-none mb-8 sm:mb-12">
-              <p className="text-gray-700 leading-relaxed whitespace-pre-wrap text-base sm:text-lg">
-                {content.description}
-              </p>
-            </div>
-          )}
-        </div>
-        
-      </div>
-      
-      {/* Link if available (null or # hidden) */}
-      {content.link && content.link !== '#' && content.link !== null && (
-        <div className="mt-8 sm:mt-12 text-center">
-          <a 
-            href={content.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl text-sm sm:text-base"
+    <div className="min-h-screen bg-linear-to-b from-cream to-white text-navy">
+      {/* Header */}
+      <header className="p-6 mt-24 sm:ml-24 -mb-10">
+        <h1 className="text-3xl font-bold">{content.title}</h1>
+      </header>
+      <Breadcrumb items={breadcrumbItems} />
+
+      {/* Main Content */}
+      <main className="p-6 pt-12 sm:ml-24 sm:mr-24">
+        {/* Flex Container */}
+        <div className="flex flex-col lg:flex-row gap-6 max-w-[1800px]">
+          {/* Content Section - Left */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="flex-1 lg:flex-2"
           >
-            Visit Website
-            <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-            </svg>
-          </a>
+            <article className="bg-white rounded-2xl shadow-xl overflow-hidden h-full">
+              {/* Header */}
+              <div className="p-6 md:p-8 bg-linear-to-r from-navy/5 to-primary/5 border-b border-gray-100">
+                <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-navy mb-2 leading-tight">
+                  {content.title}
+                </h1>
+              </div>
+
+              {/* Content */}
+              <div className="p-6 md:p-8">
+                {/* Image */}
+                {content.image_url && (
+                  <div className="mb-8">
+                    <div className="relative h-72 md:h-80 rounded-xl overflow-hidden shadow-lg">
+                      <img
+                        src={content.image_url}
+                        alt={content.title}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                        }}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Description */}
+                {content.description && (
+                  <div className="mb-8">
+                    <h2 className="text-xl font-bold text-navy mb-4 flex items-center gap-2">
+                      <div className="w-1 h-6 bg-primary rounded"></div>
+                      About the Parish
+                    </h2>
+                    <div className="p-6 bg-linear-to-r from-primary/5 to-transparent rounded-xl border-l-4 border-primary">
+                      <div
+                        className="prose prose-lg max-w-none text-gray-700 leading-relaxed"
+                        style={{ fontSize: '1rem', lineHeight: '1.8' }}
+                        dangerouslySetInnerHTML={{ __html: content.description }}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            </article>
+          </motion.div>
+
+          {/* Sidebar - Right */}
+          <motion.aside
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="w-full lg:w-[400px] shrink-0"
+          >
+            <div className="flex flex-col gap-6">
+              {/* Info Card */}
+              <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+                <div className="p-4 bg-linear-to-r from-secondary to-primary">
+                  <h3 className="text-white font-bold text-sm uppercase tracking-wide flex items-center gap-2">
+                    <FiBookOpen className="w-4 h-4" />
+                    Parish Information
+                  </h3>
+                </div>
+                <div className="p-6">
+                  <div className="space-y-4">
+                    <div className="p-4 bg-gray-50 rounded-lg">
+                      <div className="flex items-center justify-between">
+                        <span className="text-gray-500 font-medium text-sm">Parish </span>
+                        <span className="text-navy-500 font-medium text-sm">{content.title || title}</span>
+                      </div>
+                    </div>
+
+                    {content.created_at && (
+                      <div className="p-4 bg-gray-50 rounded-lg">
+                        <div className="flex items-center gap-2 mb-2">
+                          <FiCalendar className="w-4 h-4 text-primary" />
+                          <span className="text-gray-500 font-medium text-sm">Added On</span>
+                        </div>
+                        <span className="text-navy font-semibold text-sm block">
+                          {new Date(content.created_at).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                          })}
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Link Button */}
+                    {content.link && content.link !== '#' && content.link !== null && (
+                      <div className="p-4 bg-linear-to-r from-primary/10 to-secondary/10 rounded-lg border border-primary/20">
+                        <a
+                          href={content.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="block w-full text-center px-4 py-3 bg-primary hover:bg-primary/90 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                        >
+                          Visit Website
+                        </a>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Back Button */}
+                  <Link to="/parishes">
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="w-full mt-6 px-4 py-3 bg-linear-to-r from-primary to-navy text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                      <FiArrowLeft className="w-4 h-4" />
+                      Back to Parishes
+                    </motion.button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </motion.aside>
         </div>
-      )}
+      </main>
     </div>
   );
 };
