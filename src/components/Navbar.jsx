@@ -279,14 +279,14 @@ const Navbar = () => {
         { title: 'Legacy', url: '/about/legacy' },
         {
           title: 'Governance',
-          url: '/about/governance',
+          url: '/governance',
           submenu: [
-            { title: 'Administration Councils', url: '/about/governance/councils' },
+            { title: 'Administration Councils', url: '/administration-councils' },
           ],
         },
         { title: 'Support Us', url: '/about/support' },
         { title: 'Contact Us', url: 'about/contactus' },
-        { title: 'About Us', url: '/aboutus' },
+        // { title: 'About Us', url: '/aboutus' },
       ],
     },
     communities: {

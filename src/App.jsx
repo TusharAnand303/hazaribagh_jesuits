@@ -27,6 +27,8 @@ import PastoralDetails from "./pages/PastoralDetails.jsx"
 import SocialCenters from "./pages/SocialCenters.jsx"
 import MassCenters from "./pages/MassCenters.jsx"
 import Communities from "./pages/Communities.jsx"
+import AdministrationCouncils from "./pages/AdministrationCouncils.jsx"
+import GalleryDetail from "./pages/GalleryDetail.jsx"
 
 
 function App() {
@@ -60,6 +62,9 @@ function App() {
           <Route path="/socialcenters/:id" element={<SocialCenters />} />
           <Route path="/masscenteres/:id" element={<MassCenters />} />
           <Route path="/communities/:id" element={<Communities />} />
+          <Route path="/administration-councils" element={<AdministrationCouncils />} />
+          <Route path="/gallery/:id" element={<GalleryDetail />} /> {/* <-- Add this */}
+         
         </Routes>
         <Footer/> 
         <ScrollToTop />
