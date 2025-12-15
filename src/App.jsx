@@ -29,6 +29,9 @@ import MassCenters from "./pages/MassCenters.jsx"
 import Communities from "./pages/Communities.jsx"
 import AdministrationCouncils from "./pages/AdministrationCouncils.jsx"
 import GalleryDetail from "./pages/GalleryDetail.jsx"
+import SupportUs from "./pages/Supportus.jsx"
+import Foundation from "./pages/Foundation.jsx"
+
 
 
 function App() {
@@ -64,7 +67,9 @@ function App() {
           <Route path="/communities/:id" element={<Communities />} />
           <Route path="/administration-councils" element={<AdministrationCouncils />} />
           <Route path="/gallery/:id" element={<GalleryDetail />} /> {/* <-- Add this */}
-         
+          <Route path="about/supportus" element={<SupportUs />} />
+          <Route path="about/foundation" element={<Foundation />} />
+
         </Routes>
         <Footer/> 
         <ScrollToTop />
