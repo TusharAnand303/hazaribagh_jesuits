@@ -17,7 +17,7 @@ const Contactus = () => {
         <h1 className="sm:text-4xl text-2xl font-bold">Contact Us</h1>
         <p className="text-start text-sm mt-2 opacity-90">
           Details for key Province contacts.
-        </p>
+        </p> 
       </header>
 
       <Breadcrumb items={breadcrumbItems} />
