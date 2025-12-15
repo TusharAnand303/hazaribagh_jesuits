@@ -32,6 +32,10 @@ import GalleryDetail from "./pages/GalleryDetail.jsx"
 import SupportUs from "./pages/Supportus.jsx"
 import Foundation from "./pages/Foundation.jsx"
 import Legacy from "./pages/Legacy.jsx"
+import Formation from "./pages/FormatonPages/Formation.jsx"
+import FormationDetails from "./pages/FormatonPages/FormationDetails.jsx"
+import Youth from "./pages/YouthPages/Youth.jsx"
+import YouthDetails from "./pages/YouthPages/YouthDetails.jsx"
 
 
 
@@ -71,6 +75,10 @@ function App() {
           <Route path="about/supportus" element={<SupportUs />} />
           <Route path="about/foundation" element={<Foundation />} />
           <Route path="about/legacy" element={<Legacy />} />
+          <Route path="/formation" element={<Formation />} />
+          <Route path="/youth" element={<Youth />} />
+          <Route path="/formation/:id" element={<FormationDetails />} />
+          <Route path="/youth/:id" element={<YouthDetails />} />
 
         </Routes>
         <Footer/> 
