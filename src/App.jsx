@@ -27,6 +27,8 @@ import PastoralDetails from "./pages/PastoralDetails.jsx"
 import SocialCenters from "./pages/SocialCenters.jsx"
 import MassCenters from "./pages/MassCenters.jsx"
 import Communities from "./pages/Communities.jsx"
+import SupportUs from "./pages/Supportus.jsx"
+import Foundation from "./pages/Foundation.jsx"
 
 
 function App() {
@@ -60,6 +62,8 @@ function App() {
           <Route path="/socialcenters/:id" element={<SocialCenters />} />
           <Route path="/masscenteres/:id" element={<MassCenters />} />
           <Route path="/communities/:id" element={<Communities />} />
+          <Route path="about/supportus" element={<SupportUs />} />
+          <Route path="about/foundation" element={<Foundation />} />
         </Routes>
         <Footer/> 
         <ScrollToTop />

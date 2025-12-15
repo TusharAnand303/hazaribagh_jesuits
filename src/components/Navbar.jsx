@@ -284,7 +284,7 @@ const Navbar = () => {
             { title: 'Administration Councils', url: '/about/governance/councils' },
           ],
         },
-        { title: 'Support Us', url: '/about/support' },
+        { title: 'Support Us', url: '/about/supportus' },
         { title: 'Contact Us', url: 'about/contactus' },
         { title: 'About Us', url: '/aboutus' },
       ],
