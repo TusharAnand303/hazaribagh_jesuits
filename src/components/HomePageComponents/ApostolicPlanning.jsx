@@ -6,10 +6,26 @@ const ApostolicPlanning = () => {
   const [plannings, setPlannings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [pdfUrl, setPdfUrl] = useState(null);
-
   const [index, setIndex] = useState(0);
 
-  const ITEMS_PER_SLIDE = 4;
+  /* ================= RESPONSIVE ITEMS ================= */
+  const getItemsPerSlide = () => {
+    const width = window.innerWidth;
+    if (width < 640) return 1;      // Mobile
+    if (width < 1024) return 2;     // Tablet
+    return 4;                       // Desktop
+  };
+
+  const [ITEMS_PER_SLIDE, setItemsPerSlide] = useState(getItemsPerSlide());
+
+  useEffect(() => {
+    const handleResize = () => {
+      setItemsPerSlide(getItemsPerSlide());
+      setIndex(0); // reset slide on resize
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   /* ================= FETCH PLANNINGS ================= */
   useEffect(() => {
@@ -101,20 +117,22 @@ const ApostolicPlanning = () => {
         {/* ================= SLIDER ================= */}
         <div className="relative max-w-6xl mx-auto overflow-hidden">
 
-          {/* Arrow Left */}
+          {/* LEFT ARROW */}
           <button
             onClick={prevSlide}
-            className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 
-                       bg-white shadow-lg rounded-full p-3 hover:bg-primary hover:text-white transition"
+            className="absolute left-2 top-1/2 -translate-y-1/2 z-20
+                       bg-white shadow-lg rounded-full p-3
+                       hover:bg-primary hover:text-white transition"
           >
             <FiChevronLeft size={22} />
           </button>
 
-          {/* Arrow Right */}
+          {/* RIGHT ARROW */}
           <button
             onClick={nextSlide}
-            className="absolute -right-4 top-1/2 -translate-y-1/2 z-10 
-                       bg-white shadow-lg rounded-full p-3 hover:bg-primary hover:text-white transition"
+            className="absolute right-2 top-1/2 -translate-y-1/2 z-20
+                       bg-white shadow-lg rounded-full p-3
+                       hover:bg-primary hover:text-white transition"
           >
             <FiChevronRight size={22} />
           </button>
@@ -126,7 +144,13 @@ const ApostolicPlanning = () => {
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: -100, opacity: 0 }}
               transition={{ duration: 0.5 }}
-              className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8"
+              className={`grid gap-6 ${
+                ITEMS_PER_SLIDE === 1
+                  ? "grid-cols-1"
+                  : ITEMS_PER_SLIDE === 2
+                  ? "grid-cols-2"
+                  : "grid-cols-4"
+              }`}
             >
               {displayPlannings
                 .slice(
@@ -136,8 +160,10 @@ const ApostolicPlanning = () => {
                 .map((planning) => (
                   <div
                     key={planning.id}
-                    className="group bg-linear-to-r from-primary to-navy rounded-2xl p-6 
-                               text-center shadow-lg hover:shadow-2xl hover:-translate-y-2 
+                    className="group w-full max-w-md mx-auto
+                               bg-linear-to-r from-primary to-navy
+                               rounded-2xl p-6 text-center
+                               shadow-lg hover:shadow-2xl
                                transition-all duration-500"
                   >
                     <p className="text-white font-semibold leading-relaxed">
@@ -149,15 +175,15 @@ const ApostolicPlanning = () => {
           </AnimatePresence>
         </div>
 
-        {/* ================= DOWNLOAD BUTTON (OUTSIDE SLIDER) ================= */}
+        {/* ================= DOWNLOAD BUTTON ================= */}
         <div className="text-center mt-14">
           {pdfUrl ? (
             <a
               href={pdfUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-3 px-10 py-4 rounded-xl 
-                         font-bold text-lg bg-secondary text-white shadow-lg 
+              className="inline-flex items-center gap-3 px-10 py-4 rounded-xl
+                         font-bold text-lg bg-secondary text-white shadow-lg
                          hover:shadow-2xl hover:-translate-y-1 transition-all"
             >
               <FiDownload size={22} />
@@ -166,7 +192,7 @@ const ApostolicPlanning = () => {
           ) : (
             <button
               disabled
-              className="px-10 py-4 rounded-xl font-bold text-lg 
+              className="px-10 py-4 rounded-xl font-bold text-lg
                          bg-gray-400 text-white cursor-not-allowed"
             >
               PDF Not Available

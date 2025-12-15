@@ -48,7 +48,7 @@ const AdministrationCouncils = () => {
   return (
     <div className="min-h-screen bg-linear-to-b from-cream via-white to-cream text-navy">
       {/* HEADER */}
-      <header className="mt-24 px-6 sm:ml-24">
+      <header className="p-6 mt-24 sm:ml-24 -mb-10">
         <motion.h1
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
