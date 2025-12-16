@@ -34,7 +34,16 @@ import Foundation from "./pages/Foundation.jsx"
 import Legacy from "./pages/Legacy.jsx"
 import ApostolicPlannings from "./pages/ApostolicPlannings.jsx"
 import NewsletterViewer from "./pages/NewsletterViewer";
-
+import Formation from "./pages/FormatonPages/Formation.jsx"
+import FormationDetails from "./pages/FormatonPages/FormationDetails.jsx"
+import Youth from "./pages/YouthPages/Youth.jsx"
+import YouthDetails from "./pages/YouthPages/YouthDetails.jsx"
+import IgnatianRetreats from "./pages/IgnatianRetreatsPages/IgnatianRetreats.jsx"
+import IgnatianRetreatsDetails from "./pages/IgnatianRetreatsPages/IgnatianRetreatsDetails.jsx"
+import VocationPromotion from "./pages/VocationPromotionPages/VocationPromotion.jsx"
+import VocationPromotionDetails from "./pages/VocationPromotionPages/VocationPromotionDetails.jsx"
+import PopesWorldWidePrayer from "./pages/PopesPrayerPages/PopesWorldWidePrayer.jsx"
+import PopesWorldWidePrayerDetails from "./pages/PopesPrayerPages/PopesWorldWidePrayerDetails.jsx"
 
 
 function App() {
@@ -75,6 +84,16 @@ function App() {
           <Route path="about/legacy" element={<Legacy />} />
           <Route path="/apostolic-plannings" element={<ApostolicPlannings />} />
           <Route path="/newsletter/view/:id" element={<NewsletterViewer />} />
+          <Route path="/formation" element={<Formation />} />
+          <Route path="/youth" element={<Youth />} />
+          <Route path="/formation/:id" element={<FormationDetails />} />
+          <Route path="/youth/:id" element={<YouthDetails />} />
+          <Route path="/retreats" element={<IgnatianRetreats />} />
+          <Route path="/retreats/:id" element={<IgnatianRetreatsDetails />} />
+          <Route path="/vocation" element={<VocationPromotion />} />
+          <Route path="/vocation/:id" element={<VocationPromotionDetails />} />
+          <Route path="/popes-prayer" element={<PopesWorldWidePrayer />} />
+          <Route path="/popes-prayer/:id" element={<PopesWorldWidePrayerDetails />} />
 
         </Routes>
         <Footer/> 

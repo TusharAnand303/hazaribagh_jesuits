@@ -323,8 +323,8 @@ const Navbar = () => {
           url: '/social_center',
           submenu: socialcentersubmenu  // ✅ ONLY API data, empty array if no data
         },
-        { title: 'Youth', url: '/youth/jamuniatar' },
-        { title: 'Formation', url: '/formation/tarwa' },
+        { title: 'Youth', url: '/youth' },
+        { title: 'Formation', url: '/formation' },
         { title: 'Vocation Promotion', url: '/vocation' },
         { title: 'Ignatian Retreats', url: '/retreats' },
         { title: "Pope's Worldwide Prayer", url: '/popes-prayer' },
