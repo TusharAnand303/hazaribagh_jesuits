@@ -32,9 +32,9 @@ const BecomeJesuits = () => {
           const formattedSections = result.data.map((item, index) => ({
             id: item.id,
             title: item.title,
-            content: item.description, // Keep HTML
+            content: item.description,
             image: item.image_url,
-            imagePosition: index % 2 === 0 ? 'left' : 'right', // alternate
+            imagePosition: index % 2 === 0 ? 'left' : 'right',
           }));
           setSections(formattedSections);
         } else {
@@ -53,7 +53,7 @@ const BecomeJesuits = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-cream text-navy flex flex-col items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-cream to-white text-navy flex flex-col items-center justify-center">
         <Breadcrumb items={breadcrumbItems} />
         <div className="flex flex-col items-center gap-4 mt-20">
           <div className="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
@@ -69,11 +69,11 @@ const BecomeJesuits = () => {
         <Breadcrumb items={breadcrumbItems} />
         <div className="flex flex-col items-center gap-4 mt-20">
           <div className="text-red-500 text-4xl">⚠️</div>
-          <h3 className="text-xl font-bold text-navy">Unable to Load Content</h3>
+          <h3 className="text-2xl font-bold text-navy">Unable to Load Content</h3>
           <p className="text-gray-600">{error === 'Request timeout' ? 'The request is taking longer than expected.' : 'There was an error loading the content.'}</p>
           <button
             onClick={() => window.location.reload()}
-            className="px-6 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors"
+            className="px-6 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg transition-all transform hover:scale-105"
           >
             Retry
           </button>
@@ -87,8 +87,8 @@ const BecomeJesuits = () => {
       <div className="min-h-screen bg-cream text-navy flex flex-col items-center justify-center">
         <Breadcrumb items={breadcrumbItems} />
         <div className="flex flex-col items-center gap-4 mt-20">
-          <div className="text-gray-400 text-5xl">📖</div>
-          <h3 className="text-xl font-bold text-navy">No Content Available</h3>
+          <div className="text-gray-400 text-6xl animate-pulse">📖</div>
+          <h3 className="text-2xl font-bold text-navy">No Content Available</h3>
           <p className="text-gray-600">Check back later for updates.</p>
         </div>
       </div>
@@ -96,10 +96,10 @@ const BecomeJesuits = () => {
   }
 
   return (
-    <div className="min-h-screen bg-cream text-navy">
-      <header className="p-6 sm:ml-24 mt-24 -mb-10">
-        <h1 className="sm:text-4xl text-2xl font-bold">Become a Jesuit</h1>
-        <p className="text-sm mt-2 opacity-90">Answer the Call to Serve God and Others</p>
+    <div className="min-h-screen bg-gradient-to-b from-cream to-white text-navy">
+      <header className="p-6 sm:ml-24 mt-24 mb-10">
+        <h1 className="sm:text-5xl text-3xl font-extrabold text-navy mb-2">Become a Jesuit</h1>
+        <p className="text-lg md:text-xl text-primary/80 italic">Answer the Call to Serve God and Others</p>
       </header>
 
       <Breadcrumb items={breadcrumbItems} />
@@ -108,23 +108,26 @@ const BecomeJesuits = () => {
         {sections.map((section, index) => (
           <motion.section
             key={section.id}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: index * 0.1 }}
-            className="mb-12"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: index * 0.15 }}
+            className={`mb-16 relative group`}
           >
-            <div className={`bg-white rounded-lg shadow-lg overflow-hidden p-6 md:p-8 flex flex-col ${
-              section.imagePosition === 'right' ? 'md:flex-row-reverse' : 'md:flex-row'
-            } gap-6 items-start`}>
-              <div className="shrink-0">
+            <div
+              className={`bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row gap-6 items-center p-6 md:p-10 transition-transform transform hover:scale-[1.02] hover:shadow-2xl border-l-8 ${
+                section.imagePosition === 'right' ? 'md:flex-row-reverse border-l-primary' : 'border-l-secondary'
+              }`}
+            >
+              <div className="flex-shrink-0 w-full md:w-[350px] h-[350px] overflow-hidden rounded-xl shadow-lg">
                 <img
                   src={section.image}
                   alt={section.title}
-                  className="w-full md:w-[300px] h-[300px] object-cover rounded-lg shadow-md"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
               <div className="flex-1 flex flex-col justify-center">
-                <h2 className="text-2xl md:text-3xl font-bold text-navy mb-4">{section.title}</h2>
+                <h2 className="text-3xl md:text-4xl font-bold text-navy mb-4">{section.title}</h2>
                 <div
                   className="text-gray-700 text-base md:text-lg leading-relaxed"
                   dangerouslySetInnerHTML={{ __html: section.content }}
