@@ -218,14 +218,14 @@ const Communities = () => {
                   </div>
 
                   {/* Back Button */}
-                  <Link to="/communities">
+                  <Link to="/">
                     <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       className="w-full mt-6 px-4 py-3 bg-linear-to-r from-primary to-navy text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
                     >
                       <FiArrowLeft className="w-4 h-4" />
-                      Back to Communities
+                      Back to Home
                     </motion.button>
                   </Link>
                 </div>

@@ -124,92 +124,140 @@ const PopesWorldWidePrayerDetails = () => {
 
     /* ===================== MAIN ===================== */
     return (
-        <div className="min-h-screen bg-linear-to-b from-cream to-white text-navy">
+  <div className="min-h-screen bg-linear-to-b from-cream to-white text-navy">
+    {/* Header */}
+    <header className="p-6 mt-24 sm:ml-24 -mb-10">
+      <h1 className="text-3xl font-bold">{prayer.title}</h1>
+    </header>
+
+    <Breadcrumb items={breadcrumbItems} />
+
+    {/* Main Content */}
+    <main className="p-6 pt-12 sm:ml-24 sm:mr-24">
+      <div className="flex flex-col lg:flex-row gap-6 max-w-[1800px]">
+
+        {/* ================= LEFT CONTENT ================= */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="flex-1"
+        >
+          <article className="bg-white rounded-2xl shadow-xl overflow-hidden h-full">
             {/* Header */}
-            <header className="p-6 mt-24 sm:ml-24 -mb-10">
-                <h1 className="text-3xl font-bold">{prayer.title}</h1>
-            </header>
+            <div className="p-6 md:p-8 bg-linear-to-r from-navy/5 to-primary/5 border-b">
+              <span className="inline-flex items-center gap-2 bg-primary/10 text-primary px-3 py-1.5 rounded-full text-xs font-bold mb-4">
+                <FiAward className="w-4 h-4" />
+                PRAYER NETWORK
+              </span>
 
-            <Breadcrumb items={breadcrumbItems} />
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-navy leading-tight">
+                {prayer.title}
+              </h1>
+            </div>
 
-            <main className="p-6 pt-12 sm:ml-24 sm:mr-24">
-                <div className="flex flex-col lg:flex-row gap-6 max-w-[1800px]">
-                    {/* ===================== CONTENT ===================== */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
-                        className="flex-1"
-                    >
-                        <article className="bg-white rounded-2xl shadow-xl overflow-hidden">
-                            <div className="p-6 md:p-8 bg-linear-to-r from-navy/5 to-primary/5 border-b">
-                                <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-navy">
-                                    {prayer.title}
-                                </h1>
-                            </div>
-
-                            <div className="p-6 md:p-8">
-                                {/* Image */}
-                                {prayer.image_url ? (
-                                    <div className="mb-8">
-                                        <div className="relative h-72 md:h-80 rounded-xl overflow-hidden shadow-lg">
-                                            <img
-                                                src={prayer.image_url}
-                                                alt={prayer.title}
-                                                className="w-full h-full object-cover"
-                                                onError={(e) => {
-                                                    e.target.src =
-                                                        'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1200&h=800&fit=crop';
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <div className="mb-8 h-72 bg-gray-100 rounded-xl flex items-center justify-center">
-                                        <FiAward className="w-16 h-16 text-gray-300" />
-                                    </div>
-                                )}
-
-                                {/* Description */}
-                                {prayer.description && (
-                                    <div>
-                                        <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-                                            <div className="w-1 h-6 bg-primary rounded"></div>
-                                            About the Prayer Network
-                                        </h2>
-                                        <div className="p-6 bg-primary/5 rounded-xl border-l-4 border-primary">
-                                            <div
-                                                className="prose prose-lg max-w-none text-gray-700 leading-relaxed"
-                                                dangerouslySetInnerHTML={{
-                                                    __html: prayer.description,
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-                                )}
-
-                                {prayer.link && (
-                                <div className="flex justify-center mt-8">
-                                    <div className="p-3 bg-linear-to-r from-primary/10 to-secondary/10 rounded-lg border border-primary/20">
-                                    <a
-                                        href={prayer.link}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="inline-flex items-center gap-2 px-5 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-300"
-                                    >
-                                        <FiLink className="w-4 h-4" />
-                                        Visit Website
-                                    </a>
-                                    </div>
-                                </div>
-                                )}
-                            </div>
-                        </article>
-                    </motion.div>
+            {/* Content */}
+            <div className="p-6 md:p-8">
+              {/* Image */}
+              {prayer.image_url && (
+                <div className="mb-8">
+                  <div className="relative h-72 md:h-80 rounded-xl overflow-hidden shadow-lg">
+                    <img
+                      src={prayer.image_url}
+                      alt={prayer.title}
+                      className="w-full h-full object-cover"
+                      onError={(e) => (e.target.style.display = 'none')}
+                    />
+                  </div>
                 </div>
-            </main>
-        </div>
-    );
+              )}
+
+              {/* Description */}
+              {prayer.description && (
+                <div className="mb-8">
+                  <h2 className="text-xl font-bold text-navy mb-4 flex items-center gap-2">
+                    <div className="w-1 h-6 bg-primary rounded"></div>
+                    About the Prayer Network
+                  </h2>
+                  <div className="p-6 bg-linear-to-r from-primary/5 to-transparent rounded-xl border-l-4 border-primary">
+                    <div
+                      className="prose prose-lg max-w-none text-gray-700 leading-relaxed"
+                      dangerouslySetInnerHTML={{ __html: prayer.description }}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          </article>
+        </motion.div>
+
+        {/* ================= RIGHT SIDEBAR ================= */}
+        <motion.aside
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="w-full lg:w-[380px] shrink-0"
+        >
+          <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <div className="p-4 bg-linear-to-r from-secondary to-primary">
+              <h3 className="text-white font-bold text-sm uppercase tracking-wide">
+                Prayer Information
+              </h3>
+            </div>
+
+            <div className="p-6 space-y-4">
+              {/* Created Date */}
+              {prayer.created_at && (
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <div className="flex items-center gap-2 mb-1">
+                    <FiCalendar className="w-4 h-4 text-primary" />
+                    <span className="text-gray-500 text-sm font-medium">
+                      Added On
+                    </span>
+                  </div>
+                  <span className="text-navy font-semibold text-sm">
+                    {new Date(prayer.created_at).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}
+                  </span>
+                </div>
+              )}
+
+              {/* Visit Website */}
+              {prayer.link && (
+                <div className="p-4 bg-linear-to-r from-primary/10 to-secondary/10 rounded-lg border border-primary/20">
+                  <a
+                    href={prayer.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full text-center px-4 py-3 bg-primary hover:bg-primary/90 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2"
+                  >
+                    <FiLink className="w-4 h-4" />
+                    Visit Website
+                  </a>
+                </div>
+              )}
+
+              {/* Back Button */}
+              <Link to="/popes-prayer">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full mt-4 px-4 py-3 bg-linear-to-r from-primary to-navy text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2"
+                >
+                  <FiArrowLeft className="w-4 h-4" />
+                  Back to Prayer List
+                </motion.button>
+              </Link>
+            </div>
+          </div>
+        </motion.aside>
+      </div>
+    </main>
+  </div>
+);
 };
 
 export default PopesWorldWidePrayerDetails;
