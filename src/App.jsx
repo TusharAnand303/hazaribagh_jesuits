@@ -32,6 +32,8 @@ import GalleryDetail from "./pages/GalleryDetail.jsx"
 import SupportUs from "./pages/Supportus.jsx"
 import Foundation from "./pages/Foundation.jsx"
 import Legacy from "./pages/Legacy.jsx"
+import ApostolicPlannings from "./pages/ApostolicPlannings.jsx"
+import NewsletterViewer from "./pages/NewsletterViewer";
 
 
 
@@ -71,6 +73,8 @@ function App() {
           <Route path="about/supportus" element={<SupportUs />} />
           <Route path="about/foundation" element={<Foundation />} />
           <Route path="about/legacy" element={<Legacy />} />
+          <Route path="/apostolic-plannings" element={<ApostolicPlannings />} />
+          <Route path="/newsletter/view/:id" element={<NewsletterViewer />} />
 
         </Routes>
         <Footer/> 

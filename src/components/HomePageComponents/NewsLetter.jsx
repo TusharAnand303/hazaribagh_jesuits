@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FiChevronLeft, FiChevronRight, FiDownload, FiCalendar, FiFileText, FiEye } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 
 const NewsLetter = () => {
   const scrollRef = useRef(null);
@@ -206,20 +207,13 @@ const NewsLetter = () => {
                     {newsletter.description || 'Stay informed with our monthly newsletters featuring stories, updates, and insights'}
                   </p>
                   {/* View PDF Button - Fixed at bottom */}
-                  <a
-                    href={newsletter.pdf_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => {
-                      // Prevent default and manually open with proper encoding
-                      e.preventDefault();
-                      window.open(encodeURI(newsletter.pdf_url), '_blank', 'noopener,noreferrer');
-                    }}
-                    className="inline-flex items-center gap-2 px-3 py-2 bg-primary hover:bg-primary/90 text-white text-xs font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 w-full justify-center mt-auto"
-                  >
-                    <FiEye className="w-3 h-3" />
-                    View PDF
-                  </a>
+                  <Link
+  to={`/newsletter/view/${newsletter.id}`}
+  className="inline-flex items-center gap-2 px-3 py-2 bg-primary hover:bg-primary/90 text-white text-xs font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 w-full justify-center mt-auto"
+>
+  <FiEye className="w-3 h-3" />
+  View PDF
+</Link>
                 </div>
               </div>
             </motion.div>
