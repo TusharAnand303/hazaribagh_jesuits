@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FiArrowLeft, FiAlertCircle, FiUsers, FiCalendar, FiLink } from 'react-icons/fi';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import Breadcrumb from '../components/Breadcrumb'; // Fixed path for EducationPages
+import Breadcrumb from '../../components/Breadcrumb'; // Fixed path for EducationPages
 
-const Communities = () => {
+const CommunitiesDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [content, setContent] = useState(null);
@@ -18,7 +18,7 @@ const Communities = () => {
         setLoading(true);
         setError(null);
 
-        const fetchPromise = fetch(`${import.meta.env.VITE_API_BASE_URL}/communities/${id}`);
+        const fetchPromise = fetch(`${import.meta.env.VITE_API_BASE_URL}/communitiesdetails/${id}`);
         const timeoutPromise = new Promise((_, reject) =>
           setTimeout(() => reject(new Error('Request timeout')), 15000)
         );
@@ -238,4 +238,4 @@ const Communities = () => {
   );
 };
 
-export default Communities;
+export default CommunitiesDetails;

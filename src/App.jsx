@@ -26,7 +26,8 @@ import Aboutus from "./pages/Aboutus.jsx"
 import PastoralDetails from "./pages/PastoralDetails.jsx"
 import SocialCenters from "./pages/SocialCenters.jsx"
 import MassCenters from "./pages/MassCenters.jsx"
-import Communities from "./pages/Communities.jsx"
+import Communities from "./pages/CommunityPage/Communities.jsx"
+import CommunitiesDetails from "./pages/CommunityPage/CommunitiesDetails.jsx"
 import AdministrationCouncils from "./pages/AdministrationCouncils.jsx"
 import GalleryDetail from "./pages/GalleryDetail.jsx"
 import SupportUs from "./pages/Supportus.jsx"
@@ -77,6 +78,7 @@ function App() {
           <Route path="/socialcenters/:id" element={<SocialCenters />} />
           <Route path="/masscenteres/:id" element={<MassCenters />} />
           <Route path="/communities/:id" element={<Communities />} />
+          <Route path="/communitiesdetails/:id" element={<CommunitiesDetails />} />
           <Route path="/administration-councils" element={<AdministrationCouncils />} />
           <Route path="/gallery/:id" element={<GalleryDetail />} /> {/* <-- Add this */}
           <Route path="about/supportus" element={<SupportUs />} />
