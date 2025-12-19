@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FiArrowLeft, FiAlertCircle, FiUsers, FiCalendar, FiLink } from 'react-icons/fi';
+import { FiArrowLeft, FiAlertCircle, FiUsers, FiCalendar, FiLink, FiUser } from 'react-icons/fi';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import Breadcrumb from '../../components/Breadcrumb'; // Fixed path for EducationPages
+import Breadcrumb from '../../components/Breadcrumb';
 
-const CommunitiesDetails = () => {
+const JesuitsMembersDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [content, setContent] = useState(null);
@@ -13,12 +13,12 @@ const CommunitiesDetails = () => {
   const [dataAvailable, setDataAvailable] = useState(false);
 
   useEffect(() => {
-    const fetchCommunities = async () => {
+    const fetchJesuitMember = async () => {
       try {
         setLoading(true);
         setError(null);
 
-        const fetchPromise = fetch(`${import.meta.env.VITE_API_BASE_URL}/communitiesdetails/${id}`);
+        const fetchPromise = fetch(`${import.meta.env.VITE_API_BASE_URL}/jesuits_member/${id}`);
         const timeoutPromise = new Promise((_, reject) =>
           setTimeout(() => reject(new Error('Request timeout')), 15000)
         );
@@ -29,28 +29,29 @@ const CommunitiesDetails = () => {
         }
 
         const response = await res.json();
-        const dataItem = response.data[0];
+        const dataItem = response.data;
         setContent(dataItem || null);
         setDataAvailable(!!dataItem);
         if (dataItem) {
-          document.title = `${dataItem.community_name} - Communities`;
+          document.title = `${dataItem.title} - Jesuit Members`;
         }
       } catch (err) {
         console.error(err);
-        setError(err.message || 'Unable to load Communities details. Please try again later.');
+        setError(err.message || 'Unable to load Jesuit member details. Please try again later.');
       } finally {
         setLoading(false);
       }
     };
 
     if (id) {
-      fetchCommunities();
+      fetchJesuitMember();
     }
   }, [id]);
 
   const breadcrumbItems = [
     { label: 'Home', path: '/' },
-    { label: content?.community_name || 'Details', path: `/communities/${id}` },
+    { label: 'Jesuits Members', path: '/jesuits-member' },
+    { label: 'Jesuits Member Details', path: `/jesuits-member/${id}` },
   ];
 
   // Loading state
@@ -60,7 +61,7 @@ const CommunitiesDetails = () => {
         <Breadcrumb items={breadcrumbItems} />
         <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
           <div className="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
-          <p className="text-gray-600 text-lg">Loading community details...</p>
+          <p className="text-gray-600 text-lg">Loading Jesuit member details...</p>
         </div>
       </div>
     );
@@ -73,12 +74,17 @@ const CommunitiesDetails = () => {
         <Breadcrumb items={breadcrumbItems} />
         <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
           <FiAlertCircle className="w-16 h-16 text-red-500" />
-          <h3 className="text-xl font-bold text-navy">Unable to Load Community</h3>
+          <h3 className="text-xl font-bold text-navy">Unable to Load Member</h3>
           <p className="text-gray-600">
             {error === 'Request timeout'
               ? 'The request is taking longer than expected.'
-              : error || 'Community details could not be found.'}
+              : error || 'Jesuit member details could not be found.'}
           </p>
+          <Link to="/jesuits-member">
+            <button className="px-6 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors">
+              Back to Jesuit Members
+            </button>
+          </Link>
         </div>
       </div>
     );
@@ -88,7 +94,7 @@ const CommunitiesDetails = () => {
     <div className="min-h-screen bg-linear-to-b from-cream to-white text-navy">
       {/* Header */}
       <header className="p-6 mt-24 sm:ml-24 -mb-10">
-        <h1 className="text-3xl font-bold">{content.community_name}</h1>
+        <h1 className="text-3xl font-bold">{content.title}</h1>
       </header>
       <Breadcrumb items={breadcrumbItems} />
 
@@ -108,12 +114,12 @@ const CommunitiesDetails = () => {
               <div className="p-6 md:p-8 bg-linear-to-r from-navy/5 to-primary/5 border-b border-gray-100">
                 <div className="flex items-center gap-3 mb-4">
                   <span className="bg-primary/10 text-primary px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5">
-                    <FiUsers className="w-3.5 h-3.5" />
-                    COMMUNITY
+                    <FiUser className="w-3.5 h-3.5" />
+                    JESUIT MEMBER
                   </span>
                 </div>
                 <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-navy mb-2 leading-tight">
-                  {content.community_name}
+                  {content.title}
                 </h1>
               </div>
 
@@ -122,10 +128,10 @@ const CommunitiesDetails = () => {
                 {/* Image */}
                 {content.image_url && (
                   <div className="mb-8">
-                    <div className="relative h-72 md:h-80 rounded-xl overflow-hidden shadow-lg">
+                    <div className="relative h-screen rounded-xl overflow-hidden shadow-lg">
                       <img
                         src={content.image_url}
-                        alt={content.community_name}
+                        alt={content.title}
                         className="w-full h-full object-cover"
                         onError={(e) => {
                           e.target.style.display = 'none';
@@ -136,17 +142,17 @@ const CommunitiesDetails = () => {
                 )}
 
                 {/* Description */}
-                {content.long_description && (
+                {content.description && (
                   <div className="mb-8">
                     <h2 className="text-xl font-bold text-navy mb-4 flex items-center gap-2">
                       <div className="w-1 h-6 bg-primary rounded"></div>
-                      About the Community
+                      Member Details
                     </h2>
                     <div className="p-6 bg-linear-to-r from-primary/5 to-transparent rounded-xl border-l-4 border-primary">
                       <div
                         className="prose prose-lg max-w-none text-gray-700 leading-relaxed"
                         style={{ fontSize: '1rem', lineHeight: '1.8' }}
-                        dangerouslySetInnerHTML={{ __html: content.long_description }}
+                        dangerouslySetInnerHTML={{ __html: content.description }}
                       />
                     </div>
                   </div>
@@ -167,16 +173,16 @@ const CommunitiesDetails = () => {
               <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
                 <div className="p-4 bg-linear-to-r from-secondary to-primary">
                   <h3 className="text-white font-bold text-sm uppercase tracking-wide flex items-center gap-2">
-                    <FiUsers className="w-4 h-4" />
-                    Community Information
+                    <FiUser className="w-4 h-4" />
+                    Member Information
                   </h3>
                 </div>
                 <div className="p-6">
                   <div className="space-y-4">
                     <div className="p-4 bg-gray-50 rounded-lg">
                       <div className="flex items-center justify-between">
-                        <span className="text-gray-500 font-medium text-sm">Community Center</span>
-                        <span className="text-navy font-bold">{content.community_name || community_name}</span>
+                        <span className="text-gray-500 font-medium text-sm">Position</span>
+                        <span className="text-navy font-bold">{content.title}</span>
                       </div>
                     </div>
 
@@ -213,14 +219,14 @@ const CommunitiesDetails = () => {
                   </div>
 
                   {/* Back Button */}
-                  <Link to="/">
+                  <Link to="/jesuits-member">
                     <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       className="w-full mt-6 px-4 py-3 bg-linear-to-r from-primary to-navy text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
                     >
                       <FiArrowLeft className="w-4 h-4" />
-                      Back to Home
+                      Back to Jesuit Members
                     </motion.button>
                   </Link>
                 </div>
@@ -233,4 +239,4 @@ const CommunitiesDetails = () => {
   );
 };
 
-export default CommunitiesDetails;
+export default JesuitsMembersDetails;

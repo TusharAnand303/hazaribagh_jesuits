@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Breadcrumb from '../../components/Breadcrumb';
 
-const Communities = () => {
-  const { id } = useParams();
+const JesuitsMembers = () => {
   const navigate = useNavigate();
-  const [communities, setCommunities] = useState([]);
+  const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchCommunities = async () => {
+    const fetchJesuitMembers = async () => {
       try {
         setLoading(true);
         setError(null);
 
         const res = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL}/communities/${id}`
+          `${import.meta.env.VITE_API_BASE_URL}/jesuits_member`
         );
 
         if (!res.ok) {
@@ -26,43 +25,36 @@ const Communities = () => {
 
         const response = await res.json();
 
-        const communityData = (response.data || []).map(item => ({
+        const memberData = (response.data || []).map(item => ({
           id: item.id,
           title: item.title,
-          description: item.long_description || item.short_description || '',
-          image:
-            item.image_url ||
-            item.image ,
-          community_name: item.community_name,
+          description: item.description || '',
+          image: item.image_url || item.image,
           created_at: item.created_at,
         }));
 
-        setCommunities(communityData);
-
-        if (communityData.length > 0) {
-          document.title = `${communityData[0].community_name} - Communities`;
-        }
+        setMembers(memberData);
+        document.title = 'Jesuit Members - Hazaribag Jesuits';
       } catch (err) {
         console.error(err);
-        setError('Unable to load Communities.');
+        setError('Unable to load Jesuit Members.');
       } finally {
         setLoading(false);
       }
     };
 
-    if (id) fetchCommunities();
-  }, [id]);
+    fetchJesuitMembers();
+  }, []);
 
   const breadcrumbItems = [
     { label: 'Home', path: '/' },
-    { label: 'Communities', path: '/communities' },
-    { label: communities[0]?.community_name || 'Details', path: `/communities/${id}` },
+    { label: 'Jesuit Members', path: '/jesuitsmembers' },
   ];
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-linear-to-t from-cream to-white">
-        <p className="text-lg font-semibold">Loading Communities...</p>
+        <p className="text-lg font-semibold">Loading Jesuit Members...</p>
       </div>
     );
   }
@@ -80,7 +72,7 @@ const Communities = () => {
       {/* Header */}
       <header className="p-6 mt-24 sm:ml-24 -mb-10">
         <h1 className="sm:text-4xl text-2xl font-bold mb-2">
-          {communities[0]?.community_name || 'Communities'}
+          Jesuit Members
         </h1>
       </header>
 
@@ -88,47 +80,46 @@ const Communities = () => {
 
       {/* Content */}
       <main className="container mx-auto p-6 pt-12 pb-16 sm:ml-24 sm:mr-24">
-        {communities.length === 0 ? (
+        {members.length === 0 ? (
           <div className="text-center py-20">
             <p className="text-xl text-gray-500">
-              No communities available.
+              No Jesuit members available.
             </p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
-            {communities.map((community, index) => (
+            {members.map((member, index) => (
               <motion.div
-                key={community.id}
+                key={member.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="bg-cream rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105 cursor-pointer border-2 border-secondary"
                 style={{ height: '380px' }}
-                onClick={() => navigate(`/communitiesdetails/${community.id}`)}
+                onClick={() => navigate(`/jesuits-member/${member.id}`)}
               >
                 {/* Image */}
                 <motion.img
-                  src={community.image}
+                  src={member.image}
                   alt=""
                   className="w-full h-52 object-cover"
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.3 }}
                   onError={(e) => {
-                    e.currentTarget.src =
-                      "";
+                    e.currentTarget.src = '';
                   }}
                 />
 
                 {/* Content */}
                 <div className="p-5 flex flex-col">
                   <h2 className="text-lg font-bold text-primary mb-2 line-clamp-2">
-                    {community.title}
+                    {member.title}
                   </h2>
 
                   <div
                     className="text-gray-600 text-sm line-clamp-3"
                     dangerouslySetInnerHTML={{
-                      __html: community.description,
+                      __html: member.description,
                     }}
                   />
                 </div>
@@ -141,4 +132,4 @@ const Communities = () => {
   );
 };
 
-export default Communities;
+export default JesuitsMembers;

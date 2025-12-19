@@ -282,6 +282,7 @@ const Navbar = () => {
           url: '/governance',
           submenu: [
             { title: 'Administration Councils', url: '/administration-councils' },
+            { title: 'Jesuits Members', url: '/jesuits-member' },
           ],
         },
         { title: 'Support Us', url: '/about/supportus' },
