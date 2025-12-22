@@ -12,6 +12,13 @@ const PopupNotice = () => {
   useEffect(() => {
     const fetchPopupData = async () => {
       try {
+        // Check if popup was already closed in this session
+        const popupClosed = sessionStorage.getItem('popupClosed');
+        if (popupClosed === 'true') {
+          setLoading(false);
+          return;
+        }
+
         const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/popup`);
         if (!response.ok) {
           throw new Error('Failed to fetch popup data');
@@ -46,6 +53,8 @@ const PopupNotice = () => {
   // Close popup handler
   const handleClose = () => {
     setIsOpen(false);
+    // Store in sessionStorage that popup has been closed
+    sessionStorage.setItem('popupClosed', 'true');
   };
 
   // Handle backdrop click
