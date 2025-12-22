@@ -47,6 +47,8 @@ import PopesWorldWidePrayer from "./pages/PopesPrayerPages/PopesWorldWidePrayer.
 import PopesWorldWidePrayerDetails from "./pages/PopesPrayerPages/PopesWorldWidePrayerDetails.jsx"
 import Spirituality from "./pages/Spirituality.jsx"
 import SpiritualityDetail from "./pages/SpiritualityDetail.jsx"
+import JesuitsMembers from "./pages/JesuitsMembersPages/JesuitsMembers.jsx"
+import JesuitsMembersDetails from "./pages/JesuitsMembersPages/JesuitsMembersDetails.jsx"
 
 
 function App() {
@@ -99,7 +101,10 @@ function App() {
           <Route path="/popes-prayer" element={<PopesWorldWidePrayer />} />
           <Route path="/popes-prayer/:id" element={<PopesWorldWidePrayerDetails />} />
           <Route path="/spirituality" element={<Spirituality />} />
-           <Route path="/spirituality/:id" element={<SpiritualityDetail />} />
+          <Route path="/spirituality/:id" element={<SpiritualityDetail />} />
+          <Route path="/jesuits-member" element={<JesuitsMembers />} />
+          <Route path="/jesuits-member/:id" element={<JesuitsMembersDetails />} />
+
 
         </Routes>
         <Footer/> 
