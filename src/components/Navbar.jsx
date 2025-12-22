@@ -344,6 +344,7 @@ const Navbar = () => {
   const singleMenuItems = [
     { title: 'Apostolic Plannings', url: '/apostolic-plannings' },
     { title: 'Become a Jesuit', url: '/become-a-jesuit' },
+    { title: 'Spirituality', url: '/spirituality' },
     { title: 'Gallery', url: '/gallery' },
     { title: 'New Initiatives', url: '/new-initiatives' },
   ];

@@ -45,6 +45,8 @@ import VocationPromotion from "./pages/VocationPromotionPages/VocationPromotion.
 import VocationPromotionDetails from "./pages/VocationPromotionPages/VocationPromotionDetails.jsx"
 import PopesWorldWidePrayer from "./pages/PopesPrayerPages/PopesWorldWidePrayer.jsx"
 import PopesWorldWidePrayerDetails from "./pages/PopesPrayerPages/PopesWorldWidePrayerDetails.jsx"
+import Spirituality from "./pages/Spirituality.jsx"
+import SpiritualityDetail from "./pages/SpiritualityDetail.jsx"
 
 
 function App() {
@@ -96,6 +98,8 @@ function App() {
           <Route path="/vocation/:id" element={<VocationPromotionDetails />} />
           <Route path="/popes-prayer" element={<PopesWorldWidePrayer />} />
           <Route path="/popes-prayer/:id" element={<PopesWorldWidePrayerDetails />} />
+          <Route path="/spirituality" element={<Spirituality />} />
+           <Route path="/spirituality/:id" element={<SpiritualityDetail />} />
 
         </Routes>
         <Footer/> 

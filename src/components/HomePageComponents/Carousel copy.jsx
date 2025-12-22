@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { FiPause, FiPlay } from 'react-icons/fi';
 
 const Carousel = () => {
@@ -16,11 +17,15 @@ const Carousel = () => {
     const fetchBannerData = async () => {
       try {
         const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/banner`);
-        if (!response.ok) throw new Error('Failed to fetch banner data');
-
+        if (!response.ok) {
+          throw new Error('Failed to fetch banner data');
+        }
         const data = await response.json();
+
+        // Only active banners
         const bannersArray = Array.isArray(data?.data) ? data.data.filter(b => b.status === 1) : [];
 
+        // Transform API data to slides format
         const transformedSlides = bannersArray.map(banner => ({
           id: banner.id,
           image_url: banner.image_url,
@@ -44,15 +49,16 @@ const Carousel = () => {
   // Auto-play functionality
   const nextSlide = useCallback(() => {
     if (slides.length === 0) return;
-    setCurrentSlide(prev => (prev + 1) % slides.length);
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
   }, [slides.length]);
 
   const prevSlide = () => {
     if (slides.length === 0) return;
-    setCurrentSlide(prev => (prev - 1 + slides.length) % slides.length);
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   };
 
-  const goToSlide = index => setCurrentSlide(index);
+  const goToSlide = (index) => setCurrentSlide(index);
+
   const toggleAutoPlay = () => {
     setIsAutoPlaying(!isAutoPlaying);
     setIsPaused(!isPaused);
@@ -67,7 +73,7 @@ const Carousel = () => {
 
   // Keyboard navigation
   useEffect(() => {
-    const handleKeyPress = e => {
+    const handleKeyPress = (e) => {
       if (slides.length === 0) return;
       if (e.key === 'ArrowLeft') prevSlide();
       if (e.key === 'ArrowRight') nextSlide();
@@ -83,8 +89,8 @@ const Carousel = () => {
   // Touch/Swipe support
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
-  const handleTouchStart = e => setTouchStart(e.targetTouches[0].clientX);
-  const handleTouchMove = e => setTouchEnd(e.targetTouches[0].clientX);
+  const handleTouchStart = (e) => setTouchStart(e.targetTouches[0].clientX);
+  const handleTouchMove = (e) => setTouchEnd(e.targetTouches[0].clientX);
   const handleTouchEnd = () => {
     if (touchStart - touchEnd > 75) nextSlide();
     if (touchStart - touchEnd < -75) prevSlide();
@@ -130,7 +136,7 @@ const Carousel = () => {
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
           >
-            {/* Background Media */}
+            {/* Background Media: Video or Image */}
             <div className="absolute inset-0">
               {slide.video_url ? (
                 <video
@@ -150,36 +156,48 @@ const Carousel = () => {
               <div className="absolute inset-0 bg-linear-to-r from-navy/40 via-navy/10 to-navy/40"></div>
             </div>
 
-            {/* Content: only show if it's not a video */}
-            {!slide.video_url && (
-              <div className="relative z-20 h-full flex items-center">
-                <div className="container mx-auto px-4 sm:px-8 lg:px-16">
-                  <div className="max-w-3xl">
-                    <div
-                      className={`transform transition-all duration-700 delay-200 translate-y-0 opacity-100`}
-                    >
-                      <span className="hidden sm:inline-block px-4 py-2 bg-primary/20 backdrop-blur-sm border border-secondary/30 rounded-full text-secondary text-xs sm:text-sm font-semibold mb-4">
-                        {slide.subtitle}
-                      </span>
-                    </div>
-                    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 leading-tight">
-                      {slide.title}
-                    </h1>
-                    <p className="text-base sm:text-lg md:text-xl text-cream mb-6 sm:mb-8 leading-relaxed">
-                      {slide.description}
-                    </p>
-                    <div className="flex flex-wrap gap-4">
-                      <button className="px-4 sm:px-14 py-2 sm:py-3 bg-linear-to-r from-primary to-navy hover:from-navy hover:to-primary text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 cursor-pointer">
-                        Learn More
-                      </button>
-                      <button className="px-4 sm:px-14 py-2 sm:py-3 bg-transparent border-2 border-white text-white hover:bg-white hover:text-navy font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 cursor-pointer">
-                        Join Us
-                      </button>
-                    </div>
+            {/* Content */}
+            <div className="relative z-20 h-full flex items-center">
+              <div className="container mx-auto px-4 sm:px-8 lg:px-16">
+                <div className="max-w-3xl">
+                  <div
+                    className={`transform transition-all duration-700 delay-200 ${
+                      index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
+                    }`}
+                  >
+                    <span className="hidden sm:inline-block px-4 py-2 bg-primary/20 backdrop-blur-sm border border-secondary/30 rounded-full text-secondary text-xs sm:text-sm font-semibold mb-4">
+                      {slide.subtitle}
+                    </span>
+                  </div>
+                  <h1
+                    className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 leading-tight transform transition-all duration-700 delay-300 ${
+                      index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
+                    }`}
+                  >
+                    {slide.title}
+                  </h1>
+                  <p
+                    className={`text-base sm:text-lg md:text-xl text-cream mb-6 sm:mb-8 leading-relaxed transform transition-all duration-700 delay-500 ${
+                      index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
+                    }`}
+                  >
+                    {slide.description}
+                  </p>
+                  <div
+                    className={`flex flex-wrap gap-4 transform transition-all duration-700 delay-700 ${
+                      index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
+                    }`}
+                  >
+                    <button className="px-4 sm:px-14 py-2 sm:py-3 bg-linear-to-r from-primary to-navy hover:from-navy hover:to-primary text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 cursor-pointer">
+                      Learn More
+                    </button>
+                    <button className="px-4 sm:px-14 py-2 sm:py-3 bg-transparent border-2 border-white text-white hover:bg-white hover:text-navy font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 cursor-pointer">
+                      Join Us
+                    </button>
                   </div>
                 </div>
               </div>
-            )}
+            </div>
           </div>
         ))}
       </div>
