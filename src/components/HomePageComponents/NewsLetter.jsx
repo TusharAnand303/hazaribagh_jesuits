@@ -74,7 +74,7 @@ const NewsLetter = () => {
   // Loading state
   if (loading) {
     return (
-      <section className="py-6 sm:py-8 md:py-10 lg:py-12 bg-gradient-to-b from-cream to-white overflow-hidden">
+      <section className="py-6 sm:py-8 md:py-10 lg:py-12 bg-linear-to-b from-cream to-white overflow-hidden">
         <div className="mx-auto px-4 sm:px-6 md:px-8 lg:px-12 max-w-7xl">
           <div className="text-center py-12">
             <div className="inline-block animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-t-2 border-b-2 border-primary mb-3 sm:mb-4"></div>
@@ -88,7 +88,7 @@ const NewsLetter = () => {
   // Error or no data state
   if (error || newsletters.length === 0) {
     return (
-      <section className="py-6 sm:py-8 md:py-10 lg:py-12 bg-gradient-to-b from-cream to-white overflow-hidden">
+      <section className="py-6 sm:py-8 md:py-10 lg:py-12 bg-linear-to-b from-cream to-white overflow-hidden">
         <div className="mx-auto px-4 sm:px-6 md:px-8 lg:px-12 max-w-7xl">
           <div className="text-center py-12">
             <p className="text-navy text-sm sm:text-base">
@@ -101,7 +101,7 @@ const NewsLetter = () => {
   }
 
   return (
-    <section className="py-6 sm:py-8 md:py-10 lg:py-12 bg-gradient-to-b from-cream to-white overflow-hidden">
+    <section className="py-6 sm:py-8 md:py-10 lg:py-12 bg-linear-to-b from-cream to-white overflow-hidden">
       {/* Section Header - Constrained container */}
       <div className="mx-auto px-4 sm:px-6 md:px-8 lg:px-12 mb-6 sm:mb-8 md:mb-10 max-w-7xl">
         <motion.div
@@ -159,9 +159,9 @@ const NewsLetter = () => {
           <FiChevronRight className="w-5 h-5 lg:w-6 lg:h-6" />
         </motion.button>
 
-        {/* Symmetrical Gradient Overlays - Same width and opacity on both sides */}
-        <div className="hidden md:block absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-cream to-transparent z-10 pointer-events-none"></div>
-        <div className="hidden md:block absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-cream to-transparent z-10 pointer-events-none"></div>
+        {/* Symmetrical linear Overlays - Same width and opacity on both sides */}
+        <div className="hidden md:block absolute left-0 top-0 bottom-0 w-32 bg-linear-to-r from-cream to-transparent z-10 pointer-events-none"></div>
+        <div className="hidden md:block absolute right-0 top-0 bottom-0 w-32 bg-linear-to-l from-cream to-transparent z-10 pointer-events-none"></div>
 
         {/* Scrollable Container */}
         <div
@@ -186,7 +186,7 @@ const NewsLetter = () => {
                     alt={newsletter.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-navy/20 to-transparent"></div>
+                  <div className="absolute inset-0 bg-linear-to-t from-navy/80 via-navy/20 to-transparent"></div>
                   
                   {/* Date Badge - Responsive */}
                   <div className="absolute top-2 right-2">

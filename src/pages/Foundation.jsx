@@ -72,8 +72,8 @@ const Foundation = () => {
                     alt="Foundation of Hazaribag Jesuit Mission"
                     className="w-full h-40 sm:h-48 md:h-56 lg:h-64 xl:h-72 object-contain bg-gray-100 transform group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-navy/70 via-transparent to-transparent pointer-events-none"></div>
-                  <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 md:p-5 lg:p-6 bg-gradient-to-t from-navy/90 to-transparent">
+                  <div className="absolute inset-0 bg-linear-to-t from-navy/70 via-transparent to-transparent pointer-events-none"></div>
+                  <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 md:p-5 lg:p-6 bg-linear-to-t from-navy/90 to-transparent">
                     <p className="text-white text-sm sm:text-base md:text-lg font-semibold">
                       The Beginning of the Mission
                     </p>
@@ -96,8 +96,8 @@ const Foundation = () => {
                     alt="First Jesuits arrival"
                     className="w-full h-56 sm:h-64 md:h-72 lg:h-80 object-contain bg-gray-100 transform group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-navy/70 via-transparent to-transparent pointer-events-none"></div>
-                  <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 bg-gradient-to-t from-navy/90 to-transparent">
+                  <div className="absolute inset-0 bg-linear-to-t from-navy/70 via-transparent to-transparent pointer-events-none"></div>
+                  <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 bg-linear-to-t from-navy/90 to-transparent">
                     <p className="text-white text-xs sm:text-sm font-semibold">
                       Arrival from Australia
                     </p>
@@ -116,8 +116,8 @@ const Foundation = () => {
                     alt="Balmoral house purchase"
                     className="w-full h-56 sm:h-64 md:h-72 lg:h-80 object-contain bg-gray-100 transform group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-navy/70 via-transparent to-transparent pointer-events-none"></div>
-                  <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 bg-gradient-to-t from-navy/90 to-transparent">
+                  <div className="absolute inset-0 bg-linear-to-t from-navy/70 via-transparent to-transparent pointer-events-none"></div>
+                  <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 bg-linear-to-t from-navy/90 to-transparent">
                     <p className="text-white text-xs sm:text-sm font-semibold">
                       Balmoral House
                     </p>
@@ -136,8 +136,8 @@ const Foundation = () => {
                     alt="St. Xavier's School opening"
                     className="w-full h-56 sm:h-64 md:h-72 lg:h-80 object-contain bg-gray-100 transform group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-navy/70 via-transparent to-transparent pointer-events-none"></div>
-                  <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 bg-gradient-to-t from-navy/90 to-transparent">
+                  <div className="absolute inset-0 bg-linear-to-t from-navy/70 via-transparent to-transparent pointer-events-none"></div>
+                  <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 bg-linear-to-t from-navy/90 to-transparent">
                     <p className="text-white text-xs sm:text-sm font-semibold">
                       St. Xavier's Opens
                     </p>

@@ -103,7 +103,7 @@ const LatestNews = () => {
   // Loading state with spinner
   if (loading) {
     return (
-      <section className="py-6 sm:py-8 md:py-10 lg:py-12 bg-gradient-to-b from-white to-cream">
+      <section className="py-6 sm:py-8 md:py-10 lg:py-12 bg-linear-to-b from-white to-cream">
         <div className="mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
           <motion.div
             className="text-center"
@@ -125,7 +125,7 @@ const LatestNews = () => {
   // Error state
   if (error) {
     return (
-      <section className="py-6 sm:py-8 md:py-10 lg:py-12 bg-gradient-to-b from-white to-cream">
+      <section className="py-6 sm:py-8 md:py-10 lg:py-12 bg-linear-to-b from-white to-cream">
         <div className="mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
           <motion.div
             className="text-center"
@@ -156,7 +156,7 @@ const LatestNews = () => {
   // No news state
   if (!newsData || newsData.length === 0) {
     return (
-      <section className="py-6 sm:py-8 md:py-10 lg:py-12 bg-gradient-to-b from-white to-cream">
+      <section className="py-6 sm:py-8 md:py-10 lg:py-12 bg-linear-to-b from-white to-cream">
         <div className="mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
           <motion.div
             className="text-center"
@@ -179,7 +179,7 @@ const LatestNews = () => {
   }
 
   return (
-    <section className="py-6 sm:py-8 md:py-10 lg:py-12 bg-gradient-to-b from-white to-cream">
+    <section className="py-6 sm:py-8 md:py-10 lg:py-12 bg-linear-to-b from-white to-cream">
       <div className="mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
         {/* Section Header */}
         <motion.div
@@ -243,7 +243,7 @@ const LatestNews = () => {
                         }}
                       />
                       {/* Overlay - adjusted for responsive */}
-                      <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-navy/80 via-navy/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
+                      <div className="absolute inset-0 bg-linear-to-t lg:bg-linear-to-r from-navy/80 via-navy/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
                       
                       {/* Category Badge */}
                       <div className="absolute top-2 sm:top-3 left-2 sm:left-3">

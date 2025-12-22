@@ -86,7 +86,7 @@ const ApostolicPlanning = () => {
 
   if (loading) {
     return (
-      <section className="py-6 sm:py-8 md:py-10 lg:py-12 bg-gradient-to-t from-cream to-white">
+      <section className="py-6 sm:py-8 md:py-10 lg:py-12 bg-linear-to-t from-cream to-white">
         <div className="mx-auto px-4 sm:px-6 md:px-8 lg:px-12 max-w-7xl">
           <div className="text-center">
             <div className="inline-block animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-t-2 border-b-2 border-primary mb-3 sm:mb-4"></div>
@@ -98,7 +98,7 @@ const ApostolicPlanning = () => {
   }
 
   return (
-    <section className="py-6 sm:py-8 md:py-10 lg:py-12 bg-gradient-to-t from-cream to-white">
+    <section className="py-6 sm:py-8 md:py-10 lg:py-12 bg-linear-to-t from-cream to-white">
       <div className="mx-auto px-4 sm:px-6 md:px-8 lg:px-12 max-w-7xl">
 
         {/* ================= HEADER ================= */}
@@ -165,7 +165,7 @@ const ApostolicPlanning = () => {
                   <div
                     key={planning.id}
                     className="group w-full max-w-md mx-auto
-                               bg-gradient-to-r from-primary to-navy
+                               bg-linear-to-r from-primary to-navy
                                rounded-xl sm:rounded-2xl p-5 sm:p-6 text-center
                                shadow-lg hover:shadow-2xl
                                transition-all duration-500"

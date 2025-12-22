@@ -90,9 +90,9 @@ const AboutHead = () => {
   // Loading state
   if (loading) {
     return (
-      <section className="py-6 sm:py-8 md:py-10 lg:py-12 overflow-hidden bg-gradient-to-b from-cream to-white">
+      <section className="py-6 sm:py-8 md:py-10 lg:py-12 overflow-hidden bg-linear-to-b from-cream to-white">
         <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12">
-          <div className="max-w-6xl mx-auto bg-white rounded-xl sm:rounded-2xl shadow-lg p-6 sm:p-8 md:p-10 lg:p-12 flex items-center justify-center min-h-[280px] sm:min-h-[320px] md:min-h-[360px] lg:min-h-[400px]">
+          <div className="max-w-6xl mx-auto bg-white rounded-xl sm:rounded-2xl shadow-lg p-6 sm:p-8 md:p-10 lg:p-12 flex items-center justify-center min-h-[280px] sm:min-h-80 md:min-h-[360px] lg:min-h-[400px]">
             <div className="text-center">
               <div className="inline-block animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-t-2 border-b-2 border-primary mb-3 sm:mb-4"></div>
               <p className="text-navy text-sm sm:text-base lg:text-xl font-medium">Loading provincial message...</p>
@@ -106,9 +106,9 @@ const AboutHead = () => {
   // Error or no data state
   if (error || !provincialData) {
     return (
-      <section className="py-6 sm:py-8 md:py-10 lg:py-12 overflow-hidden bg-gradient-to-b from-cream to-white">
+      <section className="py-6 sm:py-8 md:py-10 lg:py-12 overflow-hidden bg-linear-to-b from-cream to-white">
         <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12">
-          <div className="max-w-6xl mx-auto bg-white rounded-xl sm:rounded-2xl shadow-lg p-6 sm:p-8 md:p-10 lg:p-12 text-center min-h-[280px] sm:min-h-[320px] md:min-h-[360px] lg:min-h-[400px] flex items-center justify-center">
+          <div className="max-w-6xl mx-auto bg-white rounded-xl sm:rounded-2xl shadow-lg p-6 sm:p-8 md:p-10 lg:p-12 text-center min-h-[280px] sm:min-h-80 md:min-h-[360px] lg:min-h-[400px] flex items-center justify-center">
             <p className="text-navy text-sm sm:text-base">Provincial message not available at this time.</p>
           </div>
         </div>
@@ -127,7 +127,7 @@ const AboutHead = () => {
   const imageSrc = provincialData.image_url || principalImage;
 
   return (
-    <section className="py-6 sm:py-8 md:py-10 lg:py-12 overflow-hidden bg-gradient-to-b from-cream to-white">
+    <section className="py-6 sm:py-8 md:py-10 lg:py-12 overflow-hidden bg-linear-to-b from-cream to-white">
       <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 max-w-[1400px]">
         {/* Section Title */}
         <motion.div
@@ -175,10 +175,10 @@ const AboutHead = () => {
                   <img
                     src={imageSrc}
                     alt={provincialData.title}
-                    className="w-full h-full object-contain lg:object-cover bg-gradient-to-t to-cream from-white transform transition-transform duration-700 group-hover:scale-105"
+                    className="w-full h-full object-contain lg:object-cover bg-linear-to-t to-cream from-white transform transition-transform duration-700 group-hover:scale-105"
                   />
                   {/* Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-navy/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  <div className="absolute inset-0 bg-linear-to-t from-navy/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                   
                   {/* Quote Icon */}
                   <motion.div
@@ -274,7 +274,7 @@ const AboutHead = () => {
           transition={{ duration: 0.5, delay: 0.3 }}
         >
           <motion.div
-            className="bg-gradient-to-r from-cream to-white p-4 sm:p-5 md:p-6 rounded-lg sm:rounded-xl shadow-md border border-secondary/20"
+            className="bg-linear-to-r from-cream to-white p-4 sm:p-5 md:p-6 rounded-lg sm:rounded-xl shadow-md border border-secondary/20"
             whileHover={{ scale: 1.01, boxShadow: "0 8px 25px rgba(0,0,0,0.08)" }}
             transition={{ duration: 0.3 }}
           >

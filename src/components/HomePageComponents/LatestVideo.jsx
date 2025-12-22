@@ -88,7 +88,7 @@ const LatestVideo = () => {
 
   if (loading) {
     return (
-      <section className="py-6 sm:py-8 md:py-10 lg:py-12 bg-gradient-to-b from-cream to-white">
+      <section className="py-6 sm:py-8 md:py-10 lg:py-12 bg-linear-to-b from-cream to-white">
         <div className="mx-auto px-4 sm:px-6 md:px-8 lg:px-12 max-w-7xl">
           <div className="text-center">
             <div className="animate-pulse space-y-4">
@@ -107,7 +107,7 @@ const LatestVideo = () => {
 
   if (error || videos.length === 0) {
     return (
-      <section className="py-6 sm:py-8 md:py-10 lg:py-12 bg-gradient-to-b from-cream to-white">
+      <section className="py-6 sm:py-8 md:py-10 lg:py-12 bg-linear-to-b from-cream to-white">
         <div className="mx-auto px-4 sm:px-6 md:px-8 lg:px-12 max-w-7xl">
           <div className="text-center py-12">
             <p className="text-navy text-sm sm:text-base">
@@ -120,7 +120,7 @@ const LatestVideo = () => {
   }
 
   return (
-    <section className="py-6 sm:py-8 md:py-10 lg:py-12 bg-gradient-to-b from-cream to-white">
+    <section className="py-6 sm:py-8 md:py-10 lg:py-12 bg-linear-to-b from-cream to-white">
       <div className="mx-auto px-4 sm:px-6 md:px-8 lg:px-12 max-w-7xl">
         {/* Section Header */}
         <motion.div

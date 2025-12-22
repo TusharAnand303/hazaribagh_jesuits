@@ -90,7 +90,7 @@ const Testimonials = () => {
   // Loading state
   if (loading) {
     return (
-      <section className="py-8 sm:py-10 md:py-12 lg:py-14 bg-gradient-to-b from-cream to-white overflow-hidden relative">
+      <section className="py-8 sm:py-10 md:py-12 lg:py-14 bg-linear-to-b from-cream to-white overflow-hidden relative">
         <div className="text-center py-12">
           <div className="inline-block animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 border-t-2 border-b-2 border-orange-500 mb-4"></div>
           <p className="text-gray-700 text-sm sm:text-base">Loading testimonials...</p>
@@ -102,7 +102,7 @@ const Testimonials = () => {
   // Error or no data state
   if (error || testimonials.length === 0) {
     return (
-      <section className="py-8 sm:py-10 md:py-12 lg:py-14 bg-gradient-to-b from-cream to-white overflow-hidden relative">
+      <section className="py-8 sm:py-10 md:py-12 lg:py-14 bg-linear-to-b from-cream to-white overflow-hidden relative">
         <div className="text-center py-12">
           <p className="text-gray-700 text-base sm:text-lg">
             {error ? 'Unable to load testimonials' : 'No testimonials available'}
@@ -113,11 +113,11 @@ const Testimonials = () => {
   }
 
   return (
-    <section className="py-8 sm:py-10 md:py-12 lg:py-14 bg-gradient-to-b from-cream to-white overflow-hidden relative">
+    <section className="py-8 sm:py-10 md:py-12 lg:py-14 bg-linear-to-b from-cream to-white overflow-hidden relative">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0" style={{
-          backgroundImage: 'radial-gradient(circle at 2px 2px, #f97316 1px, transparent 0)',
+          backgroundImage: 'radial-linear(circle at 2px 2px, #f97316 1px, transparent 0)',
           backgroundSize: '40px 40px'
         }}></div>
       </div>
@@ -134,16 +134,16 @@ const Testimonials = () => {
           <p className="text-gray-600 text-sm sm:text-base md:text-lg max-w-2xl mx-auto px-4">
             Hear from our students, parents, and community members
           </p>
-          <div className="w-20 sm:w-24 h-1 bg-gradient-to-r from-amber-500 to-orange-500 mx-auto mt-4 sm:mt-6 rounded-full"></div>
+          <div className="w-20 sm:w-24 h-1 bg-linear-to-r from-amber-500 to-orange-500 mx-auto mt-4 sm:mt-6 rounded-full"></div>
         </div>
 
         {/* Horizontal Scrolling Testimonials */}
         <div className="relative">
-          {/* Gradient Overlays - Only show if animating */}
+          {/* linear Overlays - Only show if animating */}
           {shouldAnimate && (
             <>
-              <div className="hidden md:block absolute left-0 top-0 bottom-0 w-24 lg:w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
-              <div className="hidden md:block absolute right-0 top-0 bottom-0 w-24 lg:w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
+              <div className="hidden md:block absolute left-0 top-0 bottom-0 w-24 lg:w-32 bg-linear-to-r from-white to-transparent z-10 pointer-events-none"></div>
+              <div className="hidden md:block absolute right-0 top-0 bottom-0 w-24 lg:w-32 bg-linear-to-l from-white to-transparent z-10 pointer-events-none"></div>
             </>
           )}
 
