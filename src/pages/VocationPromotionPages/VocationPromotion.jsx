@@ -103,7 +103,7 @@ const VocationPromotion = () => {
                 className="bg-cream rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105 cursor-pointer border-2 border-secondary"
                 style={{ height: '380px' }}
                 onClick={() =>
-                  navigate(`/vocation-promotion/${item.id}`)
+                  navigate(`/vocation/${item.id}`)
                 }
               >
                 {/* Image */}
