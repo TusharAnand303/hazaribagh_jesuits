@@ -1,6 +1,6 @@
 import React from "react";
 import Breadcrumb from "../components/Breadcrumb";
-import h5 from '../assets/images/web_images/h5.jpeg';
+import h5 from '../assets/images/foundation_history.jpeg';
 
 
 const Foundation = () => {

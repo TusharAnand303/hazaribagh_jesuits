@@ -39,7 +39,7 @@ const NewsletterViewer = () => {
         }
 
         setPdfUrl(data.data.pdf_url);
-        setNewsletterTitle(data.data.title); // ✅ Dynamic title
+        setNewsletterTitle(data.data.title);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -50,7 +50,7 @@ const NewsletterViewer = () => {
     fetchNewsletter();
   }, [id]);
 
-  /* ===================== LOADING STATE ===================== */
+  /* ===================== LOADING ===================== */
   if (loading) {
     return (
       <div className="min-h-screen bg-linear-to-b from-cream to-white">
@@ -63,7 +63,7 @@ const NewsletterViewer = () => {
     );
   }
 
-  /* ===================== ERROR STATE ===================== */
+  /* ===================== ERROR ===================== */
   if (error) {
     return (
       <div className="min-h-screen bg-linear-to-b from-cream to-white">
@@ -89,7 +89,7 @@ const NewsletterViewer = () => {
   return (
     <div className="min-h-screen bg-cream text-navy">
       {/* Header */}
-      <header className="p-6 sm:ml-24 -mb-10 mt-24">
+      <header className="p-2 sm:ml-24 mt-24">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -98,24 +98,24 @@ const NewsletterViewer = () => {
           <h1 className="sm:text-4xl text-2xl font-bold">
             {newsletterTitle}
           </h1>
-          <p className="text-sm mt-2 opacity-90">
-            Newsletter Preview
-          </p>
+    
         </motion.div>
       </header>
 
       <Breadcrumb items={breadcrumbItems} />
 
-      {/* PDF Viewer */}
-      <main className="container mx-auto px-6 py-8 mt-10 sm:mt-0">
+      {/* ===================== A4 PDF VIEW ===================== */}
+      <main className="container mx-auto px-6 py-8 flex justify-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="
-            bg-white rounded-lg shadow-xl overflow-hidden
-            h-[75vh] sm:h-[85vh] lg:h-[92vh]
-          "
+          className="bg-white rounded-lg shadow-xl overflow-hidden"
+          style={{
+            aspectRatio: "210 / 297", // ✅ A4 aspect ratio
+            width: "100%",
+            maxWidth: "794px",       // ✅ A4 width (96 DPI)
+          }}
         >
           <iframe
             src={`${encodeURI(pdfUrl)}#toolbar=0&navpanes=0&scrollbar=0`}

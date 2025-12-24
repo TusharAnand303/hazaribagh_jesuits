@@ -102,7 +102,7 @@ const Universal = () => {
 
                 {/* Back Side */}
                 <div className="absolute inset-0 rounded-2xl overflow-hidden shadow-lg backface-hidden rotate-y-180 bg-primary flex items-center justify-center p-4">
-                  <h3 className="text-white text-center text-lg font-bold">{item.title}</h3>
+                  <h3 className="text-white text-center text-lg font-bold">{item.description}</h3>
                 </div>
 
               </div>
