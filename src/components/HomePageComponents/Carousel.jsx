@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { FiPause, FiPlay } from 'react-icons/fi';
 
 const Carousel = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
+  const [isVideoPaused, setIsVideoPaused] = useState(false);
+  const videoRef = useRef(null);
 
   // Banner API states
   const [slides, setSlides] = useState([]);
@@ -27,7 +29,7 @@ const Carousel = () => {
           video_url: banner.video_url,
           title: banner.title || 'Hazaribagh Jesuits',
           subtitle: 'Society of Jesus',
-          description: 'Serving God through Education, Social Development, and Spiritual Formation'
+          description: banner.description,
         }));
 
         setSlides(transformedSlides);
@@ -45,17 +47,35 @@ const Carousel = () => {
   const nextSlide = useCallback(() => {
     if (slides.length === 0) return;
     setCurrentSlide(prev => (prev + 1) % slides.length);
+    setIsVideoPaused(false);
   }, [slides.length]);
 
   const prevSlide = () => {
     if (slides.length === 0) return;
     setCurrentSlide(prev => (prev - 1 + slides.length) % slides.length);
+    setIsVideoPaused(false);
   };
 
-  const goToSlide = index => setCurrentSlide(index);
+  const goToSlide = index => {
+    setCurrentSlide(index);
+    setIsVideoPaused(false);
+  };
+
   const toggleAutoPlay = () => {
     setIsAutoPlaying(!isAutoPlaying);
     setIsPaused(!isPaused);
+  };
+
+  const toggleVideoPlay = () => {
+    if (videoRef.current) {
+      if (isVideoPaused) {
+        videoRef.current.play();
+        setIsVideoPaused(false);
+      } else {
+        videoRef.current.pause();
+        setIsVideoPaused(true);
+      }
+    }
   };
 
   // Auto-play effect
@@ -92,7 +112,7 @@ const Carousel = () => {
 
   if (loading) {
     return (
-      <div className="relative w-full h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden bg-navy flex items-center justify-center">
+      <div className="relative w-full h-[450px] sm:h-[550px] md:h-[650px] lg:h-[750px] overflow-hidden bg-navy flex items-center justify-center">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-secondary mb-4"></div>
           <p className="text-white text-xl">Loading banners...</p>
@@ -116,6 +136,9 @@ const Carousel = () => {
     );
   }
 
+  const currentSlideData = slides[currentSlide];
+  const isCurrentSlideVideo = currentSlideData?.video_url;
+
   return (
     <div className="relative w-full h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden bg-navy group">
       {/* Slides */}
@@ -134,11 +157,12 @@ const Carousel = () => {
             <div className="absolute inset-0">
               {slide.video_url ? (
                 <video
+                  ref={index === currentSlide ? videoRef : null}
                   src={slide.video_url}
                   autoPlay
                   muted
                   loop
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                 />
               ) : (
                 <img
@@ -184,13 +208,17 @@ const Carousel = () => {
         ))}
       </div>
 
-      {/* Play/Pause */}
+      {/* Play/Pause Button - Video or Carousel control at same position */}
       <button
-        onClick={toggleAutoPlay}
+        onClick={isCurrentSlideVideo ? toggleVideoPlay : toggleAutoPlay}
         className="absolute bottom-20 sm:bottom-24 right-4 sm:right-8 z-30 bg-white/10 hover:bg-primary backdrop-blur-sm text-white p-2 sm:p-3 rounded-full transition-all duration-300 hover:scale-110 border border-white/20"
-        aria-label={isPaused ? 'Play' : 'Pause'}
+        aria-label={isCurrentSlideVideo ? (isVideoPaused ? 'Play video' : 'Pause video') : (isPaused ? 'Play carousel' : 'Pause carousel')}
       >
-        {isPaused ? <FiPlay className="w-4 h-4 sm:w-5 sm:h-5" /> : <FiPause className="w-4 h-4 sm:w-5 sm:h-5" />}
+        {isCurrentSlideVideo ? (
+          isVideoPaused ? <FiPlay className="w-4 h-4 sm:w-5 sm:h-5" /> : <FiPause className="w-4 h-4 sm:w-5 sm:h-5" />
+        ) : (
+          isPaused ? <FiPlay className="w-4 h-4 sm:w-5 sm:h-5" /> : <FiPause className="w-4 h-4 sm:w-5 sm:h-5" />
+        )}
       </button>
 
       {/* Indicators */}

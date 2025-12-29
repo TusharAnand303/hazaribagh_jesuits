@@ -128,7 +128,7 @@ const JesuitsMembersDetails = () => {
                 {/* Image */}
                 {content.image_url && (
                   <div className="mb-8">
-                    <div className="relative h-screen rounded-xl overflow-hidden shadow-lg">
+                    <div className="relative sm:h-screen rounded-xl overflow-hidden shadow-lg">
                       <img
                         src={content.image_url}
                         alt={content.title}

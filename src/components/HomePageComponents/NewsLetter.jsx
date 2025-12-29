@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FiChevronLeft, FiChevronRight, FiDownload, FiCalendar, FiFileText, FiEye } from 'react-icons/fi';
+import { FiChevronLeft, FiChevronRight, FiDownload, FiCalendar, FiFileText, FiEye, FiArrowRight } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 
 const NewsLetter = () => {
@@ -192,8 +192,8 @@ const NewsLetter = () => {
                   <div className="absolute top-2 right-2">
                     <span className="flex items-center gap-1 px-2 py-1 bg-white/95 backdrop-blur-sm rounded-full text-[10px] sm:text-xs font-semibold text-primary shadow-lg">
                       <FiCalendar className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
-                      <span className="hidden xs:inline">{formatDate(newsletter.created_at)}</span>
-                      <span className="xs:hidden">{new Date(newsletter.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
+                      <span className="hidden xs:inline">{formatDate(newsletter.newsletter_date)}</span>
+                      <span className="xs:hidden">{new Date(newsletter.newsletter_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
                     </span>
                   </div>
                 </div>
@@ -231,6 +231,26 @@ const NewsLetter = () => {
           </p>
         </div>
       </div>
+
+      {/* View All Newsletter Button */}
+      <motion.div
+        className="text-center mt-6 sm:mt-8 md:mt-10"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.5 }}
+      >
+        <Link to="/newsletter-details">
+          <motion.button
+            className="px-5 py-2.5 sm:px-6 sm:py-3 bg-primary hover:bg-primary/90 text-white text-sm sm:text-base font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 mx-auto cursor-pointer"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            View All Newsletters
+            <FiArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+          </motion.button>
+        </Link>
+      </motion.div>
 
       {/* Hide scrollbar CSS */}
       <style jsx>{`

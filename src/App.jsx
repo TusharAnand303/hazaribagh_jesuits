@@ -34,7 +34,8 @@ import SupportUs from "./pages/Supportus.jsx"
 import Foundation from "./pages/Foundation.jsx"
 import Legacy from "./pages/Legacy.jsx"
 import ApostolicPlannings from "./pages/ApostolicPlannings.jsx"
-import NewsletterViewer from "./pages/NewsletterViewer";
+import NewsletterViewer from "./pages/NewsletterViewer"
+import NewsLetterDetails from "./pages/NewsLetterDetails.jsx"  
 import Formation from "./pages/FormatonPages/Formation.jsx"
 import FormationDetails from "./pages/FormatonPages/FormationDetails.jsx"
 import Youth from "./pages/YouthPages/Youth.jsx"
@@ -49,7 +50,6 @@ import Spirituality from "./pages/Spirituality.jsx"
 import SpiritualityDetail from "./pages/SpiritualityDetail.jsx"
 import JesuitsMembers from "./pages/JesuitsMembersPages/JesuitsMembers.jsx"
 import JesuitsMembersDetails from "./pages/JesuitsMembersPages/JesuitsMembersDetails.jsx"
-
 
 function App() {
 
@@ -84,12 +84,13 @@ function App() {
           <Route path="/communities/:id" element={<Communities />} />
           <Route path="/communitiesdetails/:id" element={<CommunitiesDetails />} />
           <Route path="/administration-councils" element={<AdministrationCouncils />} />
-          <Route path="/gallery/:id" element={<GalleryDetail />} /> {/* <-- Add this */}
+          <Route path="/gallery/:id" element={<GalleryDetail />} />
           <Route path="about/supportus" element={<SupportUs />} />
           <Route path="about/foundation" element={<Foundation />} />
           <Route path="about/legacy" element={<Legacy />} />
           <Route path="/apostolic-plannings" element={<ApostolicPlannings />} />
           <Route path="/newsletter/view/:id" element={<NewsletterViewer />} />
+          <Route path="/newsletter-details" element={<NewsLetterDetails />} />
           <Route path="/formation" element={<Formation />} />
           <Route path="/youth" element={<Youth />} />
           <Route path="/formation/:id" element={<FormationDetails />} />
@@ -104,7 +105,6 @@ function App() {
           <Route path="/spirituality/:id" element={<SpiritualityDetail />} />
           <Route path="/jesuits-member" element={<JesuitsMembers />} />
           <Route path="/jesuits-member/:id" element={<JesuitsMembersDetails />} />
-
 
         </Routes>
         <Footer/> 

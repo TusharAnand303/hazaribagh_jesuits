@@ -260,7 +260,7 @@ const LatestNews = () => {
                       <div className="flex items-center gap-1 text-xs sm:text-xs text-gray mb-2">
                         <FiCalendar className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                         <span className="text-xs sm:text-xs">
-                          {new Date(news.created_at).toLocaleDateString('en-US', {
+                          {new Date(news.news_date).toLocaleDateString('en-US', {
                             month: 'short',
                             day: 'numeric',
                             year: 'numeric'
