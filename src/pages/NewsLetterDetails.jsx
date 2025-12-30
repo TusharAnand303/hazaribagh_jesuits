@@ -173,7 +173,7 @@ const NewsLetterDetails = () => {
                     </td>
                     <td className="px-6 py-4">
                       <p className="text-gray-600 text-sm line-clamp-2 max-w-md">
-                        {newsletter.description || 'Stay informed with our monthly newsletters featuring stories, updates, and insights'}
+                        {newsletter.description}
                       </p>
                     </td>
                     <td className="px-6 py-4">

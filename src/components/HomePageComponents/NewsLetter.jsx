@@ -207,7 +207,7 @@ const NewsLetter = () => {
                   
                   {/* Description - Responsive font and spacing */}
                   <p className="text-[11px] sm:text-xs text-gray leading-relaxed mb-2.5 sm:mb-3 flex-1 line-clamp-2">
-                    {newsletter.description || 'Stay informed with our monthly newsletters featuring stories, updates, and insights'}
+                    {newsletter.description}
                   </p>
 
                   {/* View PDF Button - Responsive sizing */}
