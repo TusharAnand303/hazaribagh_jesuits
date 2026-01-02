@@ -223,8 +223,13 @@ const Book = () => {
                     {/* Description with custom scrollbar */}
                     <div className="flex-1 overflow-y-auto pr-2 description-scroll">
                       <p className="text-gray-700 text-sm leading-relaxed">
-                        {book.description || 'No description available.'}
-                      </p>
+                        <div
+                      className="prose prose-lg max-w-none text-gray-700 leading-relaxed"
+                      style={{fontSize: '1rem',lineHeight: '1.8',}} 
+                      dangerouslySetInnerHTML={{ __html: book.description }}
+                    />
+                      
+                      </p> 
                       
                       {/* Scroll indicator at bottom */}
                       {book.description && book.description.length > 200 && (
@@ -237,11 +242,21 @@ const Book = () => {
                     </div>
 
                     {/* Footer */}
-                    <div className="mt-4 pt-3 border-t border-gray-200 shrink-0">
-                      <p className="text-xs text-gray-500 italic text-center">
-                        Available at Jesuit Archives, Hazaribag
-                      </p>
-                    </div>
+                  <div className="mt-4 pt-3 border-t border-gray-200 shrink-0 text-end">
+                    {book.link ? (
+                      <a
+                        href={book.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block px-4 py-2 text-xs font-semibold text-white rounded-md bg-primary hover:bg-navy transition-all duration-300"
+                      >
+                        Book Link
+                      </a>
+                    ) : (
+                      <span className="text-xs text-gray-400 italic">No link available</span>
+                    )}
+                  </div>
+
                   </div>
 
                   {/* Page binding shadow */}
