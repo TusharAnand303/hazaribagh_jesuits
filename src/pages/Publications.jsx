@@ -148,7 +148,7 @@ const Publications = () => {
               className="group h-full"
             >
               <Link to={`/publications/${pub.id}`} className="block h-full">
-                <div className="bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 h-[480px] flex flex-col">
+                <div className="bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 h-[520px] flex flex-col">
                   {/* Image Section */}
                   <div className="relative h-56 overflow-hidden shrink-0">
                     <img
