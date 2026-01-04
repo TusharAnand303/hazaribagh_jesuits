@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import Breadcrumb from '../components/Breadcrumb';
 
+
 const Gallery = () => {
   const [galleryItems, setGalleryItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -10,19 +11,24 @@ const Gallery = () => {
   const [filter, setFilter] = useState('All');
   const navigate = useNavigate();
 
+
   useEffect(() => {
     const fetchGallery = async () => {
       try {
         setLoading(true);
         setError(null);
 
+
         const response = await fetch(
           `${import.meta.env.VITE_API_BASE_URL}/gallery`
         );
 
+
         if (!response.ok) throw new Error('Failed to load gallery');
 
+
         const result = await response.json();
+
 
         if (result.status && result.data) {
           setGalleryItems(result.data);
@@ -36,23 +42,28 @@ const Gallery = () => {
       }
     };
 
+
     fetchGallery();
   }, []);
+
 
   const categories = [
     'All',
     ...Array.from(new Set(galleryItems.map(i => i.category_name))),
   ];
 
+
   const filteredItems =
     filter === 'All'
       ? galleryItems
       : galleryItems.filter(i => i.category_name === filter);
 
+
   const breadcrumbItems = [
     { label: 'Home', path: '/' },
     { label: 'Gallery', path: '/gallery' },
   ];
+
 
   /* ================= LOADING ================= */
   if (loading) {
@@ -66,6 +77,7 @@ const Gallery = () => {
     );
   }
 
+
   /* ================= ERROR ================= */
   if (error) {
     return (
@@ -77,6 +89,7 @@ const Gallery = () => {
       </div>
     );
   }
+
 
   /* ================= UI ================= */
   return (
@@ -94,7 +107,9 @@ const Gallery = () => {
         </motion.div>
       </header>
 
+
       <Breadcrumb items={breadcrumbItems} />
+
 
       <div className="container mx-auto px-6 py-8 mt-10 sm:mt-0">
         {/* ================= FILTERS ================= */}
@@ -102,9 +117,10 @@ const Gallery = () => {
           {categories.map(category => (
             <motion.button
               key={category}
-              whileTap={{ scale: 0.9 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => setFilter(category)}
-              className={`px-6 py-2 rounded-full font-medium transition-all duration-300 ${
+              className={`px-6 py-2 rounded-full font-medium transition-all duration-300 cursor-pointer ${
                 filter === category
                   ? 'bg-secondary text-white shadow-lg'
                   : 'bg-white text-navy hover:bg-gray-100 shadow-md'
@@ -115,19 +131,29 @@ const Gallery = () => {
           ))}
         </div>
 
+
         {/* ================= GALLERY GRID ================= */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          <AnimatePresence>
+          <AnimatePresence mode="wait">
             {filteredItems.map((item, index) => (
               <motion.div
-                key={item.id}
-                initial={{ opacity: 0, y: 40, scale: 0.9 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{
-                  duration: 0.45,
-                  delay: index * 0.08, // 🔥 ONE BY ONE LOAD
-                  ease: 'easeOut',
+                key={`${filter}-${item.id}`}
+                layout
+                initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                animate={{ 
+                  opacity: 1, 
+                  scale: 1, 
+                  y: 0,
+                  transition: {
+                    duration: 0.4,
+                    delay: index * 0.05,
+                    ease: [0.4, 0, 0.2, 1]
+                  }
+                }}
+                exit={{ 
+                  opacity: 0, 
+                  scale: 0.8,
+                  transition: { duration: 0.2 }
                 }}
                 whileHover={{ scale: 1.05, y: -6 }}
                 whileTap={{ scale: 0.95 }}
@@ -142,6 +168,7 @@ const Gallery = () => {
                     loading="lazy"
                   />
                 </div>
+
 
                 <div className="p-4">
                   <h3 className="text-navy font-semibold text-base leading-snug">
@@ -159,5 +186,6 @@ const Gallery = () => {
     </div>
   );
 };
+
 
 export default Gallery;
