@@ -4,6 +4,8 @@ import { FiArrowLeft, FiAlertCircle, FiUsers, FiCalendar, FiLink, FiUser } from 
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import Breadcrumb from '../../components/Breadcrumb';
 
+
+
 const JesuitsMembersDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -12,21 +14,29 @@ const JesuitsMembersDetails = () => {
   const [error, setError] = useState(null);
   const [dataAvailable, setDataAvailable] = useState(false);
 
+
+
   useEffect(() => {
     const fetchJesuitMember = async () => {
       try {
         setLoading(true);
         setError(null);
 
+
+
         const fetchPromise = fetch(`${import.meta.env.VITE_API_BASE_URL}/jesuits_member/${id}`);
         const timeoutPromise = new Promise((_, reject) =>
           setTimeout(() => reject(new Error('Request timeout')), 15000)
         );
 
+
+
         const res = await Promise.race([fetchPromise, timeoutPromise]);
         if (!res.ok) {
           throw new Error(`Failed to fetch: ${res.status}`);
         }
+
+
 
         const response = await res.json();
         const dataItem = response.data;
@@ -43,16 +53,22 @@ const JesuitsMembersDetails = () => {
       }
     };
 
+
+
     if (id) {
       fetchJesuitMember();
     }
   }, [id]);
+
+
 
   const breadcrumbItems = [
     { label: 'Home', path: '/' },
     { label: 'Jesuits Members', path: '/jesuits-member' },
     { label: 'Jesuits Member Details', path: `/jesuits-member/${id}` },
   ];
+
+
 
   // Loading state
   if (loading) {
@@ -66,6 +82,8 @@ const JesuitsMembersDetails = () => {
       </div>
     );
   }
+
+
 
   // Error state
   if (error || !content) {
@@ -90,6 +108,8 @@ const JesuitsMembersDetails = () => {
     );
   }
 
+
+
   return (
     <div className="min-h-screen bg-linear-to-b from-cream to-white text-navy">
       {/* Header */}
@@ -97,6 +117,8 @@ const JesuitsMembersDetails = () => {
         <h1 className="text-3xl font-bold">{content.title}</h1>
       </header>
       <Breadcrumb items={breadcrumbItems} />
+
+
 
       {/* Main Content */}
       <main className="p-6 pt-12 sm:ml-24 sm:mr-24">
@@ -123,23 +145,25 @@ const JesuitsMembersDetails = () => {
                 </h1>
               </div>
 
+
+
               {/* Content */}
               <div className="p-6 md:p-8">
-                {/* Image */}
+                {/* Image - No white spaces, left aligned */}
                 {content.image_url && (
                   <div className="mb-8">
-                    <div className="relative sm:h-screen rounded-xl overflow-hidden shadow-lg">
-                      <img
-                        src={content.image_url}
-                        alt={content.title}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                        }}
-                      />
-                    </div>
+                    <img
+                      src={content.image_url}
+                      alt={content.title}
+                      className="max-h-[300px] md:max-h-[350px] lg:max-h-[400px] w-auto rounded-xl shadow-lg"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                      }}
+                    />
                   </div>
                 )}
+
+
 
                 {/* Description */}
                 {content.description && (
@@ -160,6 +184,8 @@ const JesuitsMembersDetails = () => {
               </div>
             </article>
           </motion.div>
+
+
 
           {/* Sidebar - Right */}
           <motion.aside
@@ -186,6 +212,8 @@ const JesuitsMembersDetails = () => {
                       </div>
                     </div>
 
+
+
                     {content.created_at && (
                       <div className="p-4 bg-gray-50 rounded-lg">
                         <div className="flex items-center gap-2 mb-2">
@@ -202,6 +230,8 @@ const JesuitsMembersDetails = () => {
                       </div>
                     )}
 
+
+
                     {/* Link Button */}
                     {content.link && content.link !== '#' && content.link !== null && (
                       <div className="p-4 bg-linear-to-r from-primary/10 to-secondary/10 rounded-lg border border-primary/20">
@@ -217,6 +247,8 @@ const JesuitsMembersDetails = () => {
                       </div>
                     )}
                   </div>
+
+
 
                   {/* Back Button */}
                   <Link to="/jesuits-member">
@@ -238,5 +270,7 @@ const JesuitsMembersDetails = () => {
     </div>
   );
 };
+
+
 
 export default JesuitsMembersDetails;

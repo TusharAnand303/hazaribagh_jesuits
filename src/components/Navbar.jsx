@@ -1,29 +1,35 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { FaBars, FaTimes, FaChevronDown, FaChevronRight } from 'react-icons/fa';
+import { FaBars, FaTimes, FaChevronDown, FaChevronRight, FaEllipsisH } from 'react-icons/fa';
 import logo from './../assets/images/web_images/logo.png'; 
+
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState(null);
   const [activeSubMenu, setActiveSubMenu] = useState(null);
   const [scrolled, setScrolled] = useState(false);
+  const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const moreDropdownRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
   const hoverTimeoutRef = useRef(null);
   const subMenuHoverTimeoutRef = useRef(null);
+
 
   // logo states
   const [logoData, setLogoData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+
   // Nav menu API states
   const [navMenuData, setNavMenuData] = useState(null);
   const [navMenuLoading, setNavMenuLoading] = useState(true);
   const [navMenuError, setNavMenuError] = useState(null);
   const [communityData, setCommunityData] = useState([]);
+
 
   // Fetch logo data
   useEffect(() => {
@@ -35,11 +41,13 @@ const Navbar = () => {
         }
         const data = await response.json();
 
+
         const logosArray = Array.isArray(data?.data) ? data.data : [];
         const topLogo =
           logosArray.find((item) => item.title === 'Top Logo') ||
           logosArray[0] ||
           null;
+
 
         setLogoData(topLogo);
         setLoading(false);
@@ -52,6 +60,7 @@ const Navbar = () => {
     fetchLogoData();
   }, []);
 
+
   // Fetch nav menu data
   useEffect(() => {
     const fetchNavMenuData = async () => {
@@ -63,7 +72,7 @@ const Navbar = () => {
         }
         const data = await response.json();
 
-        // API response: { status: true, data: { pastoral: [...], mass_centers: [...], social_centers: [...] } }
+
         setNavMenuData(data?.data || {});
         setNavMenuLoading(false);
       } catch (error) {
@@ -75,6 +84,7 @@ const Navbar = () => {
     fetchNavMenuData();
   }, []);
 
+
   useEffect(() => {
   const fetchCommunityData = async () => {
     try {
@@ -83,7 +93,7 @@ const Navbar = () => {
         throw new Error('Failed to fetch community data');
       }
       const data = await response.json();
-      setCommunityData(data?.data || []); // Array from API response
+      setCommunityData(data?.data || []);
     } catch (error) {
       console.error('Error fetching community data:', error);
     }
@@ -91,18 +101,14 @@ const Navbar = () => {
   fetchCommunityData();
 }, []);
 
+
 // Generate community submenu
   const communitySubmenu = communityData.map((item) => ({
-    title: item.community_name,  // "Hazaribagh"
-    id: item.id,                 // 1
-    url: `/communities/${item.id}` // /community/1
+    title: item.community_name,
+    id: item.id,
+    url: `/communities/${item.id}`
   }));
 
-  {communitySubmenu.map((item) => (
-    <Link key={item.id} to={item.url}>
-      {item.title}
-    </Link>
-  ))}
 
   const pastoralSubmenu = navMenuData?.pastoral?.map((item) => ({
     title: item.title.split(':')[0].trim(),  
@@ -110,35 +116,20 @@ const Navbar = () => {
     url: `/pastoral/${item.id}`         
   })) || [];
 
-  {pastoralSubmenu.map((item) => (
-    <Link key={item.id} to={item.url}>
-      {item.title}
-    </Link>
-  ))}
 
   const socialcentersubmenu = navMenuData?.social_centers?.map((item) => ({
     title: item.title,
-    id: item.id,  // Use exact API title
-    url: `/socialcenters/${item.id}`  // Generate URL from title
+    id: item.id,
+    url: `/socialcenters/${item.id}`
   })) || [];
-    
-  {socialcentersubmenu.map((item) => (
-    <Link key={item.id} to={item.url}>
-      {item.title}
-    </Link>
-  ))}
+
 
   const masscentersubmenu = navMenuData?.mass_centers?.map((item) => ({
     title: item.title,
-    id: item.id,  // Use exact API title
-    url: `/masscenteres/${item.id}`  // Generate URL from title
+    id: item.id,
+    url: `/masscenteres/${item.id}`
   })) || [];
 
-  {masscentersubmenu.map((item) => (
-    <Link key={item.id} to={item.url}>
-      {item.title}
-    </Link>
-  ))}
 
   // Handle logo click
   const handleLogoClick = () => {
@@ -146,7 +137,9 @@ const Navbar = () => {
     setIsOpen(false);
     setActiveMenu(null);
     setActiveSubMenu(null);
+    setMoreMenuOpen(false);
   };
+
 
   // Scroll effect
   useEffect(() => {
@@ -157,7 +150,8 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close dropdown when clicking outside (Desktop only)
+
+  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (window.innerWidth >= 1024) {
@@ -165,8 +159,12 @@ const Navbar = () => {
           setActiveMenu(null);
           setActiveSubMenu(null);
         }
+        if (moreDropdownRef.current && !moreDropdownRef.current.contains(event.target)) {
+          setMoreMenuOpen(false);
+        }
       }
     };
+
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
@@ -174,24 +172,30 @@ const Navbar = () => {
     };
   }, []);
 
+
   const handleNavigation = (path) => {
     navigate(path);
     setIsOpen(false);
     setActiveMenu(null);
     setActiveSubMenu(null);
+    setMoreMenuOpen(false);
   };
+
 
   const handleLinkClick = () => {
     setIsOpen(false);
     setActiveMenu(null);
     setActiveSubMenu(null);
+    setMoreMenuOpen(false);
   };
+
 
   // Desktop: Toggle on click
   const toggleDropdown = (key) => {
     setActiveMenu(activeMenu === key ? null : key);
     setActiveSubMenu(null);
   };
+
 
   // Desktop: Hover handlers for main menu
   const handleMouseEnter = (key) => {
@@ -203,6 +207,7 @@ const Navbar = () => {
     }
   };
 
+
   const handleMouseLeave = () => {
     if (window.innerWidth >= 1024) {
       hoverTimeoutRef.current = setTimeout(() => {
@@ -212,7 +217,8 @@ const Navbar = () => {
     }
   };
 
-  // Desktop: Hover handlers for submenu (third level)
+
+  // Desktop: Hover handlers for submenu (third level) - INCREASED DELAY
   const handleSubMenuMouseEnter = (key) => {
     if (window.innerWidth >= 1024) {
       if (subMenuHoverTimeoutRef.current) {
@@ -222,13 +228,15 @@ const Navbar = () => {
     }
   };
 
+
   const handleSubMenuMouseLeave = () => {
     if (window.innerWidth >= 1024) {
       subMenuHoverTimeoutRef.current = setTimeout(() => {
         setActiveSubMenu(null);
-      }, 150);
+      }, 400);
     }
   };
+
 
   // Mobile: Toggle dropdown properly with explicit state check
   const toggleMobileDropdown = (key, event) => {
@@ -243,6 +251,7 @@ const Navbar = () => {
     });
   };
 
+
   // Mobile: Toggle third level dropdown
   const toggleMobileSubDropdown = (key, event) => {
     event.stopPropagation();
@@ -254,10 +263,12 @@ const Navbar = () => {
     });
   };
 
+
   // Check if link is active
   const isLinkActive = (url) => {
     return location.pathname === url;
   };
+
 
   // Check if any submenu item is active
   const isSubmenuActive = (items) => {
@@ -268,6 +279,7 @@ const Navbar = () => {
       return location.pathname === item.url;
     });
   };
+
 
   // Base menu data structure
   const baseMenuData = {
@@ -287,12 +299,11 @@ const Navbar = () => {
         },
         { title: 'Support Us', url: '/about/supportus' },
         { title: 'Contact Us', url: 'about/contactus' },
-        // { title: 'About Us', url: '/aboutus' },
       ],
     },
     communities: {
       title: 'Communities',
-      items: communitySubmenu  // ✅ ONLY API data, empty array if no data
+      items: communitySubmenu
     },
     ministries: {
       title: 'Ministries',
@@ -307,12 +318,10 @@ const Navbar = () => {
             { title: 'Hostels', url: '/education/hostels' },
           ] 
         },
-        // Pastoral menu will be dynamically populated from API
         {
-
           title: 'Pastoral',
           url: '/pastoral',
-          submenu: pastoralSubmenu  // ✅ ONLY API data, empty array if no data
+          submenu: pastoralSubmenu
         },
         {
           title: 'Mass Centers',
@@ -322,7 +331,7 @@ const Navbar = () => {
         {
           title: 'Social Centers',
           url: '/social_center',
-          submenu: socialcentersubmenu  // ✅ ONLY API data, empty array if no data
+          submenu: socialcentersubmenu
         },
         { title: 'Youth', url: '/youth' },
         { title: 'Formation', url: '/formation' },
@@ -341,6 +350,7 @@ const Navbar = () => {
     },
   };
 
+
   // Single menu items (no dropdown)
   const singleMenuItems = [
     { title: 'Apostolic Plannings', url: '/apostolic-plannings' },
@@ -350,11 +360,29 @@ const Navbar = () => {
     { title: 'New Initiatives', url: '/new-initiatives' },
   ];
 
+
+  // Items in "More" dropdown for MacBook/small laptops
+  const moreMenuItems = [
+    { title: 'Apostolic Plannings', url: '/apostolic-plannings' },
+    { title: 'New Initiatives', url: '/new-initiatives' },
+  ];
+
+
+  // Primary menu items visible on MacBook/small laptops
+  const primaryMenuKeys = ['aboutUs', 'communities', 'ministries', 'resources'];
+  const primarySingleItems = [
+    { title: 'Become a Jesuit', url: '/become-a-jesuit' },
+    { title: 'Spirituality', url: '/spirituality' },
+    { title: 'Gallery', url: '/gallery' },
+  ];
+
+
   // decide which logo src to use
   const logoSrc =
     !loading && !error && logoData && logoData.image_url
       ? logoData.image_url
-      : logo; // fallback to local logo
+      : logo;
+
 
   return (
     <>
@@ -371,7 +399,7 @@ const Navbar = () => {
             {/* Logo Section */}
             <Link
               to="/"
-              className="flex items-center gap-2 sm:gap-3 shrink-0 group"
+              className="flex items-center gap-2 sm:gap-3 shrink-0 group cursor-pointer"
               onClick={handleLogoClick}
             >
               <div className="relative">
@@ -391,6 +419,7 @@ const Navbar = () => {
                 />
               </div>
 
+
               <div>
                 <h1
                   className={`text-md sm:text-base lg:text-lg font-bold leading-tight transition-colors duration-500 whitespace-nowrap ${
@@ -409,8 +438,9 @@ const Navbar = () => {
               </div>
             </Link>
 
-            {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center gap-1 xl:gap-2" ref={dropdownRef}>
+
+            {/* Desktop Navigation - Increased gap for more spacing */}
+            <div className="hidden lg:flex items-center gap-2 xl:gap-3" ref={dropdownRef}>
               <Link
                 to="/"
                 className={`px-2.5 xl:px-3 py-2 font-semibold text-sm rounded transition-all duration-300 whitespace-nowrap cursor-pointer ${
@@ -426,8 +456,9 @@ const Navbar = () => {
                 Home
               </Link>
 
-              {/* Dropdown Menus with Hover and Click */}
-              {Object.keys(baseMenuData).map((key) => (
+
+              {/* Primary Dropdown Menus */}
+              {primaryMenuKeys.map((key) => (
                 <div
                   key={key}
                   className="relative"
@@ -436,7 +467,7 @@ const Navbar = () => {
                 >
                   <button
                     onClick={() => toggleDropdown(key)}
-                    className={`px-2.5 xl:px-3 py-2 font-semibold text-sm rounded transition-all duration-300 flex items-center gap-1.5 whitespace-nowrap ${
+                    className={`px-2.5 xl:px-3 py-2 font-semibold text-sm rounded transition-all duration-300 flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
                       isSubmenuActive(baseMenuData[key].items)
                         ? scrolled
                           ? 'bg-primary text-white'
@@ -460,6 +491,7 @@ const Navbar = () => {
                     />
                   </button>
 
+
                   {/* Dropdown Menu (Second Level) */}
                   {activeMenu === key && (
                     <div
@@ -468,7 +500,6 @@ const Navbar = () => {
                       onMouseLeave={handleMouseLeave}
                     >
                       <div className="w-64 bg-white rounded shadow-2xl border-t-4 border-primary animate-fadeIn">
-                        {/* Menu Header */}
                         <div className="bg-linear-to-r from-primary via-navy to-primary px-4 py-3">
                           <h3 className="text-white text-sm font-bold flex items-center">
                             <FaChevronRight className="text-secondary text-[10px] mr-2" />
@@ -476,7 +507,7 @@ const Navbar = () => {
                           </h3>
                         </div>
 
-                        {/* Menu Items */}
+
                         <div className="py-1 max-h-96 overflow-visible">
                           {baseMenuData[key].items.map((item, idx) => (
                             <div
@@ -523,7 +554,7 @@ const Navbar = () => {
                                     <FaChevronRight className="text-[10px]" />
                                   </div>
 
-                                  {/* Third Level Dropdown */}
+
                                   {activeSubMenu === `${key}-${idx}` && (
                                     <div
                                       className="absolute left-full top-0 ml-1"
@@ -550,7 +581,7 @@ const Navbar = () => {
                                                   setActiveMenu(null);
                                                   setActiveSubMenu(null);
                                                 }}
-                                                className={`flex items-center px-4 py-2.5 transition-all duration-200 group ${
+                                                className={`flex items-center px-4 py-2.5 transition-all duration-200 group cursor-pointer ${
                                                   isLinkActive(subItem.url)
                                                     ? 'bg-primary text-white'
                                                     : 'text-navy hover:bg-linear-to-r hover:from-primary hover:to-navy hover:text-white'
@@ -579,7 +610,7 @@ const Navbar = () => {
                                 <Link
                                   to={item.url}
                                   onClick={() => setActiveMenu(null)}
-                                  className={`flex items-center px-4 py-2.5 transition-all duration-200 group ${
+                                  className={`flex items-center px-4 py-2.5 transition-all duration-200 group cursor-pointer ${
                                     isLinkActive(item.url)
                                       ? 'bg-primary text-white'
                                       : 'text-navy hover:bg-linear-to-r hover:from-primary hover:to-navy hover:text-white'
@@ -601,7 +632,7 @@ const Navbar = () => {
                           ))}
                         </div>
 
-                        {/* Bottom Accent */}
+
                         <div className="h-1 bg-linear-to-r from-secondary via-primary to-secondary"></div>
                       </div>
                     </div>
@@ -609,12 +640,13 @@ const Navbar = () => {
                 </div>
               ))}
 
-              {/* Single Menu Items */}
-              {singleMenuItems.map((item, idx) => (
+
+              {/* Primary Single Menu Items - Always visible */}
+              {primarySingleItems.map((item, idx) => (
                 <Link
                   key={idx}
                   to={item.url}
-                  className={`px-2.5 xl:px-3 py-2 font-semibold text-sm rounded transition-all duration-300 whitespace-nowrap ${
+                  className={`px-2.5 xl:px-3 py-2 font-semibold text-sm rounded transition-all duration-300 whitespace-nowrap cursor-pointer ${
                     isLinkActive(item.url)
                       ? scrolled
                         ? 'bg-primary text-white'
@@ -627,12 +659,122 @@ const Navbar = () => {
                   {item.title}
                 </Link>
               ))}
+
+
+              {/* Extra Items for 2XL screens only - Show inline (1536px+) */}
+              <Link
+                to="/apostolic-plannings"
+                className={`hidden 2xl:block px-3 py-2 font-semibold text-sm rounded transition-all duration-300 whitespace-nowrap cursor-pointer ${
+                  isLinkActive('/apostolic-plannings')
+                    ? scrolled
+                      ? 'bg-primary text-white'
+                      : 'bg-white text-primary'
+                    : scrolled
+                    ? 'text-navy hover:text-primary hover:bg-cream'
+                    : 'text-white hover:text-secondary hover:bg-white/10'
+                }`}
+              >
+                Apostolic Plannings
+              </Link>
+
+
+              <Link
+                to="/new-initiatives"
+                className={`hidden 2xl:block px-3 py-2 font-semibold text-sm rounded transition-all duration-300 whitespace-nowrap cursor-pointer ${
+                  isLinkActive('/new-initiatives')
+                    ? scrolled
+                      ? 'bg-primary text-white'
+                      : 'bg-white text-primary'
+                    : scrolled
+                    ? 'text-navy hover:text-primary hover:bg-cream'
+                    : 'text-white hover:text-secondary hover:bg-white/10'
+                }`}
+              >
+                New Initiatives
+              </Link>
+
+
+              {/* "More" Dropdown Menu - Only on LG/XL screens (1024-1535px), hidden on 2XL+ */}
+              <div className="relative 2xl:hidden" ref={moreDropdownRef}>
+                <button
+                  onClick={() => setMoreMenuOpen(!moreMenuOpen)}
+                  className={`px-2.5 py-2 font-semibold text-sm rounded transition-all duration-300 flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
+                    moreMenuItems.some(item => isLinkActive(item.url))
+                      ? scrolled
+                        ? 'bg-primary text-white'
+                        : 'bg-white text-primary'
+                      : scrolled
+                      ? 'text-navy hover:text-primary hover:bg-cream'
+                      : 'text-white hover:text-secondary hover:bg-white/10'
+                  } ${
+                    moreMenuOpen
+                      ? scrolled
+                        ? 'bg-cream text-primary'
+                        : 'bg-white/10 text-secondary'
+                      : ''
+                  }`}
+                >
+                  <FaEllipsisH className="text-sm" />
+                  <span>More</span>
+                  <FaChevronDown
+                    className={`text-[10px] transition-all duration-300 ${
+                      moreMenuOpen ? 'rotate-180' : ''
+                    }`}
+                  />
+                </button>
+
+
+                {/* More Dropdown Content */}
+                {moreMenuOpen && (
+                  <div className="absolute right-0 pt-2 z-50">
+                    <div className="w-56 bg-white rounded shadow-2xl border-t-4 border-primary animate-fadeIn">
+                      <div className="bg-linear-to-r from-primary via-navy to-primary px-4 py-3">
+                        <h3 className="text-white text-sm font-bold flex items-center">
+                          <FaChevronRight className="text-secondary text-[10px] mr-2" />
+                          More Options
+                        </h3>
+                      </div>
+
+
+                      <div className="py-1">
+                        {moreMenuItems.map((item, idx) => (
+                          <Link
+                            key={idx}
+                            to={item.url}
+                            onClick={() => setMoreMenuOpen(false)}
+                            className={`flex items-center px-4 py-2.5 transition-all duration-200 group cursor-pointer ${
+                              isLinkActive(item.url)
+                                ? 'bg-primary text-white'
+                                : 'text-navy hover:bg-linear-to-r hover:from-primary hover:to-navy hover:text-white'
+                            }`}
+                          >
+                            <FaChevronRight
+                              className={`text-[8px] mr-3 group-hover:scale-125 transition-all ${
+                                isLinkActive(item.url)
+                                  ? 'text-secondary'
+                                  : 'text-secondary group-hover:text-white'
+                              }`}
+                            />
+                            <span className="text-sm font-medium">
+                              {item.title}
+                            </span>
+                          </Link>
+                        ))}
+                      </div>
+
+
+                      <div className="h-1 bg-linear-to-r from-secondary via-primary to-secondary"></div>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
+
 
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className={`lg:hidden p-2 rounded transition-all duration-300 ${
+              className={`lg:hidden p-2 rounded transition-all duration-300 cursor-pointer ${
                 scrolled ? 'text-primary hover:bg-cream' : 'text-white hover:bg-white/10'
               }`}
             >
@@ -641,6 +783,7 @@ const Navbar = () => {
           </div>
         </div>
       </nav>
+
 
       {/* Mobile Menu */}
       {isOpen && (
@@ -655,7 +798,8 @@ const Navbar = () => {
             }}
           ></div>
 
-          {/* Sidebar */}
+
+          {/* Sidebar - Changed from top-[72px] to top-0 */}
           <div className="fixed top-0 right-0 bottom-0 w-[85%] sm:w-80 bg-white z-50 lg:hidden overflow-hidden shadow-2xl animate-slideInRight">
             {/* Mobile Header */}
             <div className="bg-linear-to-r from-primary via-navy to-primary p-4 flex items-center justify-between">
@@ -669,23 +813,25 @@ const Navbar = () => {
                   setActiveMenu(null);
                   setActiveSubMenu(null);
                 }}
-                className="p-2 text-white hover:bg-white/20 rounded-full transition-all"
+                className="p-2 text-white hover:bg-white/20 rounded-full transition-all cursor-pointer"
               >
                 <FaTimes className="w-5 h-5" />
               </button>
             </div>
 
+
             {/* Divider */}
             <div className="h-0.5 bg-linear-to-r from-secondary via-primary to-secondary"></div>
 
-            {/* Mobile Menu Items */}
+
+            {/* Mobile Menu Items - Adjusted height to account for header */}
             <div className="overflow-y-auto h-[calc(100vh-85px)] custom-scrollbar">
               <nav className="p-3">
                 {/* Home Link */}
                 <Link
                   to="/"
                   onClick={handleLinkClick}
-                  className={`flex items-center gap-2 py-3 px-4 mb-1 font-semibold rounded transition-all ${
+                  className={`flex items-center gap-2 py-3 px-4 mb-1 font-semibold rounded transition-all cursor-pointer ${
                     isLinkActive('/')
                       ? 'bg-primary text-white'
                       : 'text-navy hover:bg-cream hover:text-primary'
@@ -699,12 +845,13 @@ const Navbar = () => {
                   Home
                 </Link>
 
-                {/* Dropdown Menus - Mobile */}
+
+                {/* All Dropdown Menus - Mobile */}
                 {Object.keys(baseMenuData).map((key) => (
                   <div key={key} className="mb-1">
                     <button
                       onClick={(e) => toggleMobileDropdown(key, e)}
-                      className={`w-full flex items-center justify-between py-3 px-4 font-semibold rounded transition-all ${
+                      className={`w-full flex items-center justify-between py-3 px-4 font-semibold rounded transition-all cursor-pointer ${
                         activeMenu === key || isSubmenuActive(baseMenuData[key].items)
                           ? 'bg-primary text-white'
                           : 'text-navy hover:bg-cream hover:text-primary'
@@ -727,7 +874,7 @@ const Navbar = () => {
                       />
                     </button>
 
-                    {/* Dropdown Items (Second Level) */}
+
                     {activeMenu === key && (
                       <div className="mt-1 ml-4 bg-cream/50 rounded overflow-hidden border-l-2 border-secondary animate-slideDown">
                         {baseMenuData[key].items.map((item, idx) => (
@@ -738,7 +885,7 @@ const Navbar = () => {
                                   onClick={(e) =>
                                     toggleMobileSubDropdown(`${key}-${idx}`, e)
                                   }
-                                  className={`w-full flex items-center justify-between px-4 py-2.5 transition-all ${
+                                  className={`w-full flex items-center justify-between px-4 py-2.5 transition-all cursor-pointer ${
                                     activeSubMenu === `${key}-${idx}` ||
                                     isLinkActive(item.url) ||
                                     item.submenu.some((sub) =>
@@ -766,7 +913,7 @@ const Navbar = () => {
                                   />
                                 </button>
 
-                                {/* Third Level Dropdown - Mobile */}
+
                                 {activeSubMenu === `${key}-${idx}` && (
                                   <div className="ml-4 bg-cream/70 rounded overflow-hidden border-l-2 border-primary animate-slideDown">
                                     {item.submenu.map((subItem, subIdx) => (
@@ -774,7 +921,7 @@ const Navbar = () => {
                                         key={subIdx}
                                         to={subItem.url}
                                         onClick={handleLinkClick}
-                                        className={`flex items-center gap-2 px-4 py-2 transition-all ${
+                                        className={`flex items-center gap-2 px-4 py-2 transition-all cursor-pointer ${
                                           isLinkActive(subItem.url)
                                             ? 'bg-primary text-white'
                                             : 'text-navy hover:bg-linear-to-r hover:from-secondary hover:to-primary hover:text-white'
@@ -797,7 +944,7 @@ const Navbar = () => {
                               <Link
                                 to={item.url}
                                 onClick={handleLinkClick}
-                                className={`flex items-center gap-2 px-4 py-2.5 transition-all ${
+                                className={`flex items-center gap-2 px-4 py-2.5 transition-all cursor-pointer ${
                                   isLinkActive(item.url)
                                     ? 'bg-primary text-white'
                                     : 'text-navy hover:bg-linear-to-r hover:from-primary hover:to-navy hover:text-white'
@@ -820,13 +967,14 @@ const Navbar = () => {
                   </div>
                 ))}
 
-                {/* Single Menu Items */}
+
+                {/* All Single Menu Items in Mobile */}
                 {singleMenuItems.map((item, idx) => (
                   <Link
                     key={idx}
                     to={item.url}
                     onClick={handleLinkClick}
-                    className={`flex items-center gap-2 py-3 px-4 mb-1 font-semibold rounded transition-all ${
+                    className={`flex items-center gap-2 py-3 px-4 mb-1 font-semibold rounded transition-all cursor-pointer ${
                       isLinkActive(item.url)
                         ? 'bg-primary text-white'
                         : 'text-navy hover:bg-cream hover:text-primary'
@@ -846,24 +994,29 @@ const Navbar = () => {
         </>
       )}
 
+
       {/* Custom Styles */}
       <style jsx>{`
         .custom-scrollbar::-webkit-scrollbar {
           width: 4px;
         }
 
+
         .custom-scrollbar::-webkit-scrollbar-track {
           background: #F8F4E3;
         }
+
 
         .custom-scrollbar::-webkit-scrollbar-thumb {
           background: #D4AF37;
           border-radius: 2px;
         }
 
+
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
           background: #800000;
         }
+
 
         @keyframes fadeIn {
           from {
@@ -873,6 +1026,7 @@ const Navbar = () => {
             opacity: 1;
           }
         }
+
 
         @keyframes slideInRight {
           from {
@@ -885,6 +1039,7 @@ const Navbar = () => {
           }
         }
 
+
         @keyframes slideDown {
           from {
             opacity: 0;
@@ -896,13 +1051,16 @@ const Navbar = () => {
           }
         }
 
+
         .animate-fadeIn {
           animation: fadeIn 0.3s ease-out;
         }
 
+
         .animate-slideInRight {
           animation: slideInRight 0.3s ease-out;
         }
+
 
         .animate-slideDown {
           animation: slideDown 0.3s ease-out;
@@ -911,5 +1069,6 @@ const Navbar = () => {
     </>
   );
 };
+
 
 export default Navbar;

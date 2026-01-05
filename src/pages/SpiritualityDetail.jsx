@@ -3,13 +3,16 @@ import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import Breadcrumb from "../components/Breadcrumb";
 
+
 const SpiritualityDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
+
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
 
   useEffect(() => {
     const fetchDetail = async () => {
@@ -18,7 +21,9 @@ const SpiritualityDetail = () => {
           `${import.meta.env.VITE_API_BASE_URL}/spirituality/${id}`
         );
 
+
         if (!response.ok) throw new Error("Failed to load content");
+
 
         const result = await response.json();
         if (result.status && result.data) {
@@ -33,14 +38,17 @@ const SpiritualityDetail = () => {
       }
     };
 
+
     fetchDetail();
   }, [id]);
+
 
   const breadcrumbItems = [
     { label: "Home", path: "/" },
     { label: "Spirituality", path: "/spirituality" },
     { label: item?.title || "Detail", path: "#" },
   ];
+
 
   /* ================= LOADING ================= */
   if (loading) {
@@ -53,6 +61,7 @@ const SpiritualityDetail = () => {
       </div>
     );
   }
+
 
   /* ================= ERROR ================= */
   if (error) {
@@ -74,6 +83,7 @@ const SpiritualityDetail = () => {
     );
   }
 
+
   /* ================= PAGE ================= */
   return (
     <div className="min-h-screen bg-cream text-navy">
@@ -90,12 +100,14 @@ const SpiritualityDetail = () => {
         </motion.div>
       </header>
 
+
       {/* BREADCRUMB — KEEP SAME */}
       <Breadcrumb items={breadcrumbItems} />
 
+
       {/* CONTENT — NEW LAYOUT */}
       <section className="container mx-auto px-6 py-10">
-        {/* IMAGE (FULL, SOFT, NOT BOXED) */}
+        {/* IMAGE (SMALLER, NO WHITE SPACES) */}
         <motion.div
           initial={{ opacity: 0, scale: 0.97 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -105,9 +117,10 @@ const SpiritualityDetail = () => {
           <img
             src={item.image_url}
             alt={item.title}
-            className="w-full max-h-[480px] object-cover rounded-xl shadow-md"
+            className="max-h-[300px] md:max-h-[350px] lg:max-h-[400px] w-auto rounded-xl shadow-md"
           />
         </motion.div>
+
 
         {/* META */}
         <div className="text-sm text-gray-500 mb-8">
@@ -118,6 +131,7 @@ const SpiritualityDetail = () => {
             year: "numeric",
           })}
         </div>
+
 
         {/* CONTENT TEXT (FLOWING) */}
         <motion.div
@@ -137,8 +151,10 @@ const SpiritualityDetail = () => {
           dangerouslySetInnerHTML={{ __html: item.description }}
         />
 
+
         {/* DIVIDER */}
         <div className="my-14 border-t border-primary/20"></div>
+
 
        <div className="mt-14">
             <button
@@ -152,5 +168,6 @@ const SpiritualityDetail = () => {
     </div>
   );
 };
+
 
 export default SpiritualityDetail;

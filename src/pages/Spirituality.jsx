@@ -124,7 +124,7 @@ const Spirituality = () => {
 
                 <button
                   onClick={() => navigate(`/spirituality/${item.id}`)}
-                  className="mt-6 self-start text-primary font-medium hover:underline"
+                  className="mt-6 self-start text-primary font-medium hover:underline cursor-pointer"
                 >
                   Read More →
                 </button>
