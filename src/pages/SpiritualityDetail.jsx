@@ -117,7 +117,7 @@ const SpiritualityDetail = () => {
           <img
             src={item.image_url}
             alt={item.title}
-            className="max-h-[300px] md:max-h-[350px] lg:max-h-[400px] w-auto rounded-xl shadow-md"
+            className="w-full max-h-[480px] object-cover rounded-xl shadow-md"
           />
         </motion.div>
 
