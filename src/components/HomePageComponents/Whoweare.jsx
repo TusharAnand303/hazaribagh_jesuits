@@ -21,10 +21,10 @@ const Whoweare = () => {
 
         // API: { status: true, data: [ { ...who objects... } ] }
         const whoArray = Array.isArray(data?.data) ? data.data : [];
-        
+
         // Get first who data
         const who = whoArray[0] || null;
-        
+
         setWhoData(who);
         setLoading(false);
       } catch (error) {
@@ -91,7 +91,7 @@ const Whoweare = () => {
   return (
     <section className="py-4 sm:py-6 lg:py-8 bg-linear-to-b from-white to-cream">
       <div className="container mx-auto px-4 sm:px-6 lg:px-12">
-        
+
         {/* Section Title with Badge */}
         <motion.div
           className="text-center mb-6"
@@ -125,7 +125,7 @@ const Whoweare = () => {
         {/* Main Content - Wider Layout */}
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-10">
-            
+
             {/* Logo Section - Smaller */}
             <motion.div
               className="w-full lg:w-1/4 flex items-center justify-center shrink-0"
@@ -140,7 +140,6 @@ const Whoweare = () => {
                 className="w-32 h-32 sm:w-40 sm:h-40 lg:w-44 lg:h-44 object-contain"
               />
             </motion.div>
-
             {/* Content Section - Takes More Width */}
             <motion.div
               className="w-full lg:w-3/4"
@@ -149,9 +148,10 @@ const Whoweare = () => {
               viewport={{ once: true }}
               variants={contentVariants}
             >
-              <p className="text-gray-700 text-sm sm:text-base leading-relaxed whitespace-pre-line">
-                {displayData.description}
-              </p>
+              <p
+                className="text-gray-700 text-sm sm:text-base leading-relaxed"
+                dangerouslySetInnerHTML={{ __html: displayData.description }}
+              />
             </motion.div>
 
           </div>
